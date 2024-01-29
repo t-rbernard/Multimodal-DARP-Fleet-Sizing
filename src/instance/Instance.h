@@ -6,9 +6,11 @@
 #define GREEDYALGORITHM_INSTANCE_H
 #include <vector>
 #include "requests/Request.h"
+#include "graph/Graph.h"
 
 class Instance {
     std::vector<Request> requests;
+    Graph graph;
 };
 
 
