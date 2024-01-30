@@ -3,7 +3,7 @@ project(GreedyAlgorithm)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(GreedyAlgorithm src/main.cpp
+add_executable(GreedyAlgorithm
         src/instance/graph/Node.cpp
         src/instance/graph/Node.h
         src/instance/graph/Edge.cpp
@@ -22,4 +22,6 @@ add_executable(GreedyAlgorithm src/main.cpp
         src/instance/services/CSV/CSVIterator.cpp
         src/instance/services/CSV/CSVIterator.h
         test/debug.cpp
+        src/instance/graph/LineStop.cpp
+        src/instance/graph/LineStop.h
 )

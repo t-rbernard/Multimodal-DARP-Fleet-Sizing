@@ -8,19 +8,24 @@
 
 #include <utility>
 #include <vector>
-#include "Node.h"
 
 class Line {
 private:
-    std::vector<Node> _nodes; //sorted according to line order (start -> terminus)
-    std::vector<std::vector<int>> _timetable; //list of list of timestamps for each node start order (size of _timetable must remain constant throughout the whole vector
+    std::vector<int> _nodes; //index according to Graph::_nodes, sorted according to line order (start -> terminus)
+    std::vector<std::vector<int>> _timetables; //list of list of timestamps for each node start order (size of _timetables must remain constant throughout the whole vector
 
 public:
     Line() = default;
-    void addNode(Node node) { _nodes.push_back(node); };
-    std::vector<int> getTimetable(int pos) { return _timetable.at(pos);};
-    void setTimetable(int pos, std::vector<int> timetable) { _timetable.at(pos) = std::move(timetable);};
+
+    std::vector<int> getNodes() { return _nodes;};
+    void addNode(const int node){this->_nodes.emplace_back(node);};
+
+    std::vector<int> getTimetable(int pos) { return _timetables.at(pos);};
+    std::vector<std::vector<int>> getTimetables() { return _timetables;};
+    void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
+    void setTimetable(int pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
 };
 
+#include "Node.h"
 
 #endif //GREEDYALGORITHM_LINE_H

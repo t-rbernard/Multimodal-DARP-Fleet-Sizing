@@ -14,15 +14,15 @@ Node::Node() {
 }
 
 bool Node::isPTNode() {
-    return &_busLines == nullptr || _busLines.empty();
+    return &_ptLines == nullptr || _ptLines.empty();
 }
 
-Node::Node(Status status, double x, double y) {
+Node::Node(Status status, double x, double y) : _status(status), _x(x), _y(y), _ptLines(std::set<LineStop>()) {
     this->_status = status;
     this->_x = x;
     this->_y = y;
 }
 
-bool Node::addBusLine(Line line, Node node) {
-    return false;
+void Node::addBusLine(const Line& line, int nodeInLine) {
+    this->_ptLines.emplace(line, nodeInLine);
 }

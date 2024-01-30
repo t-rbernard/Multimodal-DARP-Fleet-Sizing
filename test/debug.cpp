@@ -5,7 +5,7 @@
 #include "../src/instance/graph/Graph.h"
 
 int main() {
-    Graph("../resources/test/instances/basic_debug_instance/nodes.csv",
+    Graph give_me_a_name("../resources/test/instances/basic_debug_instance/nodes.csv",
           "../resources/test/instances/basic_debug_instance/edges.csv",
           "../resources/test/instances/basic_debug_instance/PT_lines.csv");
     return 0;
