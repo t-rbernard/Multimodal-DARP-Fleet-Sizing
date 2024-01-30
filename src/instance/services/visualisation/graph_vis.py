@@ -7,10 +7,21 @@ class edge:
     def __init__(self):
         self.start = None
         self.end = None
+        self.length = None
 
-    def __init__(self, start, end):
+    def __init__(self, start, end, length):
         self.start = start
         self.end = end
+        self.length = length
+
+class node:
+    def __init__(self):
+        self.x = None
+        self.y = None
+
+    def __init__(self, start, end):
+        self.x = start
+        self.y = end
 
 #TODO : get those from cpp
 X = []
