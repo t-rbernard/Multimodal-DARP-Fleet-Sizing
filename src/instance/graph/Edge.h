@@ -10,22 +10,24 @@
 
 class Edge {
 private:
-    Node* in;
-    Node* out;
-    double length;
+    int _start;
+    int _end;
+    double _length;
 
 public:
-    Node *getIn() const;
+    int getNodeStart() const;
 
-    void setIn(Node *in);
+    void setNodeStart(int start);
 
-    Node *getOut() const;
+    int getNodeEnd() const;
 
-    void setOut(Node *out);
+    void setNodeEnd(int end);
 
     double getLength() const;
 
     void setLength(double d);
+
+    Edge(int start, int end, double length);
 };
 
 

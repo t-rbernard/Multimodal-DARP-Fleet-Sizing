@@ -4,26 +4,32 @@
 
 #include "Edge.h"
 
-Node *Edge::getIn() const {
-    return in;
+int Edge::getNodeStart() const {
+    return _start;
 }
 
-void Edge::setIn(Node *pNode) {
-    Edge::in = pNode;
+void Edge::setNodeStart(int start) {
+    Edge::_start = start;
 }
 
-Node *Edge::getOut() const {
-    return out;
+int Edge::getNodeEnd() const {
+    return _end;
 }
 
-void Edge::setOut(Node *pNode) {
-    Edge::out = pNode;
+void Edge::setNodeEnd(int end) {
+    Edge::_end = end;
 }
 
 double Edge::getLength() const {
-    return length;
+    return _length;
 }
 
 void Edge::setLength(double d) {
-    Edge::length = d;
+    Edge::_length = d;
+}
+
+Edge::Edge(int start, int end, double length) {
+    _start = start;
+    _end = end;
+    _length = length;
 }

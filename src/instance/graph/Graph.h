@@ -17,25 +17,25 @@ private:
     std::vector<Node> nodesVector;
     std::vector<Edge> edgesVector;
 public:
-    const std::vector<Node> &getNodesVector() const {
+    [[nodiscard]] const std::vector<Node> &getNodesVector() const {
         return nodesVector;
     }
 
-    const std::vector<Edge> &getEdgesVector() const {
+    [[nodiscard]] const std::vector<Edge> &getEdgesVector() const {
         return edgesVector;
     }
 
     std::vector<Edge> addEdge(Edge& edge) {
-        edgesVector[edgesVector.size()] = edge;
+        edgesVector.push_back(edge);
         return edgesVector;
     }
 
     std::vector<Node> addNode(Node& node) {
-        nodesVector[edgesVector.size()] = node;
+        nodesVector.push_back(node);
         return nodesVector;
     }
 
-    Graph(std::string filePath);
+    Graph(std::string nodeFilePath, std::string edgeFilePath, std::string ptLineFilePath);
 };
 
 
