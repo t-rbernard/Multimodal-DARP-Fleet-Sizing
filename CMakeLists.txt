@@ -16,9 +16,10 @@ add_executable(GreedyAlgorithm src/main.cpp
         src/instance/Instance.h
         src/instance/graph/Line.cpp
         src/instance/graph/Line.h
-        src/instance/service/CSVRow.cpp
-        src/instance/service/CSVRange.cpp
-        src/instance/service/CSVRange.h
-        src/instance/service/CSVIterator.cpp
-        src/instance/service/CSVIterator.h
+        src/instance/services/CSV/CSVRow.cpp
+        src/instance/services/CSV/CSVRange.cpp
+        src/instance/services/CSV/CSVRange.h
+        src/instance/services/CSV/CSVIterator.cpp
+        src/instance/services/CSV/CSVIterator.h
+        test/debug.cpp
 )
