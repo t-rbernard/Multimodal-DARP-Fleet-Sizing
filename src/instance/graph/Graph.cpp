@@ -9,6 +9,7 @@
 #include "Graph.h"
 #include "Node.h"
 #include "../services/CSV/CSVRange.h"
+#include "../services/DatFile/DATRow.h"
 
 Graph::Graph(std::string nodesFilePath, std::string edgesFilePath, std::string ptLinesFilePath) {
 
@@ -103,4 +104,35 @@ Graph::Graph(std::string nodesFilePath, std::string edgesFilePath, std::string p
         }
     }
     std::cout << "test is done" << std::endl;
+}
+
+Graph::Graph(const std::string& datFilePath) {
+    std::ifstream infile(datFilePath);
+    DATRow currentRow = DATRow(',');
+    std::string currentLine;
+
+    //-- Read params
+    infile >> currentRow;
+    std::cout << currentRow[0] << std::endl;
+    infile >> currentRow; // read seed
+    const std::string rngSeed = currentLine;
+    //-- End of params
+
+    //-- Read nodes
+    infile >> currentRow; // Read and print comment line for format
+    std::cout << currentRow[0] << std::endl;
+    while(infile >> currentRow && currentRow[0].starts_with('#')) {
+
+    }
+    //-- End of nodes
+
+    //-- Read Edges
+    std::cout << currentRow[0] << std::endl;
+    while(infile >> currentLine) {
+
+    }
+    //-- End of edges
+
+    //-- Read Public transit line
+    std::cout << currentRow[0] << std::endl;
 }

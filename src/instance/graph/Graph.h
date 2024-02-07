@@ -35,6 +35,7 @@ public:
         return nodesVector;
     }
 
+    Graph(const std::string& datFilePath);
     Graph(std::string nodeFilePath, std::string edgeFilePath, std::string ptLineFilePath);
 };
 

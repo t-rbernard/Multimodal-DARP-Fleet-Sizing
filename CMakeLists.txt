@@ -24,4 +24,6 @@ add_executable(GreedyAlgorithm
         test/debug.cpp
         src/instance/graph/LineStop.cpp
         src/instance/graph/LineStop.h
+        src/instance/services/DatFile/DATRow.cpp
+        src/instance/services/DatFile/DATRow.h
 )
