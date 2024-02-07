@@ -39,9 +39,11 @@ public:
         m_data.emplace_back(pos);
     }
 
+    std::string toString() {return m_line;}
+
     DATRow() : _separator(' ') {}
     explicit DATRow(const char separator) : _separator(separator) {}
-private:
+protected:
     const char          _separator;
     std::string         m_line;
     std::vector<int>    m_data;
