@@ -8,8 +8,8 @@
 #include <algorithm>
 #include "Graph.h"
 #include "Node.h"
-#include "../services/CSV/CSVRange.h"
-#include "../services/DatFile/DATRow.h"
+#include "../../services/CSV/CSVRange.h"
+#include "../../services/DatFile/DATRow.h"
 
 Graph::Graph(std::string nodesFilePath, std::string edgesFilePath, std::string ptLinesFilePath) {
 
