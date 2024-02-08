@@ -23,6 +23,6 @@ Node::Node(Status status, double x, double y) : _status(status), _x(x), _y(y), _
     this->_y = y;
 }
 
-void Node::addBusLine(const Line& line, int nodeInLine) {
-    this->_ptLines.emplace(line, nodeInLine);
+void Node::addBusLine(const Line& line, int indexInLine) {
+    this->_ptLines.emplace(line, indexInLine);
 }

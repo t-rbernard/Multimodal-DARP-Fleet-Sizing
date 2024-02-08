@@ -9,8 +9,13 @@
 #include "graph/Graph.h"
 
 class Instance {
+private:
     std::vector<Request> requests;
     Graph graph;
+
+public:
+    [[nodiscard]] Graph const & getGraph() const { return graph;}
+    [[nodiscard]] std::vector<Request> const & getRequests() const { return requests;}
 };
 
 

@@ -10,5 +10,6 @@ int main() {
 //          "../resources/test/instances/basic_debug_instance/PT_lines.csv");
 
     Graph give_me_another_name("../resources/test/instances/basic_debug_instance/graph.dat");
+    give_me_another_name.exportGraphToFiles("../resources/test/outputs/basic_debug_instance/");
     return 0;
 }

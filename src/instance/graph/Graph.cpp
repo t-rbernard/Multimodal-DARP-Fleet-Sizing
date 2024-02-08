@@ -16,7 +16,7 @@
 #include "Node.h"
 #include "../../services/CSV/CSVRange.h"
 
-Graph::Graph(std::string nodesFilePath, std::string edgesFilePath, std::string ptLinesFilePath) {
+Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath, const std::string& ptLinesFilePath) {
 
     //Nodes instantiation
     double x;
@@ -196,6 +196,64 @@ Graph::Graph(const std::string& datFilePath) {
             newTimetable.clear();
         }
 
+        this->addLine(newLine);
+
         DEBUG_MSG("Created new line with nodes");
     }
+}
+
+namespace fs = std::filesystem;
+void Graph::exportGraphToFiles(fs::path exportFolderPath) {
+    fs::create_directories(exportFolderPath);
+
+    //Nodes
+    std::ofstream outfileNodes(exportFolderPath.string() + "nodes.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
+    for(auto& node : this->nodesVector)
+    {
+        outfileNodes << node.getCoordinates().x << " " << node.getCoordinates().y << std::endl;
+    }
+    outfileNodes.close();
+
+    //Edges
+    std::ofstream outfileEdges(exportFolderPath.string() + "edges.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
+    for(auto& edge : this->edgesVector)
+    {
+        outfileEdges << edge.getNodeStart() << " " << edge.getNodeEnd() << " " << edge.getLength() << std::endl;
+    }
+    outfileEdges.close();
+
+    //Transit lines
+    std::ofstream outfilePT(exportFolderPath.string() + "ptlines.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
+    for(auto& ptline : this->transitLines)
+    {
+        //Print nodes in order on one line
+        std::ostringstream oss;
+        if (!ptline.getNodes().empty())
+        {
+            // Convert all but the last element to avoid a trailing ","
+            std::copy(ptline.getNodes().begin(), ptline.getNodes().end()-1,
+                      std::ostream_iterator<int>(oss, " "));
+
+            // Now add the last element with no delimiter
+            oss << ptline.getNodes().back();
+        }
+        outfilePT << oss.str() << std::endl;
+
+        //Reuse string stream to print schedules line by line
+        for(auto& schedule : ptline.getTimetables())
+        {
+            if (!schedule.empty())
+            {
+                // Convert all but the last element to avoid a trailing ","
+                std::copy(schedule.begin(), schedule.end()-1,
+                          std::ostream_iterator<int>(oss, " "));
+
+                // Now add the last element with no delimiter
+                oss << schedule.back();
+            }
+            outfilePT << oss.str() << std::endl;
+            oss.clear();
+        }
+    }
+    outfilePT.close();
 }

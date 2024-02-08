@@ -8,6 +8,7 @@
 
 #include <utility>
 #include <string>
+#include <filesystem>
 
 #include "Node.h"
 #include "Edge.h"
@@ -16,6 +17,7 @@ class Graph {
 private:
     std::vector<Node> nodesVector;
     std::vector<Edge> edgesVector;
+    std::vector<Line> transitLines;
 public:
     [[nodiscard]] const std::vector<Node> &getNodesVector() const {
         return nodesVector;
@@ -23,6 +25,10 @@ public:
 
     [[nodiscard]] const std::vector<Edge> &getEdgesVector() const {
         return edgesVector;
+    }
+
+    [[nodiscard]] const std::vector<Line> &getPTLines() const {
+        return transitLines;
     }
 
     std::vector<Edge> addEdge(Edge& edge) {
@@ -35,8 +41,21 @@ public:
         return nodesVector;
     }
 
+    std::vector<Line> addLine(Line& line) {
+        //Add line stops to nodes
+        for(int i = 0; i < line.getNodes().size(); ++i)
+        {
+            nodesVector.at(i).addBusLine(line, i);
+        }
+        //Add transit line to transit lines vector
+        transitLines.push_back(line);
+        return transitLines;
+    }
+
     explicit Graph(const std::string& datFilePath);
-    Graph(std::string nodeFilePath, std::string edgeFilePath, std::string ptLineFilePath);
+    Graph(const std::string& nodeFilePath, const std::string& edgeFilePath, const std::string& ptLineFilePath);
+
+    void exportGraphToFiles(std::filesystem::path exportFolderPath);
 };
 
 

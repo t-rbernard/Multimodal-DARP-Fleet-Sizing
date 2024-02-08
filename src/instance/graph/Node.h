@@ -18,18 +18,26 @@ enum Status {
 class Line;
 class LineStop;
 class Node {
-    private:
-        Status _status;
-        double _x;
-        double _y;
-        std::set<LineStop> _ptLines;
 
-    public:
-        Node();
-        Node(Status status, double x, double y);
-        bool isPTNode();
-        void addBusLine(const Line& line, int nodeInLine);
-        Status statusFromString(std::string from);
+
+private:
+    Status _status;
+    double _x;
+    double _y;
+    std::set<LineStop> _ptLines;
+
+public:
+    Node();
+    Node(Status status, double x, double y);
+
+    struct Coordinate {
+        double x,y;
+    };
+
+    bool isPTNode();
+    void addBusLine(const Line& line, int indexInLine);
+    Status const statusFromString(std::string from);
+    [[nodiscard]] Coordinate getCoordinates() const {return Coordinate(_x,_y);}
 };
 #include "Line.h"
 #include "LineStop.h"
