@@ -38,6 +38,7 @@ public:
     void addBusLine(const Line& line, int indexInLine);
     Status const statusFromString(std::string from);
     [[nodiscard]] Coordinate getCoordinates() const {return Coordinate(_x,_y);}
+    [[nodiscard]] std::set<LineStop> getPTLinesSet() const {return _ptLines;}
 };
 #include "Line.h"
 #include "LineStop.h"

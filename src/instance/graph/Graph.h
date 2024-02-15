@@ -18,6 +18,8 @@ private:
     std::vector<Node> nodesVector;
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
+
+    bool checkLineToNodeLinks();
 public:
     [[nodiscard]] const std::vector<Node> &getNodesVector() const {
         return nodesVector;
@@ -46,6 +48,10 @@ public:
 
     std::vector<Line> addLine(Line& line);
     void exportGraphToFiles(std::filesystem::path exportFolderPath);
+    //TODO : add check functions
+    //  - check(), checkAllLines(), checkLineStops() (will check nodes' LineStop <-> Line.nodes coherence)
+    bool check();
+
 };
 
 

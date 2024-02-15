@@ -18,6 +18,7 @@ public:
     Line() = default;
 
     std::vector<int> getNodes() { return _nodes;};
+    int getNode(int index) { return _nodes.at(index);};
     void addNode(const int node){this->_nodes.emplace_back(node);};
 
     std::vector<int> getTimetable(int pos) { return _timetables.at(pos);};

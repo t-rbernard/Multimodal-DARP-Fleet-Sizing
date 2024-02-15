@@ -268,3 +268,24 @@ void Graph::exportGraphToFiles(fs::path exportFolderPath) {
     }
     outfilePT.close();
 }
+
+bool Graph::check() {
+    for(auto& transitLine : this->transitLines)
+    {
+        transitLine.check();
+    }
+    return false;
+}
+
+bool Graph::checkLineToNodeLinks() {
+    bool checkResult = true;
+    for(auto& node : nodesVector)
+    {
+        for(auto& lineStop : node.getPTLinesSet())
+        {
+            Node& nodeFromGraph = this->nodesVector.at(lineStop.getLineRef().getNode(lineStop.getStopIndex()));
+            checkResult &= nodeFromGraph == node;
+        }
+    }
+    return checkResult;
+}
