@@ -3,3 +3,26 @@
 //
 
 #include "Line.h"
+
+bool Line::check() {
+    return checkSchedules(); //Add any new check function here (if useful, add parameters to check() to only do certain checks
+}
+
+bool Line::checkSchedules() {
+    bool checkResult = true;
+    checkResult &= _nodes.size() == _timetables.size(); //check we have as many schedules as nodes in our line
+
+    int precedingTimeStep = 0;
+    int expectedScheduleSize = !_timetables.empty() ? _timetables.at(0).size() : 0;
+    for(auto& schedule : _timetables)
+    {
+        precedingTimeStep = 0; //reinit first timestep to 0
+        checkResult &= schedule.size() == expectedScheduleSize; //every schedule should are the same size
+        for(auto& currentTimestep : schedule) //check timestep precedence
+        {
+            checkResult &= currentTimestep > precedingTimeStep;
+            precedingTimeStep = currentTimestep;
+        }
+    }
+    return checkResult;
+}
