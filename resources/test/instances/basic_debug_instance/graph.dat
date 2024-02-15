@@ -18,4 +18,4 @@
 5,6,3
 6,7,2
 #PT line format : freq (min), start_time, end_time, node_1, ..., node_n
-15,340, 560, 3,4,5,6
+15,340,560,3,4,5,6

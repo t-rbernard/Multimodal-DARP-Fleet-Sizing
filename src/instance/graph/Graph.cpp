@@ -167,7 +167,7 @@ Graph::Graph(const std::string& datFilePath) {
         std::vector<int> timeTable;
         std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].size(), frequency);
         std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].size(), startTime);
-        std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[3].size(), endTime);
+        std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), endTime);
         int currentTime = startTime + uint_dist60(rng); //random startTime time with 60min max offset
         while(currentTime + frequency < endTime)
         {
