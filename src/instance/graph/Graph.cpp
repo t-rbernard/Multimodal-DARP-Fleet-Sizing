@@ -16,6 +16,17 @@
 #include "Node.h"
 #include "../../services/CSV/CSVRange.h"
 
+std::vector<Line> Graph::addLine(Line& line) {
+    //Add line stops to nodes
+    for(int i = 0; i < line.getNodes().size(); ++i)
+    {
+        nodesVector.at(i).addBusLine(line, i);
+    }
+    //Add transit line to transit lines vector
+    transitLines.push_back(line);
+    return transitLines;
+}
+
 Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath, const std::string& ptLinesFilePath) {
 
     //Nodes instantiation

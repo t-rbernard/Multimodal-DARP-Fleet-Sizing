@@ -41,20 +41,10 @@ public:
         return nodesVector;
     }
 
-    std::vector<Line> addLine(Line& line) {
-        //Add line stops to nodes
-        for(int i = 0; i < line.getNodes().size(); ++i)
-        {
-            nodesVector.at(i).addBusLine(line, i);
-        }
-        //Add transit line to transit lines vector
-        transitLines.push_back(line);
-        return transitLines;
-    }
-
     explicit Graph(const std::string& datFilePath);
     Graph(const std::string& nodeFilePath, const std::string& edgeFilePath, const std::string& ptLineFilePath);
 
+    std::vector<Line> addLine(Line& line);
     void exportGraphToFiles(std::filesystem::path exportFolderPath);
 };
 
