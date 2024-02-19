@@ -26,3 +26,24 @@ Node::Node(Status status, double x, double y) : _status(status), _x(x), _y(y), _
 void Node::addBusLine(const Line& line, int indexInLine) {
     this->_ptLines.emplace(line, indexInLine);
 }
+
+bool Node::operator==(const Node &rhs) const {
+    return _x == rhs.getX()
+        && _y == rhs.getY()
+        && _status == rhs.getStatus();
+}
+
+bool Node::operator!=(const Node &rhs) const {
+    return _x != rhs.getX()
+           || _y != rhs.getY()
+           || _status != rhs.getStatus();
+}
+
+Status  Node::statusFromString(std::string from) {
+    auto pair = stringToStatusMap.find(from);
+    if (pair != stringToStatusMap.end()) {
+        return pair->second;
+    } else {
+        return Status::work;
+    }
+}

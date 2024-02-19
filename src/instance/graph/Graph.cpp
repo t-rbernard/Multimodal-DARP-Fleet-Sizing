@@ -221,7 +221,7 @@ void Graph::exportGraphToFiles(fs::path exportFolderPath) {
     std::ofstream outfileNodes(exportFolderPath.string() + "nodes.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
     for(auto& node : this->nodesVector)
     {
-        outfileNodes << node.getCoordinates().x << " " << node.getCoordinates().y << std::endl;
+        outfileNodes << node.getX() << " " << node.getY() << std::endl;
     }
     outfileNodes.close();
 
@@ -270,20 +270,26 @@ void Graph::exportGraphToFiles(fs::path exportFolderPath) {
 }
 
 bool Graph::check() {
+    bool checkResult = true;
     for(auto& transitLine : this->transitLines)
     {
-        transitLine.check();
+        checkResult &= transitLine.check();
     }
-    return false;
+    checkResult &= checkLineToNodeLinks();
+    return checkResult;
 }
 
 bool Graph::checkLineToNodeLinks() {
+    int nodeIndexFromLine;
+    Node& nodeFromGraph(nodesVector.at(0)); //Forced to init here
+
     bool checkResult = true;
     for(auto& node : nodesVector)
     {
         for(auto& lineStop : node.getPTLinesSet())
         {
-            Node& nodeFromGraph = this->nodesVector.at(lineStop.getLineRef().getNode(lineStop.getStopIndex()));
+            nodeIndexFromLine = lineStop.getLineRef().getNode(lineStop.getStopIndex());
+            nodeFromGraph = this->nodesVector.at(nodeIndexFromLine);
             checkResult &= nodeFromGraph == node;
         }
     }
