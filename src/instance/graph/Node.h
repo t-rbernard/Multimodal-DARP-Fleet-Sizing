@@ -10,6 +10,10 @@
 #include <set>
 #include <unordered_map>
 
+/**
+ * Status used to qualify nodes as places with different goals (work, leisure, residential)
+ * Useful for a semi-random requests generation
+ */
 enum Status {
     work,
     leisure,
@@ -22,26 +26,49 @@ static std::unordered_map<std::string,Status> const stringToStatusMap = {{"work"
 class Line;
 class LineStop;
 class Node {
-
-
 private:
     Status _status;
     double _x;
     double _y;
     std::set<LineStop> _ptLines;
+    //TODO : for easier access, add an outgoing edges vector (reminder to also account for that in graph generation)
+    //  Do we need incoming edges vector ? (don't think so)
 
 public:
     Node();
     Node(Status status, double x, double y);
 
+    /**
+     * Simple struct to return full coordinates data with an x and y pair
+     */
     struct Coordinate {
         double x,y;
     };
 
+    /**
+     * @return True if this node contains one or more LineStop
+     */
     bool isPTNode();
+    /**
+     * Adds a new LineStop to the LineStop set
+     * @param line the line referenced by the LineStop
+     * @param indexInLine The station index in the Line for the current node
+     */
     void addBusLine(const Line& line, int indexInLine);
-    Status const statusFromString(std::string from);
+    /**
+     * Parses the string parameter and converts it to an appropriate Status value
+     * @param from String serving as basis for conversion (trailing spaces and capitalization don't matter)
+     * @return A status depending on the given string. If no status corresponds to the given String, will default to Work
+     */
+    static Status statusFromString(std::string from) ;
+    /**
+     * Formats x and y data in a Coordinate object and returns it
+     * @return A new Coordinate object with x and y data
+     */
     [[nodiscard]] Coordinate getCoordinates() const {return Coordinate(_x,_y);}
+    [[nodiscard]] double getX() const {return _x;}
+    [[nodiscard]] double getY() const {return _y;}
+    [[nodiscard]] Status getStatus() const {return _status;}
     [[nodiscard]] std::set<LineStop> getPTLinesSet() const {return _ptLines;}
 
     /**
