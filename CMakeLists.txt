@@ -25,4 +25,13 @@ add_executable(GreedyAlgorithm
         src/services/visualisation/InstanceVisualisation.cpp
         src/services/visualisation/InstanceVisualisation.cpp
         src/utils/SearchAlgorithms.h
+        src/ShortestPath/ShortestPathContainer.h
+        src/ShortestPath/TimeDependentShortestPathContainer.h
+        src/ShortestPath/TimeDependentShortestPathContainer.h
+        src/ShortestPath/ShortestPath.h
+        src/ShortestPath/Transit/TransitShortestPath.h
+        src/ShortestPath/Transit/TransitShortestPathPrecompute.cpp
+        src/ShortestPath/Transit/TransitShortestPathPrecompute.h
+        src/ShortestPath/Transit/XatDeltaIterationSolutionContainer.h
+        src/ShortestPath/Transit/XatDeltaIterationSolutionContainer.h
 )

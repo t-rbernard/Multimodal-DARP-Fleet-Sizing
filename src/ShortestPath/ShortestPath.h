@@ -1,0 +1,13 @@
+//
+// Created by Bebs on 20/02/2024.
+//
+
+#ifndef GREEDYALGORITHM_SHORTESTPATH_H
+#define GREEDYALGORITHM_SHORTESTPATH_H
+
+class ShortestPath {
+
+};
+
+
+#endif //GREEDYALGORITHM_SHORTESTPATH_H
