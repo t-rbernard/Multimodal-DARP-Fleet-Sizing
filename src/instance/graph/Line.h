@@ -8,6 +8,7 @@
 
 #include <utility>
 #include <vector>
+#include "../../utils/SearchAlgorithms.h"
 
 class Line {
 private:
@@ -28,6 +29,23 @@ public:
     //TODO : for unit tests, add Line from file creation function
     //  check(), checkSchedules(), checkNodesLink(nodesvector)
     //  Additionally, Line verifier utility functions could be good here (both debug, unit tests and instance verification => Graph.check() checks all subcomponent)
+
+    /**
+     * Searches for the next scheduled passage at a given station after a given timestep O(log n)
+     * @param stationIdx The station number for which we want to search the schedule
+     * @param timestep The timestep of arrival at the station, hence we look for the value itself or the first greater timestep
+     * @return a vector index corresponding to the next valid passage at the given station and after or at the given timestep
+     */
+    size_t findNextScheduledPassage(int stationIdx, int timestep) {
+        return SearchAlgorithms<int>::findNextSortedValue(_timetables.at(stationIdx), timestep);
+    }
+    /**
+     * Returns the timestep for the given station at a given schedule position, O(1)
+     * @param stationIdx The station number for which we want to search the schedule
+     * @param scheduleIdx The expected index of our passage
+     * @return The timestep associated with the given station at the given schedule position
+     */
+    int getTimestep(int stationIdx, int scheduleIdx) { return _timetables.at(stationIdx).at(scheduleIdx); }
     bool check();
 };
 
