@@ -8,11 +8,13 @@
 
 #include <utility>
 #include <string>
+#include <random>
 #include <filesystem>
 
 #include "Node.h"
 #include "Edge.h"
 
+class DATRow;
 class Graph {
 private:
     std::vector<Node> nodesVector; //The full list of nodes created in the graph
@@ -25,6 +27,12 @@ private:
      * @return True if @this is properly referenced in the Line object at the expected index
      */
     bool checkLineToNodeLinks();
+    void parseNodeRow(const DATRow& row);
+    void parseEdgeRow(const DATRow& row);
+    void parseLineRandomizedSchedule(const DATRow &row, std::mt19937 rng,
+                                     std::uniform_int_distribution<uint32_t> travelTimeDistribution,
+                                     std::uniform_int_distribution<uint32_t> startTimeDistribution);
+
 public:
     [[nodiscard]] const std::vector<Node> &getNodesVector() const {
         return nodesVector;
@@ -100,6 +108,13 @@ public:
      */
     bool check();
 
+    /**
+     * Adds a new edge at the back of the edgesVector, and properly links this edge to its entry and exit nodes
+     * @param edgeStartNodeIndex Index of the node serving as a starting point for this edge
+     * @param edgeEndNodeIndex Index of the node serving as an exit point for this edge
+     * @param length The length of this edge (in minutes)
+     */
+    void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
 };
 
 

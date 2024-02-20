@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <set>
 #include <unordered_map>
+#include <vector>
 
 /**
  * Status used to qualify nodes as places with different goals (work, leisure, residential)
@@ -31,8 +32,9 @@ private:
     double _x;
     double _y;
     std::set<LineStop> _ptLines;
-    //TODO : for easier access, add an outgoing edges vector (reminder to also account for that in graph generation)
-    //  Do we need incoming edges vector ? (don't think so)
+    std::vector<int> _incomingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
+    std::vector<int> _outgoingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
+    //TODO : Should these vectors be considered complete over the whole set of nodes ? Probably ? Considering we will probably pre-process shortest paths between all SAEV stations
 
 public:
     Node();
@@ -69,6 +71,8 @@ public:
     [[nodiscard]] double getX() const {return _x;}
     [[nodiscard]] double getY() const {return _y;}
     [[nodiscard]] Status getStatus() const {return _status;}
+    [[nodiscard]] std::vector<int> getIncomingEdges() const {return _incomingEdgesIndex;}
+    [[nodiscard]] std::vector<int> getOutgoingEdges() const {return _outgoingEdgesIndex;}
     [[nodiscard]] std::set<LineStop> getPTLinesSet() const {return _ptLines;}
 
     /**
