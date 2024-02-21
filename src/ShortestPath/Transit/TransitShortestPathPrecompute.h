@@ -6,9 +6,10 @@
 #define GREEDYALGORITHM_TRANSITSHORTESTPATHPRECOMPUTE_H
 
 #include "../TimeDependentShortestPathContainer.h"
+#include "TransitShortestPath.h"
 
 class TransitShortestPathPrecompute {
-    static ShortestPathContainer formatResults(TimeDependentShortestPathContainer container);
+    static ShortestPathContainer<TransitShortestPath> formatResults(TimeDependentShortestPathContainer<TransitShortestPath> container);
 };
 
 

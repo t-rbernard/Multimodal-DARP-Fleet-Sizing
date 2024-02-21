@@ -5,12 +5,15 @@
 #ifndef GREEDYALGORITHM_TIMEDEPENDENTSHORTESTPATHCONTAINER_H
 #define GREEDYALGORITHM_TIMEDEPENDENTSHORTESTPATHCONTAINER_H
 
+#include <vector>
 #include "ShortestPathContainer.h"
 
-
-class TimeDependentShortestPathContainer : public ShortestPathContainer {
+template <typename KeyPoint>
+class TimeDependentShortestPathContainer {
 public:
-    ShortestPath findShortestPath(int startNode, int destinationNode, )
+    virtual ShortestPath<KeyPoint> findShortestPath(int startNode, int destinationNode, int startTimestep) = 0;
+    virtual std::vector<ShortestPath<KeyPoint>> findDestinationsFrom(int startNode, int startTimestep) = 0;
+    virtual std::vector<ShortestPath<KeyPoint>> findDepartureListToArriveAtWindow(int destinationNode, int minArrivalTimestep, int maxArrivalTimestep) = 0;
 };
 
 
