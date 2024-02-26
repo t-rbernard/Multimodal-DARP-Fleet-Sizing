@@ -10,8 +10,8 @@ int main() {
 //          "../resources/test/instances/basic_debug_instance/edges.csv",
 //          "../resources/test/instances/basic_debug_instance/PT_lines.csv");
 
-    Graph give_me_another_name("../resources/test/instances/basic_debug_instance/graph.dat");
-    give_me_another_name.exportGraphToFiles("../resources/test/outputs/basic_debug_instance/");
+    Graph graphFromSingleFile("../resources/test/instances/basic_debug_instance/graph.dat");
+    graphFromSingleFile.exportGraphToFiles("../resources/test/outputs/basic_debug_instance/");
     TransitStateContainer stateContainer;
     stateContainer.pushNewState(0);
     return 0;

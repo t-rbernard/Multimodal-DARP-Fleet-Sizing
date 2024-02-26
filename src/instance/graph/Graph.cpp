@@ -20,7 +20,7 @@ std::vector<Line> Graph::addLine(Line& line) {
     //Add line stops to nodes
     for(int i = 0; i < line.getNodes().size(); ++i)
     {
-        nodesVector.at(i).addBusLine(line, i);
+        nodesVector.at(line.getNode(i)).addBusLine(line, i);
     }
     //Add transit line to transit lines vector
     transitLines.push_back(line);
@@ -30,9 +30,6 @@ std::vector<Line> Graph::addLine(Line& line) {
 Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath, const std::string& ptLinesFilePath) {
 
     //Nodes instantiation
-    double x;
-    double y;
-    Status status;
     std::ifstream nodesFile(nodesFilePath);
     std::cout << "Nodes instantiation" << std::endl;
     for(auto& row: CSVRange(nodesFile))
@@ -60,8 +57,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
         //If no header, do the thing
         if(!static_cast<std::string>(row[0]).starts_with('#'))
         {
-            this->parseLineRandomizedSchedule(row, rng, uint_dist10, uint_dist60);
-            DEBUG_MSG("Created new line with nodes");
+            parseLineRandomizedSchedule(row, rng, uint_dist10, uint_dist60);
         }
     }
     std::cout << "test is done" << std::endl;
