@@ -11,23 +11,23 @@
 
 class TransitAlgorithmState {
 private:
-    int _currentNodeIndex;
-    int _currentInstant;
-    int _currentPassageIndex;
+    int _nodeIndex;
+    int _instant;
+    int _passageIndex;
     std::vector<LineStop> _connections;
 
 public:
     TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex) {
-        _currentNodeIndex = currentNode;
-        _currentInstant = currentInstant;
-        _currentPassageIndex = currentPassageIndex;
+        _nodeIndex = currentNode;
+        _instant = currentInstant;
+        _passageIndex = currentPassageIndex;
         _connections.reserve(2); //TODO : replace constant max amount of connexions with a global parameter
     }
 
     TransitAlgorithmState(TransitAlgorithmState& baseState) {
-        _currentNodeIndex = baseState.getCurrentNodeIndex();
-        _currentInstant = baseState.getCurrentInstant();
-        _currentPassageIndex = baseState.getCurrentPassageIndex();
+        _nodeIndex = baseState.getNodeIndex();
+        _instant = baseState.getInstant();
+        _passageIndex = baseState.getPassageIndex();
 
         if(!baseState.getConnections().empty() && (!baseState.getConnections().empty() && !baseState.getConnections().at(0).isEmpty()))
             std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
@@ -36,9 +36,9 @@ public:
     TransitAlgorithmState(TransitAlgorithmState&& baseStatePointer) = default;
 
     TransitAlgorithmState(TransitAlgorithmState& baseState, const LineStop& newConnection) {
-        _currentNodeIndex = baseState.getCurrentNodeIndex();
-        _currentInstant = baseState.getCurrentInstant();
-        _currentPassageIndex = baseState.getCurrentPassageIndex();
+        _nodeIndex = baseState.getNodeIndex();
+        _instant = baseState.getInstant();
+        _passageIndex = baseState.getPassageIndex();
 
         if(!baseState.getConnections().empty() && (!baseState.getConnections().empty() && !baseState.getConnections().at(0).isEmpty()))
             std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
@@ -47,27 +47,27 @@ public:
     }
 
     explicit TransitAlgorithmState(int nodeIndex) {
-        _currentNodeIndex = nodeIndex;
-        _currentInstant = 0;
-        _currentPassageIndex = 0;
+        _nodeIndex = nodeIndex;
+        _instant = 0;
+        _passageIndex = 0;
     }
 
     explicit TransitAlgorithmState() {
-        _currentNodeIndex = -1;
-        _currentInstant = 0;
-        _currentPassageIndex = 0;
+        _nodeIndex = -1;
+        _instant = 0;
+        _passageIndex = 0;
     }
 
-    [[nodiscard]] int getCurrentNodeIndex() const {
-        return _currentNodeIndex;
+    [[nodiscard]] int getNodeIndex() const {
+        return _nodeIndex;
     }
 
-    [[nodiscard]] int getCurrentInstant() const {
-        return _currentInstant;
+    [[nodiscard]] int getInstant() const {
+        return _instant;
     }
 
-    [[nodiscard]] int getCurrentPassageIndex() const {
-        return _currentPassageIndex;
+    [[nodiscard]] int getPassageIndex() const {
+        return _passageIndex;
     }
 
     [[nodiscard]] const std::vector<LineStop> &getConnections() const {
@@ -98,9 +98,9 @@ public:
      * @return
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
-        return this->_currentNodeIndex == rhs.getCurrentNodeIndex() //same current node
-               && ((this->getCurrentInstant() < rhs.getCurrentInstant() && this->getConnections().size() <= rhs.getConnections().size())
-               || (this->getCurrentInstant() < rhs.getCurrentInstant() && this->getConnections().size() == rhs.getConnections().size()));
+        return this->_nodeIndex == rhs.getNodeIndex() //same current node
+               && ((this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
+               || (this->getInstant() < rhs.getInstant() && this->getConnections().size() == rhs.getConnections().size()));
     }
 
     /**
@@ -109,23 +109,23 @@ public:
      * @return
      */
     bool operator<(const TransitAlgorithmState& rhs) const {
-        return this->_currentNodeIndex == rhs.getCurrentNodeIndex() //same current node
-                && (this->getCurrentInstant() < rhs.getCurrentInstant() //strictly better time
-                || (this->getCurrentInstant() == rhs.getCurrentInstant()
+        return this->_nodeIndex == rhs.getNodeIndex() //same current node
+                && (this->getInstant() < rhs.getInstant() //strictly better time
+                || (this->getInstant() == rhs.getInstant()
                     && this->getConnections().size() < rhs.getConnections().size())); //same arrival time and strictly better connections
     }
 
     bool operator>(const TransitAlgorithmState& rhs) const {
-        return this->_currentNodeIndex == rhs.getCurrentNodeIndex() //same current node
-                && (this->getCurrentInstant() > rhs.getCurrentInstant()
-                || (this->getCurrentInstant() == rhs.getCurrentInstant()
+        return this->_nodeIndex == rhs.getNodeIndex() //same current node
+                && (this->getInstant() > rhs.getInstant()
+                || (this->getInstant() == rhs.getInstant()
                     && this->getConnections().size() > rhs.getConnections().size()));
     }
 
     TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) {
-        _currentNodeIndex = baseState.getCurrentNodeIndex();
-        _currentInstant = baseState.getCurrentInstant();
-        _currentPassageIndex = baseState.getCurrentPassageIndex();
+        _nodeIndex = baseState.getNodeIndex();
+        _instant = baseState.getInstant();
+        _passageIndex = baseState.getPassageIndex();
         std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
 
         return *this;

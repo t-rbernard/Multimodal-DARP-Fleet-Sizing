@@ -36,17 +36,17 @@ public:
 //    FIXME: check if I can properly remove this or if shortest path comparisons may be useful
 //    [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
 //        return this->getKeyPoints().size() <= rhs.getConnections().size()
-//               && this->getDuration() <= rhs.getCurrentInstant();
+//               && this->getDuration() <= rhs.getInstant();
 //    }
 //
 //    bool operator<(const TransitAlgorithmState& rhs) const {
-//        return this->getDuration() < rhs.getCurrentInstant() ||
-//               (this->getDuration() == rhs.getCurrentInstant() && this->getKeyPoints().size() < rhs.getConnections().size());
+//        return this->getDuration() < rhs.getInstant() ||
+//               (this->getDuration() == rhs.getInstant() && this->getKeyPoints().size() < rhs.getConnections().size());
 //    }
 //
 //    bool operator>(const TransitAlgorithmState& rhs) const {
-//        return this->getDuration() > rhs.getCurrentInstant() ||
-//               (this->getDuration() == rhs.getCurrentInstant() && this->getKeyPoints().size() > rhs.getConnections().size());
+//        return this->getDuration() > rhs.getInstant() ||
+//               (this->getDuration() == rhs.getInstant() && this->getKeyPoints().size() > rhs.getConnections().size());
 //    }
 };
 
