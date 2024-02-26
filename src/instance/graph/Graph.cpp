@@ -60,40 +60,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
         //If no header, do the thing
         if(!static_cast<std::string>(row[0]).starts_with('#'))
         {
-            //add nodes for the line
-            Line newLine = Line();
-            for(int i = 2; i < row.size(); ++i)
-            {
-                std::from_chars(row[i].data(), row[i].data() + row[i].size(), currentNode);
-                newLine.addNode(currentNode);
-            }
-
-            //Create timetable for starting point
-            std::vector<int> timeTable;
-            std::from_chars(row[0].data(), row[0].data() + row[0].size(), frequency);
-            std::from_chars(row[1].data(), row[1].data() + row[1].size(), startTime);
-            int currentTime = startTime + uint_dist60(rng); //random startTime time with 60min max offset
-            while(currentTime + frequency < endTime)
-            {
-                timeTable.push_back(currentTime + frequency);
-                currentTime += frequency;
-            }
-            newLine.addTimetable(timeTable);
-
-            //Create subsequent timetables according to preceding timetable and travel time
-            for(int i = 1; i < newLine.getNodes().size(); ++i)
-            {
-                int travelTime = uint_dist10(rng); //FIXME travel time is randomized for now, we should get edge length if it exists I guess
-                std::vector<int> precedingTimeTable = newLine.getTimetable(i - 1);
-                std::vector<int> newTimetable;
-                for(auto it = precedingTimeTable.begin(); it != precedingTimeTable.end(); ++it)
-                {
-                    newTimetable.emplace_back(*it.base() + travelTime);
-                }
-                newLine.addTimetable(newTimetable);
-                newTimetable.clear();
-            }
-
+            this->parseLineRandomizedSchedule(row, rng, uint_dist10, uint_dist60);
             DEBUG_MSG("Created new line with nodes");
         }
     }
