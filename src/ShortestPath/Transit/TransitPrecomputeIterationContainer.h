@@ -9,9 +9,11 @@
 #include "TransitShortestPath.h"
 
 class TransitPrecomputeIterationContainer {
-//    int x,delta;
+private:
+    //    int x,delta;
     std::vector<std::array<TransitAlgorithmState,2>>  solutionVector;
 
+public:
     /**
      * Returns the current best solution for the given node index
      * @param nodeIndex
@@ -19,6 +21,8 @@ class TransitPrecomputeIterationContainer {
      */
     TransitAlgorithmState getBestSolution(int nodeIndex){ return solutionVector.at(nodeIndex)[0];}
     std::array<TransitAlgorithmState,2> getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
+    std::vector<std::array<TransitAlgorithmState,2>>& getSolutionsVector(){ return solutionVector;}
+//    void resizeSolutionsVector(int nbNodes){ solutionVector.resize(nbNodes);}
 
     /**
      * Check if the two solutions for the given nodeIndex are ordered properly and swaps them if needed

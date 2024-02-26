@@ -14,13 +14,14 @@ private:
     int _currentNodeIndex;
     int _currentInstant;
     int _currentPassageIndex;
-    std::array<LineStop, 2> _connections; //TODO : replace constant max amount of connexions with a global parameter
+    std::vector<LineStop> _connections;
 
 public:
     TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex) {
         _currentNodeIndex = currentNode;
         _currentInstant = currentInstant;
         _currentPassageIndex = currentPassageIndex;
+        _connections = std::vector<LineStop>(2); //TODO : replace constant max amount of connexions with a global parameter
     }
 
     TransitAlgorithmState(TransitAlgorithmState& baseState) {
@@ -36,7 +37,18 @@ public:
         _currentPassageIndex = baseState.getCurrentPassageIndex();
         std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
         addNewConnection(newConnection);
+    }
 
+    explicit TransitAlgorithmState(int nodeIndex) {
+        _currentNodeIndex = nodeIndex;
+        _currentInstant = 0;
+        _currentPassageIndex = 0;
+    }
+
+    explicit TransitAlgorithmState() {
+        _currentNodeIndex = -1;
+        _currentInstant = 0;
+        _currentPassageIndex = 0;
     }
 
     [[nodiscard]] int getCurrentNodeIndex() const {
@@ -51,7 +63,7 @@ public:
         return _currentPassageIndex;
     }
 
-    [[nodiscard]] const std::array<LineStop, 2> &getConnections() const {
+    [[nodiscard]] const std::vector<LineStop> &getConnections() const {
         return _connections;
     }
 

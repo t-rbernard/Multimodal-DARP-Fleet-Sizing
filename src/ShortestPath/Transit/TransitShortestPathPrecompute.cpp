@@ -7,6 +7,9 @@
 TransitPrecomputeIterationContainer
 TransitShortestPathPrecompute::executeAlgorithm(const Graph& graph, int nodeIndex, int instant) {
     TransitPrecomputeIterationContainer solutionsContainer{};
+    for(nodeIndex = 0; nodeIndex < graph.getNodesVector().size(); ++nodeIndex) {
+
+    }
 
     return solutionsContainer;
 }
