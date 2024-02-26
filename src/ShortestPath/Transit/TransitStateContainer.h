@@ -8,7 +8,7 @@
 #include <vector>
 #include "TransitShortestPath.h"
 
-class TransitPrecomputeIterationContainer {
+class TransitStateContainer {
 private:
     //    int x,delta;
     std::vector<TransitAlgorithmState>  solutionVector;
@@ -19,7 +19,7 @@ public:
      * @param nodeIndex
      * @return The first solution of potentially two saved in this array
      */
-    TransitAlgorithmState getBestSolution(int nodeIndex){ return solutionVector.at(nodeIndex)[0];}
+    TransitAlgorithmState getBestSolution(int nodeIndex){ return solutionVector.at(nodeIndex);}
     std::vector<TransitAlgorithmState>& getSolutionsVector(){ return solutionVector;}
 //    void resizeSolutionsVector(int nbNodes){ solutionVector.resize(nbNodes);}
 
@@ -33,7 +33,8 @@ public:
             return false;
         }
     }
-    bool pushNewState(int nodeIndex)
+
+    void pushNewState(int nodeIndex)
     {
         solutionVector.emplace_back(nodeIndex, 0, 0);
     }
