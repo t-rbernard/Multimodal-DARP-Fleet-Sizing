@@ -38,6 +38,10 @@ public:
         return nodesVector;
     }
 
+    [[nodiscard]] const Node &getNode(int nodeIndex) const {
+        return nodesVector.at(nodeIndex);
+    }
+
     /**
      * @return The graph's edge vector
      */
