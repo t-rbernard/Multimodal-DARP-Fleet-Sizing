@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "../src/instance/graph/Graph.h"
+#include "../src/ShortestPath/Transit/TransitStateContainer.h"
 
 int main() {
 //    Graph give_me_a_name("../resources/test/instances/basic_debug_instance/nodes.csv",
@@ -11,5 +12,7 @@ int main() {
 
     Graph give_me_another_name("../resources/test/instances/basic_debug_instance/graph.dat");
     give_me_another_name.exportGraphToFiles("../resources/test/outputs/basic_debug_instance/");
+    TransitStateContainer stateContainer;
+    stateContainer.pushNewState(0);
     return 0;
 }

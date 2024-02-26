@@ -36,7 +36,8 @@ public:
 
     void pushNewState(int nodeIndex)
     {
-        solutionVector.emplace_back(nodeIndex, 0, 0);
+        TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex, 0, 0);
+        solutionVector.emplace_back(&newState);
     }
 };
 
