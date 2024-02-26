@@ -177,7 +177,7 @@ bool Graph::check() {
 
 bool Graph::checkLineToNodeLinks() {
     int nodeIndexFromLine;
-    Node& nodeFromGraph(nodesVector.at(0)); //Forced to init here
+    Node* nodeFromGraph; //Forced to init here
 
     bool checkResult = true;
     for(auto& node : nodesVector)
@@ -185,8 +185,8 @@ bool Graph::checkLineToNodeLinks() {
         for(auto& lineStop : node.getPTLinesSet())
         {
             nodeIndexFromLine = lineStop.getLineRef().getNode(lineStop.getStopIndex());
-            nodeFromGraph = this->nodesVector.at(nodeIndexFromLine);
-            checkResult &= nodeFromGraph == node;
+            nodeFromGraph = &this->nodesVector.at(nodeIndexFromLine);
+            checkResult &= *nodeFromGraph == node;
         }
     }
     return checkResult;
