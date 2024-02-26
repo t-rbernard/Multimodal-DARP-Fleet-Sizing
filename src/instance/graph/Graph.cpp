@@ -231,6 +231,9 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
     int startTime, endTime, frequency, currentNodeIdx;
     //add nodes for the line
     Line newLine = Line();
+    //Give it an ID
+    //TODO : use proper IDs in parsing for line names
+    newLine.setLineId(std::to_string(this->transitLines.size()));
 
     //Create a base timetable. It'll be used as a basis to generate subsequent nodes' timetables
     std::vector<int> timeTable;

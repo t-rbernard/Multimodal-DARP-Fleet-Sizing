@@ -8,18 +8,22 @@
 
 #include <utility>
 #include <vector>
+#include <string>
 #include "../../utils/SearchAlgorithms.h"
 
 class Line {
 private:
+    std::string lineID;
     std::vector<int> _nodes; //index according to Graph::_nodes, sorted according to line order (start -> terminus)
     std::vector<std::vector<int>> _timetables; //list of list of timestamps for each node start order (size of _timetables must remain constant throughout the whole vector
     bool checkSchedules();
 public:
     Line() = default;
 
-    std::vector<int> getNodes() { return _nodes;};
-    int getNode(int index) { return _nodes.at(index);};
+    [[nodiscard]] const std::string &getLineId() const;
+    void setLineId(const std::string &lineId);
+    [[nodiscard]] std::vector<int> getNodes() const { return _nodes;};
+    [[nodiscard]] int getNode(int index) const { return _nodes.at(index);};
     void addNode(const int node){this->_nodes.emplace_back(node);};
     [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
@@ -45,6 +49,15 @@ public:
      */
     int getTimestep(int stationIdx, int scheduleIdx) { return _timetables.at(stationIdx).at(scheduleIdx); }
     bool check();
+
+    bool operator==(const Line &rhs) const {
+        return lineID == rhs.getLineId();
+    }
+
+    bool operator!=(const Line &rhs) const {
+        return lineID != rhs.getLineId();
+    }
+
 };
 
 #include "Node.h"

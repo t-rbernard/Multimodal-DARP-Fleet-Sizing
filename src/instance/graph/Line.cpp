@@ -26,3 +26,11 @@ bool Line::checkSchedules() {
     }
     return checkResult;
 }
+
+const std::string &Line::getLineId() const {
+    return lineID;
+}
+
+void Line::setLineId(const std::string &lineId) {
+    lineID = lineId;
+}
