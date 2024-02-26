@@ -27,6 +27,28 @@ public:
         _lineRef = lineRef;
     }
 
+    /**
+     * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor
+     */
+    int getNextNodeIndex() const
+    {
+        if(_stopIndex + 1 < _lineRef.getNodes().size())
+            return _lineRef.getNode(_stopIndex + 1);
+        else
+            return -1;
+    }
+
+    /**
+     * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor
+     */
+    int getPrecedingNodeIndex() const
+    {
+        if(_stopIndex - 1 > 0)
+            return _lineRef.getNode(_stopIndex - 1);
+        else
+            return -1;
+    }
+
     [[nodiscard]] int getStopIndex() const {
         return _stopIndex;
     }
