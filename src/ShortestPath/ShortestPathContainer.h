@@ -1,5 +1,5 @@
 //
-// Created by Bebs on 20/02/2024.
+// Created by rbernard on 20/02/2024.
 //
 
 #ifndef GREEDYALGORITHM_SHORTESTPATHCONTAINER_H
