@@ -35,6 +35,10 @@ public:
         _stopIndex = stopIndex;
     }
 
+    [[nodiscard]] bool isEmpty() const{
+        return _lineRef.isEmpty();
+    }
+
     bool operator<(LineStop const& rhs) const {return &this->_lineRef < &rhs._lineRef;} //just check line addresses. Basically we just don't want the exact same line twice
 };
 

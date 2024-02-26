@@ -13,6 +13,9 @@ int main() {
     Graph graphFromSingleFile("../resources/test/instances/basic_debug_instance/graph.dat");
     graphFromSingleFile.exportGraphToFiles("../resources/test/outputs/basic_debug_instance/");
     TransitStateContainer stateContainer;
-    stateContainer.pushNewState(0);
+    stateContainer.resizeSolutionsVector(graphFromSingleFile.getNodesVector().size());
+    stateContainer.pushEmptyState(3);
+    stateContainer.getSolutions(3);
+    stateContainer.getBestSolution(3);
     return 0;
 }

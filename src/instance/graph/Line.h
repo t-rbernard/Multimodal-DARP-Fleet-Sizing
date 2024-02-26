@@ -21,14 +21,12 @@ public:
     std::vector<int> getNodes() { return _nodes;};
     int getNode(int index) { return _nodes.at(index);};
     void addNode(const int node){this->_nodes.emplace_back(node);};
+    [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
     std::vector<int> getTimetable(int pos) { return _timetables.at(pos);};
     std::vector<std::vector<int>> getTimetables() { return _timetables;};
     void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
     void setTimetable(int pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
-    //TODO : for unit tests, add Line from file creation function
-    //  check(), checkSchedules(), checkNodesLink(nodesvector)
-    //  Additionally, Line verifier utility functions could be good here (both debug, unit tests and instance verification => Graph.check() checks all subcomponent)
 
     /**
      * Searches for the next scheduled passage at a given station after a given timestep O(log n)
