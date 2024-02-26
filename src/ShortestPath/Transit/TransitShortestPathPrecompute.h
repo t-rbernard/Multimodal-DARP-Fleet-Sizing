@@ -7,12 +7,12 @@
 
 #include "../TimeDependentShortestPathContainer.h"
 #include "TransitShortestPath.h"
-#include "TransitPrecomputeIterationContainer.h"
 #include "../../instance/graph/Graph.h"
+#include "TransitStateContainer.h"
 
 class TransitShortestPathPrecompute {
     static ShortestPathContainer<TransitShortestPath> formatResults(TimeDependentShortestPathContainer<TransitShortestPath> container);
-    static TransitPrecomputeIterationContainer executeAlgorithm(const Graph& graph, int nodeIndex, int instant);
+    static TransitStateContainer executeAlgorithm(const Graph& graph, int nodeIndex, int instant);
 };
 
 

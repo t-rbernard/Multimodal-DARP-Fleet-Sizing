@@ -30,8 +30,6 @@ add_executable(GreedyAlgorithm
         src/ShortestPath/Transit/TransitShortestPath.h
         src/ShortestPath/Transit/TransitShortestPathPrecompute.cpp
         src/ShortestPath/Transit/TransitShortestPathPrecompute.h
-        src/ShortestPath/Transit/TransitPrecomputeIterationContainer.h
-        src/ShortestPath/Transit/TransitPrecomputeIterationContainer.h
         src/ShortestPath/Transit/TransitAlgorithmState.cpp
         src/ShortestPath/Transit/TransitAlgorithmState.h
 )

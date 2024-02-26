@@ -3,10 +3,11 @@
 //
 
 #include "TransitShortestPathPrecompute.h"
+#include "TransitStateContainer.h"
 
-TransitPrecomputeIterationContainer
-TransitShortestPathPrecompute::executeAlgorithm(const Graph& graph, int nodeIndex, int instant) {
-    TransitPrecomputeIterationContainer solutionsContainer{};
+TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Graph& graph, int nodeIndex, int instant) {
+    TransitStateContainer solutionsContainer{};
+    solutionsContainer.resizeSolutionsVector(graph.getNodesVector().size());
     for(nodeIndex = 0; nodeIndex < graph.getNodesVector().size(); ++nodeIndex) {
 
     }
