@@ -18,7 +18,7 @@ int main() {
     Graph graphFromSingleFile("../resources/test/instances/" + instanceFolder + datFile);
     graphFromSingleFile.exportGraphToFiles("../resources/test/outputs/" + instanceFolder);
     for(auto& ptLine : graphFromSingleFile.getPTLines()) {
-        for(int i = 0; i < ptLine.getNodes().size(); ++i) {
+        for(int i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 TransitShortestPathPrecompute::executeAlgorithm(graphFromSingleFile, ptLine.getNode(i),startingTime);
             }

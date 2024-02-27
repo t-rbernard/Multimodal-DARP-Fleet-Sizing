@@ -48,6 +48,9 @@ public:
      */
     [[nodiscard]] int getInstant(int stationIdx, int scheduleIdx) const { return _timetables.at(stationIdx).at(scheduleIdx); }
 
+    [[nodiscard]] size_t size() const {return _nodes.size();}
+    [[nodiscard]] size_t scheduleSize() const {return _timetables.empty() ? 0 : _timetables.at(0).size();}
+
     [[nodiscard]] bool check() const;
     [[nodiscard]] bool checkSchedules() const;
 

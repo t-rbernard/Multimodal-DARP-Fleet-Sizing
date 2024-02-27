@@ -18,7 +18,7 @@
 
 std::vector<Line> Graph::addLine(Line& line) {
     //Add line stops to nodes
-    for(int i = 0; i < line.getNodes().size(); ++i)
+    for(int i = 0; i < line.size(); ++i)
     {
         nodesVector.at(line.getNode(i)).addBusLine(line, i);
     }
