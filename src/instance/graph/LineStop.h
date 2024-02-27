@@ -17,7 +17,7 @@ private:
 
 public:
     LineStop() = default;
-    LineStop(Line lineRef, int stopIndex) : _lineRef(std::move(lineRef)), _stopIndex(stopIndex) {}
+    LineStop(const Line& lineRef, int stopIndex) : _lineRef(lineRef), _stopIndex(stopIndex) {}
 
     [[nodiscard]] Line getLineRef() const {
         return _lineRef;
@@ -30,7 +30,7 @@ public:
     /**
      * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor
      */
-    int getNextNodeIndex() const
+    [[nodiscard]] int getNextNodeIndex() const
     {
         if(_stopIndex + 1 < _lineRef.getNodes().size())
             return _lineRef.getNode(_stopIndex + 1);
@@ -41,7 +41,7 @@ public:
     /**
      * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor
      */
-    int getPrecedingNodeIndex() const
+    [[nodiscard]] int getPrecedingNodeIndex() const
     {
         if(_stopIndex - 1 > 0)
             return _lineRef.getNode(_stopIndex - 1);
@@ -62,6 +62,12 @@ public:
     }
 
     bool operator<(LineStop const& rhs) const {return &this->_lineRef < &rhs._lineRef;} //just check line addresses. Basically we just don't want the exact same line twice
+
+    LineStop& operator=(LineStop const& rhs) {
+        _lineRef = rhs.getLineRef();
+        _stopIndex = rhs.getStopIndex();
+        return *this;
+    }
 };
 
 

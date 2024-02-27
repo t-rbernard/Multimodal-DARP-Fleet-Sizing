@@ -22,6 +22,7 @@ public:
     TransitAlgorithmState& getBestSolution(int nodeIndex){ return solutionVector.at(nodeIndex)[0];}
     std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
     std::vector<std::vector<TransitAlgorithmState>>& getSolutionsVector(){ return solutionVector;}
+
     /**
      * Resizes solution vector and initializes state vectors to be able to add our solutions during algorithm execution
      * @param nbNodes How many nodes there are in the full graph
@@ -44,7 +45,7 @@ public:
 
     void pushEmptyState(int nodeIndex)
     {
-        TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex, 0, 0);
+        TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex, INT16_MAX, 0);
         solutionVector.at(nodeIndex).emplace_back(newState);
     }
 };

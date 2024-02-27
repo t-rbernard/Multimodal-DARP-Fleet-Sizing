@@ -11,6 +11,7 @@
 #include "TransitStateContainer.h"
 
 class TransitShortestPathPrecompute {
+public:
     static ShortestPathContainer<TransitShortestPath> formatResults(TimeDependentShortestPathContainer<TransitShortestPath> container);
     static TransitStateContainer executeAlgorithm(const Graph& graph, int nodeIndex, int instant);
 };

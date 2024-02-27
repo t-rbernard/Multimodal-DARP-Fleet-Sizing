@@ -4,11 +4,11 @@
 
 #include "Line.h"
 
-bool Line::check() {
+bool Line::check() const{
     return checkSchedules(); //Add any new check function here (if useful, add parameters to check() to only do certain checks
 }
 
-bool Line::checkSchedules() {
+bool Line::checkSchedules() const{
     bool checkResult = true;
     checkResult &= _nodes.size() == _timetables.size(); //check we have as many schedules as nodes in our line
 
@@ -28,9 +28,9 @@ bool Line::checkSchedules() {
 }
 
 const std::string &Line::getLineId() const {
-    return lineID;
+    return _lineID;
 }
 
 void Line::setLineId(const std::string &lineId) {
-    lineID = lineId;
+    _lineID = lineId;
 }

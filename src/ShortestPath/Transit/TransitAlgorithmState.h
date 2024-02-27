@@ -29,8 +29,10 @@ public:
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
 
-        if(!baseState.getConnections().empty() && (!baseState.getConnections().empty() && !baseState.getConnections().at(0).isEmpty()))
-            std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
+        //Copy old connections
+        for(auto& lineStop : baseState.getConnections()) {
+            _connections.emplace_back(lineStop);
+        }
     }
 
     TransitAlgorithmState(TransitAlgorithmState&& baseStatePointer) = default;
@@ -40,8 +42,10 @@ public:
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
 
-        if(!baseState.getConnections().empty() && (!baseState.getConnections().empty() && !baseState.getConnections().at(0).isEmpty()))
-            std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
+        //Copy old connections
+        for(auto& lineStop : baseState.getConnections()) {
+            _connections.emplace_back(lineStop);
+        }
 
         addNewConnection(newConnection);
     }
@@ -74,6 +78,18 @@ public:
         return _connections;
     }
 
+    void setNodeIndex(int nodeIndex) {
+        _nodeIndex = nodeIndex;
+    }
+
+    void setInstant(int instant) {
+        _instant = instant;
+    }
+
+    void setPassageIndex(int passageIndex) {
+        _passageIndex = passageIndex;
+    }
+
     /**
      *
      * @param connection
@@ -82,7 +98,7 @@ public:
     bool addNewConnection(const LineStop& connection)
     {
         if(_connections.size() < _connections.max_size()) {
-            _connections[_connections.size()] = connection;
+            _connections.emplace_back(connection);
             return true;
         } else {
             return false;
@@ -99,7 +115,7 @@ public:
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
         return this->_nodeIndex == rhs.getNodeIndex() //same current node
-               && ((this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
+               && ((this->getInstant() < rhs.getInstant() && (this->getConnections().size() <= rhs.getConnections().size() || rhs.getConnections().empty()))
                || (this->getInstant() < rhs.getInstant() && this->getConnections().size() == rhs.getConnections().size()));
     }
 
@@ -126,7 +142,10 @@ public:
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
-        std::copy(baseState.getConnections().begin(), baseState.getConnections().end(), _connections.begin());
+        //Copy old connections
+        for(auto& lineStop : baseState.getConnections()) {
+            _connections.emplace_back(lineStop);
+        }
 
         return *this;
     }
