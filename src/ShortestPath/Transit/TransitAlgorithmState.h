@@ -52,14 +52,14 @@ public:
 
     explicit TransitAlgorithmState(int nodeIndex) {
         _nodeIndex = nodeIndex;
-        _instant = 0;
-        _passageIndex = 0;
+        _instant = INT16_MAX;
+        _passageIndex = -1;
     }
 
     explicit TransitAlgorithmState() {
         _nodeIndex = -1;
-        _instant = 0;
-        _passageIndex = 0;
+        _instant = INT16_MAX;
+        _passageIndex = -1;
     }
 
     [[nodiscard]] int getNodeIndex() const {

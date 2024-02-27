@@ -45,7 +45,7 @@ public:
 
     void pushEmptyState(int nodeIndex)
     {
-        TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex, INT16_MAX, 0);
+        TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex);
         solutionVector.at(nodeIndex).emplace_back(newState);
     }
 };
