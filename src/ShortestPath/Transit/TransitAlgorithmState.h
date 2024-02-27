@@ -143,6 +143,7 @@ public:
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
         //Copy old connections
+        _connections.clear(); //TODO: see with HT if there's a better way to do this for an assignment operator
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
