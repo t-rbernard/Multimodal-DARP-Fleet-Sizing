@@ -6,6 +6,13 @@
 #include "TransitStateContainer.h"
 #include <queue>
 
+#ifdef DEBUG_TRANSIT_PRECOMPUTE
+#include <iostream>
+#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#else
+#define DEBUG_MSG(str) do { } while ( false )
+#endif
+
 //TODO:
 //  Tests :
 //      - priority queue order
@@ -27,6 +34,8 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
         currentState = statePriorityQueue.top();
         statePriorityQueue.pop();
         if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
+            DEBUG_MSG("Comparing state " + currentState.toString() + " and \n" + solutionsContainer.getBestSolution(currentState.getNodeIndex()).toString());
+            DEBUG_MSG("State isn't dominated, trying to extend it");
             for (auto& lineStop : graph.getNode(currentState.getNodeIndex()).getPTLinesSet())
             {
                 int nextNode = lineStop.getNextNodeIndex();
@@ -48,8 +57,11 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                         newState.setInstant(lineStop.getLineRef().getInstant(lineStop.getStopIndex() + 1, currentState.getPassageIndex())); //replace time with
                     }
 
+                    DEBUG_MSG("Created new state " + newState.toString());
+
                     //Add new state to the solution container and the priority queue if it's not strictly dominated by an existing solution
                     if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
+                        DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue");
                         solutionsContainer.tryAddNewState(nextNode, newState);
                         statePriorityQueue.emplace(newState);
                     }

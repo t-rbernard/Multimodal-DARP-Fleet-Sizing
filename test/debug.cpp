@@ -12,7 +12,7 @@ int main() {
 //          "../resources/test/instances/basic_debug_instance/PT_lines.csv");
 
 //    std::string instanceFolder = "basic_debug_instance/";
-    std::string instanceFolder = "two_lines_debug_instance/";
+    std::string instanceFolder = "contiguous_lines_debug_instance/";
     std::string datFile = "graph.dat";
 
     Graph graphFromSingleFile("../resources/test/instances/" + instanceFolder + datFile);

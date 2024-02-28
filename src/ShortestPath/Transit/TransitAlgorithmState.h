@@ -7,6 +7,7 @@
 
 
 #include <array>
+#include <cstdint>
 #include "../../instance/graph/LineStop.h"
 
 class TransitAlgorithmState {
@@ -149,6 +150,25 @@ public:
         }
 
         return *this;
+    }
+
+    [[nodiscard]] std::string toString() const {
+        std::string res = "Node: " + std::to_string(_nodeIndex) + ", Instant: " + std::to_string(_instant);
+
+        //Add line names in order if needed
+        if(!_connections.empty()) {
+            res += ", Connections: ";
+            if(_connections.size() > 1) {
+                for(int i = 0; i < _connections.size() - 1; ++i) {
+                    res += _connections.at(i).getLineRef().getLineId() + " -> ";
+                }
+            }
+
+            res += _connections.at(_connections.size() - 1).getLineRef().getLineId();
+
+        }
+
+        return res;
     }
 
 };

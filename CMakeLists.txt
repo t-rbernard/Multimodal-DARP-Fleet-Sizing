@@ -3,6 +3,8 @@ project(GreedyAlgorithm)
 
 set(CMAKE_CXX_STANDARD 23)
 
+add_definitions(-DDEBUG_TRANSIT_PRECOMPUTE)
+
 add_executable(GreedyAlgorithm
         src/instance/graph/Node.cpp
         src/instance/graph/Node.h
