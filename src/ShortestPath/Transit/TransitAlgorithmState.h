@@ -139,6 +139,18 @@ public:
                     && this->getConnections().size() > rhs.getConnections().size()));
     }
 
+    bool operator==(const TransitAlgorithmState& rhs) const {
+        return this->_nodeIndex == rhs.getNodeIndex() //same current node
+                && this->getInstant() == rhs.getInstant()
+                && this->getConnections().size() == rhs.getConnections().size();
+    }
+
+    bool operator!=(const TransitAlgorithmState& rhs) const {
+        return this->_nodeIndex != rhs.getNodeIndex() //same current node
+                || this->getInstant() != rhs.getInstant()
+                || this->getConnections().size() != rhs.getConnections().size();
+    }
+
     TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) {
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
