@@ -45,11 +45,16 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                     if(currentState.getConnections().empty() || (currentState.getConnections().back().getLineRef() != lineStop.getLineRef()
                     && currentState.getConnections().size() < 2)) // if new line is different than current line
                     {
-                        newState = TransitAlgorithmState(currentState, lineStop);
-                        newState.setNodeIndex(nextNode);
                         int nextPassageIndex = lineStop.getLineRef().findNextScheduledPassage(lineStop.getStopIndex(),currentState.getInstant());
-                        newState.setPassageIndex(nextPassageIndex); //get next passage for new line
-                        newState.setInstant(lineStop.getLineRef().getInstant(lineStop.getStopIndex() + 1, nextPassageIndex)); //replace time with
+                        if(nextPassageIndex == lineStop.getLineRef().scheduleSize()) {
+                            newState.setInstant(INT16_MAX);
+                            break;
+                        } else {
+                            newState = TransitAlgorithmState(currentState, lineStop);
+                            newState.setNodeIndex(nextNode);
+                            newState.setPassageIndex(nextPassageIndex); //get next passage for new line
+                            newState.setInstant(lineStop.getLineRef().getInstant(lineStop.getStopIndex() + 1,nextPassageIndex)); //replace time with
+                        }
                     } else {
                         newState = TransitAlgorithmState(currentState);
                         newState.setNodeIndex(nextNode);
