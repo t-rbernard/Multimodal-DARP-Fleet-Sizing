@@ -21,6 +21,22 @@ private:
     std::vector<std::vector<TransitAlgorithmState>>  solutionVector;
 
 public:
+    explicit TransitStateContainer(int size)
+    {
+        solutionVector.reserve(size);
+//        TransitAlgorithmState emptyState{}; FIXME
+//        for(size_t i = 0; i < size; ++i) {
+//            solutionVector.at(i).assign(2, TransitAlgorithmState(emptyState));
+//        }
+    }
+    explicit TransitStateContainer(size_t size)
+    {
+        solutionVector.reserve(size);
+//        TransitAlgorithmState emptyState{}; FIXME
+//        for(size_t i = 0; i < size; ++i) {
+//            solutionVector.at(i).assign(2, TransitAlgorithmState(emptyState));
+//        }
+    }
     /**
      * Returns the current best solution for the given node index
      * @param nodeIndex
@@ -37,22 +53,11 @@ public:
     void resizeSolutionsVector(int nbNodes){ solutionVector.resize(nbNodes);}
 
 
-    bool tryAddNewState(int nodeIndex, const TransitAlgorithmState& newState)
+    void addNewState(int nodeIndex, const TransitAlgorithmState& newState)
     {
         DEBUG_MSG("Trying to add state " + newState.toString());
-        if(!solutionVector.at(nodeIndex).empty() && newState.strictlyDominates(solutionVector.at(nodeIndex)[0])) {
-            DEBUG_MSG("Added state to position 0, replacing " + solutionVector.at(nodeIndex)[0].toString());
-            solutionVector.at(nodeIndex)[0] = newState;
-            return true;
-        } else if(solutionVector.at(nodeIndex).size() > 1 && newState.strictlyDominates(solutionVector.at(nodeIndex)[1])) {
-            DEBUG_MSG("Added state to position 1, replacing " + solutionVector.at(nodeIndex)[1].toString());
-            solutionVector.at(nodeIndex)[1] = newState;
-            return true;
-        } else {
-            DEBUG_MSG("State wasn't added to the container because it doesn't dominate \n" +
-                        solutionVector.at(nodeIndex)[0].toString() +
-                        (solutionVector.at(nodeIndex).size() > 1 ? "\nor " + solutionVector.at(nodeIndex)[1].toString() : ""));
-            return false;
+        if(newState.getNbConnections() > 0) {
+            solutionVector.at(nodeIndex)[newState.getNbConnections()] = newState;
         }
     }
 

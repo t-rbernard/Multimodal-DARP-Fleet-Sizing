@@ -18,12 +18,8 @@
 //      - priority queue order
 //      - Reference value still valid after popping (otherwise, pop at the end, before adding new state)
 TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Graph& graph, int nodeIndex, int instant) {
-    TransitStateContainer solutionsContainer{};
-    solutionsContainer.resizeSolutionsVector(graph.getNodesVector().size());
-    for(int i = 0; i < graph.getNodesVector().size(); ++i) {
-        solutionsContainer.pushEmptyState(i);
-    }
-
+    //Init container, priority queue and state variables
+    TransitStateContainer solutionsContainer{graph.getNodesVector().size()};
     std::priority_queue<TransitAlgorithmState> statePriorityQueue;
     statePriorityQueue.emplace(nodeIndex, instant,0);
 
@@ -67,7 +63,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                     //Add new state to the solution container and the priority queue if it's not strictly dominated by an existing solution
                     if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
                         DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue");
-                        solutionsContainer.tryAddNewState(nextNode, newState);
+                        solutionsContainer.addNewState(nextNode, newState);
                         statePriorityQueue.emplace(newState);
                     }
                 }

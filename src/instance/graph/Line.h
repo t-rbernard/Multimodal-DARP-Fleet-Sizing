@@ -62,12 +62,12 @@ public:
         return _lineID != rhs.getLineId();
     }
 
-    Line& operator=(const Line &rhs) {
-        _lineID = rhs.getLineId();
-        _nodes = rhs.getNodes();
-        _timetables = rhs.getTimetables();
-        return *this;
-    }
+//    Line& operator=(const Line &rhs) {
+//        _lineID = rhs.getLineId();
+//        _nodes = rhs.getNodes();
+//        _timetables = rhs.getTimetables();
+//        return *this;
+//    }
 
 };
 

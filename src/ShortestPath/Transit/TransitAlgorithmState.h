@@ -29,6 +29,7 @@ public:
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
+        _connections.reserve(2);
 
         //Copy old connections
         for(auto& lineStop : baseState.getConnections()) {
@@ -42,6 +43,7 @@ public:
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
+        _connections.reserve(2);
 
         //Copy old connections
         for(auto& lineStop : baseState.getConnections()) {
@@ -55,12 +57,14 @@ public:
         _nodeIndex = nodeIndex;
         _instant = INT16_MAX;
         _passageIndex = -1;
+        _connections.reserve(2);
     }
 
     explicit TransitAlgorithmState() {
         _nodeIndex = -1;
         _instant = INT16_MAX;
         _passageIndex = -1;
+        _connections.reserve(2);
     }
 
     [[nodiscard]] int getNodeIndex() const {
@@ -77,6 +81,10 @@ public:
 
     [[nodiscard]] const std::vector<LineStop> &getConnections() const {
         return _connections;
+    }
+
+    [[nodiscard]] size_t getNbConnections() const {
+        return _connections.size();
     }
 
     void setNodeIndex(int nodeIndex) {
@@ -115,9 +123,7 @@ public:
      * @return
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
-        return this->_nodeIndex == rhs.getNodeIndex() //same current node
-               && ((!this->getConnections().empty() && rhs.getConnections().empty())
-               || (this->getInstant() <= rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size()));
+        return this->getInstant() <= rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size();
     }
 
     /**
@@ -151,18 +157,19 @@ public:
                 || this->getConnections().size() != rhs.getConnections().size();
     }
 
-    TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) {
-        _nodeIndex = baseState.getNodeIndex();
-        _instant = baseState.getInstant();
-        _passageIndex = baseState.getPassageIndex();
-        //Copy old connections
-        _connections.clear(); //TODO: see with HT if there's a better way to do this for an assignment operator
-        for(auto& lineStop : baseState.getConnections()) {
-            _connections.emplace_back(lineStop);
-        }
-
-        return *this;
-    }
+    TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) = default;
+//    TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) {
+//        _nodeIndex = baseState.getNodeIndex();
+//        _instant = baseState.getInstant();
+//        _passageIndex = baseState.getPassageIndex();
+//        //Copy old connections
+//        _connections.clear();
+//        for(auto& lineStop : baseState.getConnections()) {
+//            _connections.emplace_back(lineStop);
+//        }
+//
+//        return *this;
+//    }
 
     [[nodiscard]] std::string toString() const {
         std::string res = "Node: " + std::to_string(_nodeIndex) + ", Instant: " + std::to_string(_instant);

@@ -17,14 +17,14 @@ bool Node::isPTNode() {
     return &_ptLines == nullptr || _ptLines.empty();
 }
 
-Node::Node(Status status, double x, double y) : _status(status), _x(x), _y(y), _ptLines(std::set<LineStop>()) {
+Node::Node(Status status, double x, double y) : _status(status), _x(x), _y(y), _ptLines(std::vector<LineStop>()) {
     this->_status = status;
     this->_x = x;
     this->_y = y;
 }
 
 void Node::addBusLine(const Line& line, int indexInLine) {
-    this->_ptLines.emplace(line, indexInLine);
+    this->_ptLines.emplace_back(line, indexInLine);
 }
 
 bool Node::operator==(const Node &rhs) const {

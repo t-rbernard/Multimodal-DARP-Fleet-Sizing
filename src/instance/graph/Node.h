@@ -21,7 +21,8 @@ enum Status {
     residential
 };
 
-static std::unordered_map<std::string,Status> const stringToStatusMap = {{"work",        Status::work}, {"leisure", Status::leisure},
+static std::unordered_map<std::string,Status> const stringToStatusMap = {{"work",        Status::work},
+                                                                         {"leisure",     Status::leisure},
                                                                          {"residential", Status::residential} };
 
 class Line;
@@ -31,7 +32,7 @@ private:
     Status _status;
     double _x;
     double _y;
-    std::set<LineStop> _ptLines;
+    std::vector<LineStop> _ptLines;
     std::vector<int> _incomingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
     std::vector<int> _outgoingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
     //TODO : Should these vectors be considered complete over the whole set of nodes ? Probably ? Considering we will probably pre-process shortest paths between all SAEV stations
@@ -73,7 +74,7 @@ public:
     [[nodiscard]] Status getStatus() const {return _status;}
     [[nodiscard]] std::vector<int> getIncomingEdges() const {return _incomingEdgesIndex;}
     [[nodiscard]] std::vector<int> getOutgoingEdges() const {return _outgoingEdgesIndex;}
-    [[nodiscard]] std::set<LineStop> getPTLinesSet() const {return _ptLines;}
+    [[nodiscard]] std::vector<LineStop> getPTLinesSet() const {return _ptLines;}
 
     /**
      * Verify if _x, _y and _status are equal to check for node equality
