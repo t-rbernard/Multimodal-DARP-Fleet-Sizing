@@ -34,7 +34,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
         currentState = statePriorityQueue.top();
         statePriorityQueue.pop();
         if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
-            DEBUG_MSG("Comparing state " + currentState.toString() + " and \n" + solutionsContainer.getBestSolution(currentState.getNodeIndex()).toString());
+            DEBUG_MSG("\n\nComparing state " + currentState.toString() + " and \n" + solutionsContainer.getBestSolution(currentState.getNodeIndex()).toString());
             DEBUG_MSG("State isn't dominated, trying to extend it");
             for (auto& lineStop : graph.getNode(currentState.getNodeIndex()).getPTLinesSet())
             {
