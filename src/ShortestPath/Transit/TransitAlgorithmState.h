@@ -116,8 +116,8 @@ public:
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
         return this->_nodeIndex == rhs.getNodeIndex() //same current node
-               && ((this->getInstant() < rhs.getInstant() && (this->getConnections().size() <= rhs.getConnections().size() || rhs.getConnections().empty()))
-               || (this->getInstant() < rhs.getInstant() && this->getConnections().size() == rhs.getConnections().size()));
+               && ((!this->getConnections().empty() && rhs.getConnections().empty())
+               || (this->getInstant() <= rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size()));
     }
 
     /**

@@ -8,6 +8,13 @@
 #include <vector>
 #include "TransitShortestPath.h"
 
+#ifdef DEBUG_TRANSIT_PRECOMPUTE
+#include <iostream>
+#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#else
+#define DEBUG_MSG(str) do { } while ( false )
+#endif
+
 class TransitStateContainer {
 private:
     //    int x,delta;
@@ -32,13 +39,19 @@ public:
 
     bool tryAddNewState(int nodeIndex, const TransitAlgorithmState& newState)
     {
-        if(newState.strictlyDominates(solutionVector.at(nodeIndex)[0])) {
+        DEBUG_MSG("Trying to add state " + newState.toString());
+        if(!solutionVector.at(nodeIndex).empty() && newState.strictlyDominates(solutionVector.at(nodeIndex)[0])) {
+            DEBUG_MSG("Added state to position 0, replacing " + solutionVector.at(nodeIndex)[0].toString());
             solutionVector.at(nodeIndex)[0] = newState;
             return true;
-        } else if(newState.strictlyDominates(solutionVector.at(nodeIndex)[1])) {
+        } else if(solutionVector.at(nodeIndex).size() > 1 && newState.strictlyDominates(solutionVector.at(nodeIndex)[1])) {
+            DEBUG_MSG("Added state to position 1, replacing " + solutionVector.at(nodeIndex)[1].toString());
             solutionVector.at(nodeIndex)[1] = newState;
             return true;
         } else {
+            DEBUG_MSG("State wasn't added to the container because it doesn't dominate \n" +
+                        solutionVector.at(nodeIndex)[0].toString() +
+                        (solutionVector.at(nodeIndex).size() > 1 ? "\nor " + solutionVector.at(nodeIndex)[1].toString() : ""));
             return false;
         }
     }
