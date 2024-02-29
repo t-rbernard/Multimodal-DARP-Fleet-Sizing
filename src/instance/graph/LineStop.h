@@ -43,7 +43,7 @@ public:
      */
     [[nodiscard]] int getPrecedingNodeIndex() const
     {
-        if(_stopIndex - 1 > 0)
+        if(_stopIndex - 1 >= 0)
             return _lineRef.getNode(_stopIndex - 1);
         else
             return -1;
