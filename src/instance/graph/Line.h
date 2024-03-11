@@ -17,7 +17,9 @@ private:
     std::vector<int> _nodes; //index according to Graph::_nodes, sorted according to line order (start -> terminus)
     std::vector<std::vector<int>> _timetables; //list of list of timestamps for each node start order (size of _timetables must remain constant throughout the whole vector
 public:
-    Line() = default;
+    Line(){
+        _lineID = "";
+    }
 
     [[nodiscard]] const std::string &getLineId() const;
     void setLineId(const std::string &lineId);
