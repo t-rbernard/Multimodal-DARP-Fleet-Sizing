@@ -23,19 +23,20 @@ private:
 public:
     explicit TransitStateContainer(int size)
     {
-        solutionVector.reserve(size);
-//        TransitAlgorithmState emptyState{}; FIXME
-//        for(size_t i = 0; i < size; ++i) {
-//            solutionVector.at(i).assign(2, TransitAlgorithmState(emptyState));
-//        }
+        solutionVector.resize(size);
+        for(size_t i = 0; i < size; ++i) {
+            solutionVector.at(i).emplace_back();
+            solutionVector.at(i).emplace_back();
+        }
     }
     explicit TransitStateContainer(size_t size)
     {
-        solutionVector.reserve(size);
-//        TransitAlgorithmState emptyState{}; FIXME
-//        for(size_t i = 0; i < size; ++i) {
-//            solutionVector.at(i).assign(2, TransitAlgorithmState(emptyState));
-//        }
+        //Reserve space for all nodes and add empty solutions to reserve memory
+        solutionVector.resize(size);
+        for(size_t i = 0; i < size; ++i) {
+            solutionVector.at(i).emplace_back();
+            solutionVector.at(i).emplace_back();
+        }
     }
     /**
      * Returns the current best solution for the given node index
