@@ -83,8 +83,32 @@ public:
         return _connections;
     }
 
+    [[nodiscard]] bool isEmpty() const {
+        return _connections.empty();
+    }
+
+    [[nodiscard]] bool canAddConnection() const {
+        return _connections.size() < 2;
+    }
+
     [[nodiscard]] size_t getNbConnections() const {
         return _connections.size();
+    }
+
+    [[nodiscard]] LineStop getLastConnectionLineStop() const {
+        return _connections.back();
+    }
+
+    [[nodiscard]] Line getLastConnectionLine() const {
+        return _connections.back().getLineRef();
+    }
+
+    [[nodiscard]] int getPrecedingNodeIndex() const {
+        return _connections.back().getPrecedingNodeIndex();
+    }
+
+    [[nodiscard]] int getNextNodeIndex() const {
+        return _connections.back().getNextNodeIndex();
     }
 
     void setNodeIndex(int nodeIndex) {
