@@ -42,6 +42,10 @@ public:
         return nodesVector.at(nodeIndex);
     }
 
+    [[nodiscard]] std::vector<LineStop> getPTLinesSet(int nodeIndex) const {
+        return nodesVector.at(nodeIndex).getPTLinesSet();
+    }
+
     /**
      * @return The graph's edge vector
      */

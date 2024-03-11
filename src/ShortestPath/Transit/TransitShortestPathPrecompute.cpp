@@ -29,14 +29,14 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
         //Extract head from our state priority queue
         currentState = statePriorityQueue.top();
         statePriorityQueue.pop();
-        if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
-            DEBUG_MSG("\n\nComparing state " + currentState.toString() + " and \n" + solutionsContainer.getBestSolution(currentState.getNodeIndex()).toString());
+        if(!solutionsContainer.strictlyDominates(currentState)) {
+            DEBUG_MSG("\n\nComparing state " + currentState.toString() + " and \n" + solutionsContainer.getBestSolution(currentState.getNodeIndex(), currentState.getNbConnections()).toString());
             DEBUG_MSG("State isn't dominated, trying to extend it");
-            for (auto& lineStop : graph.getNode(currentState.getNodeIndex()).getPTLinesSet())
+            for (auto& lineStop : graph.getPTLinesSet(currentState.getNodeIndex()))
             {
                 int nextNode = lineStop.getNextNodeIndex();
                 //If there is a proper next node and if it's not the same as our last used line stop predecessor
-                if(nextNode != -1 && (currentState.getConnections().empty() || nextNode != currentState.getConnections().back().getPrecedingNodeIndex())) {
+                if(nextNode != -1 && (currentState.isEmpty() || nextNode != currentState.getPrecedingNodeIndex())) {
                     TransitAlgorithmState newState; //define variable before conditionals
                     if(currentState.isEmpty() || currentState.getLastConnectionLine() != lineStop.getLineRef()) // if new line is different than current line
                     {
@@ -64,7 +64,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                     DEBUG_MSG("Created new state " + newState.toString());
 
                     //Add new state to the solution container and the priority queue if it's not strictly dominated by an existing solution
-                    if(!solutionsContainer.getBestSolution(currentState.getNodeIndex()).strictlyDominates(currentState)) {
+                    if(!solutionsContainer.strictlyDominates(currentState)) {
                         DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue");
                         solutionsContainer.addNewState(nextNode, newState);
                         statePriorityQueue.emplace(newState);

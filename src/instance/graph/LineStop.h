@@ -22,9 +22,7 @@ public:
         return _lineRef;
     }
 
-    void setLineRef(Line &lineRef) {
-        _lineRef = lineRef;
-    }
+    [[nodiscard]] int getInstant(int stationIdx, int scheduleIdx) const { return _lineRef.getInstant(stationIdx, scheduleIdx); }
 
     /**
      * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor

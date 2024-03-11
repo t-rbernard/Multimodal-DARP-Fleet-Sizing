@@ -43,9 +43,15 @@ public:
      * @param nodeIndex
      * @return The first solution of potentially two saved in this array
      */
-    TransitAlgorithmState& getBestSolution(int nodeIndex){ return solutionVector.at(nodeIndex)[0];}
+    std::vector<TransitAlgorithmState>& getBestSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
+    TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector.at(nodeIndex)[nbConnections];}
     std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
     std::vector<std::vector<TransitAlgorithmState>>& getSolutionsVector(){ return solutionVector;}
+
+    bool strictlyDominates(const TransitAlgorithmState& state){
+        return getBestSolution(state.getNodeIndex(), state.getNbConnections()).strictlyDominates(state);
+    }
+
 
     /**
      * Resizes solution vector and initializes state vectors to be able to add our solutions during algorithm execution
