@@ -16,6 +16,7 @@ private:
     int _instant;
     int _passageIndex;
     std::vector<LineStop> _connections;
+    int _precedingNodeIndex;
 
 public:
     TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex) {
@@ -29,9 +30,11 @@ public:
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
-        _connections.reserve(2);
+        _precedingNodeIndex = baseState.getPrecedingNodeIndex();
 
         //Copy old connections
+        _connections.clear();
+        _connections.reserve(2);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -43,9 +46,11 @@ public:
         _nodeIndex = baseState.getNodeIndex();
         _instant = baseState.getInstant();
         _passageIndex = baseState.getPassageIndex();
-        _connections.reserve(2);
+        _precedingNodeIndex = baseState.getPrecedingNodeIndex();
 
         //Copy old connections
+        _connections.clear();
+        _connections.reserve(2);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -182,18 +187,6 @@ public:
     }
 
     TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) = default;
-//    TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) {
-//        _nodeIndex = baseState.getNodeIndex();
-//        _instant = baseState.getInstant();
-//        _passageIndex = baseState.getPassageIndex();
-//        //Copy old connections
-//        _connections.clear();
-//        for(auto& lineStop : baseState.getConnections()) {
-//            _connections.emplace_back(lineStop);
-//        }
-//
-//        return *this;
-//    }
 
     [[nodiscard]] std::string toString() const {
         std::string res = "Node: " + std::to_string(_nodeIndex) + ", Instant: " + std::to_string(_instant);
