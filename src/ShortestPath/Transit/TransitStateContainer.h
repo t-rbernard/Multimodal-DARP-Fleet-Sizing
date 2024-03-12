@@ -44,12 +44,15 @@ public:
      * @return The first solution of potentially two saved in this array
      */
     std::vector<TransitAlgorithmState>& getBestSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
-    TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector.at(nodeIndex)[nbConnections];}
+    TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector.at(nodeIndex).at(nbConnections == 0 ? 0 : nbConnections - 1);}
     std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
     std::vector<std::vector<TransitAlgorithmState>>& getSolutionsVector(){ return solutionVector;}
 
     bool strictlyDominates(const TransitAlgorithmState& state){
-        return getBestSolution(state.getNodeIndex(), state.getNbConnections()).strictlyDominates(state);
+        if(state.getNodeIndex() != -1)
+            return getBestSolution(state.getNodeIndex(), state.getNbConnections()).strictlyDominates(state);
+        else
+            return true;
     }
 
 
@@ -62,9 +65,8 @@ public:
 
     void addNewState(int nodeIndex, const TransitAlgorithmState& newState)
     {
-        DEBUG_MSG("Trying to add state " + newState.toString());
         if(newState.getNbConnections() > 0) {
-            solutionVector.at(nodeIndex)[newState.getNbConnections()] = newState;
+            solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1) = newState;
         }
     }
 
