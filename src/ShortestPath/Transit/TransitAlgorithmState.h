@@ -19,10 +19,11 @@ private:
     int _precedingNodeIndex;
 
 public:
-    TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex) {
+    TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex, int precedingNodeIndex) {
         _nodeIndex = currentNode;
         _instant = currentInstant;
         _passageIndex = currentPassageIndex;
+        _precedingNodeIndex = precedingNodeIndex;
         _connections.reserve(2); //TODO : replace constant max amount of connexions with a global parameter
     }
 
@@ -62,6 +63,7 @@ public:
         _nodeIndex = nodeIndex;
         _instant = INT16_MAX;
         _passageIndex = -1;
+        _precedingNodeIndex = -1;
         _connections.reserve(2);
     }
 
@@ -69,6 +71,7 @@ public:
         _nodeIndex = -1;
         _instant = INT16_MAX;
         _passageIndex = -1;
+        _precedingNodeIndex = -1;
         _connections.reserve(2);
     }
 
@@ -109,7 +112,11 @@ public:
     }
 
     [[nodiscard]] int getPrecedingNodeIndex() const {
-        return _connections.back().getPrecedingNodeIndex();
+        return _precedingNodeIndex;
+    }
+
+    void setPrecedingNodeIndex(int nodeIndex) {
+        _precedingNodeIndex = nodeIndex;
     }
 
     [[nodiscard]] int getNextNodeIndex() const {

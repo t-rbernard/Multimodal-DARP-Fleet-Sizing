@@ -21,7 +21,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
     //Init container, priority queue and state variables
     TransitStateContainer solutionsContainer{graph.getNodesVector().size()};
     std::priority_queue<TransitAlgorithmState> statePriorityQueue;
-    statePriorityQueue.emplace(nodeIndex, instant,0);
+    statePriorityQueue.emplace(nodeIndex, instant,0, nodeIndex);
 
     TransitAlgorithmState currentState;
     while(!statePriorityQueue.empty())
@@ -49,8 +49,8 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                                 newState = TransitAlgorithmState(currentState, lineStop);
                                 newState.setNodeIndex(nextNode);
                                 newState.setPassageIndex(nextPassageIndex); //get next passage for new line
-                                newState.setInstant(lineStop.getInstant(lineStop.getStopIndex() + 1,
-                                                                        nextPassageIndex)); //replace time with arrival time on next node
+                                newState.setInstant(lineStop.getInstant(lineStop.getStopIndex() + 1,nextPassageIndex)); //replace time with arrival time on next node
+                                newState.setPrecedingNodeIndex(currentState.getNodeIndex());
                             }
                         }
                     } else {
@@ -58,6 +58,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                         newState.setNodeIndex(nextNode);
                         newState.setPassageIndex(currentState.getPassageIndex()); //get next passage for new line
                         newState.setInstant(lineStop.getLineRef().getInstant(lineStop.getStopIndex() + 1, currentState.getPassageIndex())); //replace time with
+                        newState.setPrecedingNodeIndex(currentState.getNodeIndex());
                     }
 
                     DEBUG_MSG("Created new state " + newState.toString());
