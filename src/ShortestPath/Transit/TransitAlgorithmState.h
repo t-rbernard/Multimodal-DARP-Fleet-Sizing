@@ -152,7 +152,8 @@ public:
      * @return
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
-        return this->getInstant() <= rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size();
+        return (this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
+        || (this->getInstant() == rhs.getInstant() && this->getConnections().size() < rhs.getConnections().size());
     }
 
     /**
