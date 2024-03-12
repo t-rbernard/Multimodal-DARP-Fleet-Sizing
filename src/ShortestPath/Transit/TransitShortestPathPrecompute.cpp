@@ -36,6 +36,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                 int nextNode = lineStop.getNextNodeIndex();
                 //If there is a proper next node and if it's not the same as our last used line stop predecessor
                 if(nextNode != -1 && (currentState.isEmpty() || nextNode != currentState.getPrecedingNodeIndex())) {
+                    DEBUG_MSG("Extension from line " + lineStop.getLineRef().getLineId() + " towards node " + std::to_string(nextNode));
                     TransitAlgorithmState newState; //define variable before conditionals
                     if(currentState.isEmpty() || currentState.getLastConnectionLine() != lineStop.getLineRef()) // if new line is different than current line
                     {
@@ -65,11 +66,13 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                     //Add new state to the solution container and the priority queue if it's not strictly dominated by an existing solution
                     if(!solutionsContainer.strictlyDominates(currentState)) {
                         DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue");
+                        DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue\n");
                         solutionsContainer.addNewState(nextNode, newState);
                         statePriorityQueue.emplace(newState);
                     }
                 }
             }
+            DEBUG_MSG("Done extending state " + currentState.toString());
         }
     }
 
