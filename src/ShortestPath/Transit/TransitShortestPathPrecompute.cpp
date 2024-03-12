@@ -45,7 +45,6 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                                     lineStop.getStopIndex(), currentState.getInstant());
                             if (nextPassageIndex == lineStop.getLineRef().scheduleSize()) {
                                 newState.setInstant(INT16_MAX);
-                                break;
                             } else {
                                 newState = TransitAlgorithmState(currentState, lineStop);
                                 newState.setNodeIndex(nextNode);
