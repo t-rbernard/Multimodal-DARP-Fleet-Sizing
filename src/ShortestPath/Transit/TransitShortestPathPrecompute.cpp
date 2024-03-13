@@ -65,8 +65,8 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
 
                     //Add new state to the solution container and the priority queue if it's not strictly dominated by an existing solution
                     if(newState.getNodeIndex() != -1 && !solutionsContainer.strictlyDominates(newState)) {
-                        DEBUG_MSG("Candidate state " + newState.toString() + " is being added to solution container and priority queue\n");
-                        solutionsContainer.addNewState(nextNode, newState);
+                        DEBUG_MSG("Candidate state " + newState.toString() + " added to priority queue\n");
+                        solutionsContainer.replaceBestSolutionIfNecessary(nextNode, newState);
                         statePriorityQueue.emplace(newState);
                     }
                 }

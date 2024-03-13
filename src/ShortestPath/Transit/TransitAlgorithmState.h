@@ -159,8 +159,11 @@ public:
      * @return
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
-        return (this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
-        || (this->getInstant() == rhs.getInstant() && this->getConnections().size() < rhs.getConnections().size());
+        return this->getNodeIndex() == rhs.getNodeIndex()
+        && this->getLastConnectionLine() == rhs.getLastConnectionLine()
+//        /*TODO : check */ && (this->getLastConnectionLine() == rhs.getLastConnectionLine() || this->getNbConnections() == 2) /***/
+        && ((this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
+        || (this->getInstant() == rhs.getInstant() && this->getConnections().size() < rhs.getConnections().size()));
     }
 
     /**

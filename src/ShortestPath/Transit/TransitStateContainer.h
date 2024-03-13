@@ -63,10 +63,14 @@ public:
     void resizeSolutionsVector(int nbNodes){ solutionVector.resize(nbNodes);}
 
 
-    void addNewState(int nodeIndex, const TransitAlgorithmState& newState)
+    void replaceBestSolutionIfNecessary(int nodeIndex, const TransitAlgorithmState& newState)
     {
         if(newState.getNbConnections() > 0) {
-            solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1) = newState;
+            TransitAlgorithmState& currentBest = solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1);
+            if(currentBest.getInstant() > newState.getInstant()) {
+                DEBUG_MSG("Candidate state " + newState.toString() + " is the new fastest solution");
+                solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1) = newState;
+            }
         }
     }
 
