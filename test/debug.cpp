@@ -24,5 +24,24 @@ int main() {
             }
         }
     }
+
+    Graph cyclingLinesGraph("../resources/test/instances/cycling_line_debug_instance" + datFile);
+    for(auto& ptLine : cyclingLinesGraph.getPTLines()) {
+        for(int i = 0; i < ptLine.size(); ++i) {
+            for (auto& startingTime: ptLine.getTimetable(i)) {
+                TransitShortestPathPrecompute::executeAlgorithm(cyclingLinesGraph, ptLine.getNode(i),startingTime);
+            }
+        }
+    }
+
+    Graph crossingLinesGraph("../resources/test/instances/multiple_crossing_line_debug_instance" + datFile);
+    for(auto& ptLine : crossingLinesGraph.getPTLines()) {
+        for(int i = 0; i < ptLine.size(); ++i) {
+            for (auto& startingTime: ptLine.getTimetable(i)) {
+                TransitShortestPathPrecompute::executeAlgorithm(crossingLinesGraph, ptLine.getNode(i),startingTime);
+            }
+        }
+    }
+
     return 0;
 }
