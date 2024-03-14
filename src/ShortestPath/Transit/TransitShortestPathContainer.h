@@ -15,7 +15,7 @@ private:
 
 public:
     void addShortestPathCollection(int startNodeIndex, std::pair<int, std::vector<TransitShortestPath>> shortestPathList);
-    void addShortestPathCollection(int startNodeIndex, int startingInstant, std::vector<TransitAlgorithmState>> algorithmResultStates);
+    void addShortestPathCollection(int startNodeIndex, int startingInstant, std::vector<TransitAlgorithmState> algorithmResultStates);
     std::pair<int, std::vector<TransitShortestPath>> getShortestPathsFromTime(int startNodeIndex, int );
 
 };
