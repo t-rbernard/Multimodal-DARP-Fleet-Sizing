@@ -38,13 +38,13 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                 if(nextNode != -1 && (currentState.isEmpty() || nextNode != currentState.getPrecedingNodeIndex())) {
                     DEBUG_MSG("Extension from line " + lineStop.getLineRef().getLineId() + " towards node " + std::to_string(nextNode));
                     TransitAlgorithmState newState; //define variable before conditionals
+                    int nextPassageIndex = currentState.getPassageIndex(); //default value if we stay on the same line and no turn back happens
                     if(currentState.isEmpty() || currentState.getLastConnectionLine() != lineStop.getLineRef()) // if new line is different than current line
                     {
                         if(currentState.canAddConnection()) {
-                            int nextPassageIndex = lineStop.getLineRef().findNextScheduledPassage(
-                                    lineStop.getStopIndex(), currentState.getInstant());
+                            nextPassageIndex = lineStop.findNextScheduledPassage(lineStop.getStopIndex(), currentState.getInstant());
                             if (nextPassageIndex == lineStop.getLineRef().scheduleSize()) {
-                                newState.setInstant(INT16_MAX);
+                                newState.setNodeIndex(-1);
                             } else {
                                 newState = TransitAlgorithmState(currentState, lineStop);
                                 newState.setNodeIndex(nextNode);
@@ -54,11 +54,16 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                             }
                         }
                     } else {
-                        newState = TransitAlgorithmState(currentState);
-                        newState.setNodeIndex(nextNode);
-                        newState.setPassageIndex(currentState.getPassageIndex()); //get next passage for new line
-                        newState.setInstant(lineStop.getLineRef().getInstant(lineStop.getStopIndex() + 1, currentState.getPassageIndex())); //replace time with
-                        newState.setPrecedingNodeIndex(currentState.getNodeIndex());
+                        //Check for a cycle, and in this case, look for a new passage index
+                        if(lineStop.getInstant(lineStop.getStopIndex() + 1, currentState.getPassageIndex()) < currentState.getInstant()) {
+                            newState.setNodeIndex(-1);
+                        } else {
+                            newState = TransitAlgorithmState(currentState);
+                            newState.setNodeIndex(nextNode);
+                            newState.setPassageIndex(currentState.getPassageIndex()); //get next passage for new line
+                            newState.setInstant(lineStop.getInstant(lineStop.getStopIndex() + 1, nextPassageIndex)); //replace time with
+                            newState.setPrecedingNodeIndex(currentState.getNodeIndex());
+                        }
                     }
 
                     DEBUG_MSG("Created new state " + newState.toString());
