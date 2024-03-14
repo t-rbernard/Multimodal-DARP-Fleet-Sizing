@@ -160,7 +160,7 @@ public:
      */
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
         return this->getNodeIndex() == rhs.getNodeIndex()
-        && this->getLastConnectionLine() == rhs.getLastConnectionLine()
+        && this->getLastConnectionLine().getLineId() == rhs.getLastConnectionLine().getLineId()
 //        /*TODO : check */ && (this->getLastConnectionLine() == rhs.getLastConnectionLine() || this->getNbConnections() == 2) /***/
         && ((this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
         || (this->getInstant() == rhs.getInstant() && this->getConnections().size() < rhs.getConnections().size()));
