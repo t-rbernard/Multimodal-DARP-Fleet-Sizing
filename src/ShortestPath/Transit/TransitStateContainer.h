@@ -74,6 +74,23 @@ public:
         }
     }
 
+    /**
+     * Compares the states available to get to a given node index and returns the best by comparing their time of arrival.
+     * If equivalent solutions wrt time exist, the one with the lowest amount of connections required will be returned
+     * @param nodeIndex The node we try to get to
+     * @return
+     */
+    TransitAlgorithmState getBestSolution(int nodeIndex) {
+        TransitAlgorithmState currentBestSol = solutionVector.at(nodeIndex).at(0);
+        for(size_t i = 1; i < solutionVector.at(nodeIndex).size(); ++i) {
+            if(solutionVector.at(nodeIndex).at(i).getInstant() < currentBestSol.getInstant()) {
+                currentBestSol = solutionVector.at(nodeIndex).at(i);
+            }
+        }
+
+        return currentBestSol;
+    }
+
     void pushEmptyState(int nodeIndex)
     {
         TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex);
