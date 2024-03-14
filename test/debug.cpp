@@ -34,7 +34,7 @@ int main() {
         }
     }
 
-    Graph crossingLinesGraph("../resources/test/instances/multiple_crossing_line_debug_instance/" + datFile);
+    Graph crossingLinesGraph("../resources/test/instances/multiple_crossing_lines_debug_instance/" + datFile);
     for(auto& ptLine : crossingLinesGraph.getPTLines()) {
         for(int i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
