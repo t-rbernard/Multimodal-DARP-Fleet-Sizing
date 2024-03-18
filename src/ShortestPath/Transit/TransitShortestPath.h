@@ -10,7 +10,14 @@
 #include "TransitAlgorithmState.h"
 
 class TransitShortestPath : public ShortestPath<LineStop> {
+private:
+    int _arrivalTime;
 public:
+
+    explicit TransitShortestPath(const TransitAlgorithmState& state) {
+        _arrivalTime = state.getInstant();
+        std::move(state.getConnections().begin(), state.getConnections().end(),_keyPoints.begin());
+    }
 
     /**
      * Strict dominance between two transit shortest path
@@ -19,18 +26,20 @@ public:
      */
     [[nodiscard]] bool strictlyDominates(const TransitShortestPath& rhs) const {
         return this->getKeyPoints().size() <= rhs.getKeyPoints().size()
-               && this->getDuration() <= rhs.getDuration();
+               && this->getArrivalTime() <= rhs.getArrivalTime();
     }
 
     bool operator<(const TransitShortestPath& rhs) const {
-        return this->getDuration() < rhs.getDuration() ||
-               (this->getDuration() == rhs.getDuration() && this->getKeyPoints().size() < rhs.getKeyPoints().size());
+        return this->getArrivalTime() < rhs.getArrivalTime() ||
+               (this->getArrivalTime() == rhs.getArrivalTime() && this->getKeyPoints().size() < rhs.getKeyPoints().size());
     }
 
     bool operator>(const TransitShortestPath& rhs) const {
-        return this->getDuration() > rhs.getDuration() ||
-               (this->getDuration() == rhs.getDuration() && this->getKeyPoints().size() > rhs.getKeyPoints().size());
+        return this->getArrivalTime() > rhs.getArrivalTime() ||
+               (this->getArrivalTime() == rhs.getArrivalTime() && this->getKeyPoints().size() > rhs.getKeyPoints().size());
     }
+
+    [[nodiscard]] int getArrivalTime() const { return _arrivalTime; }
 
 
 //    FIXME: check if I can properly remove this or if shortest path comparisons may be useful

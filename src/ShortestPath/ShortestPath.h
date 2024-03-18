@@ -9,26 +9,19 @@
 
 template <typename KeyPoint>
 class ShortestPath {
-    int _duration;
+protected:
     std::vector<KeyPoint> _keyPoints;
 
-    explicit ShortestPath(int duration) { _duration = duration;}
 
 public:
-    [[nodiscard]] int getDuration() const {
-        return _duration;
-    }
-
-    void setDuration(int duration) {
-        _duration = duration;
-    }
+    explicit ShortestPath() = default;
 
     [[nodiscard]] const std::vector<KeyPoint> &getKeyPoints() const {
         return _keyPoints;
     }
 
     void replaceKeyPoint(int keyPointIndex, KeyPoint& value) {
-        _keyPoints.assign(keyPointIndex, value);
+        _keyPoints.at(keyPointIndex) = value;
     }
 
     /**
