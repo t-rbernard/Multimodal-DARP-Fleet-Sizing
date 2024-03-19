@@ -3,6 +3,7 @@
 //
 
 #include "TransitShortestPathContainer.h"
+#include "TransitStateContainer.h"
 
 void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
                                                              const std::pair<int, std::vector<TransitShortestPath>>& shortestPathList) {
@@ -10,13 +11,13 @@ void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
 }
 
 void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex, int startingInstant, int graphSize,
-                                                             const std::vector<TransitAlgorithmState>& algorithmResultStates) {
+                                                             const TransitStateContainer& algorithmResultStates) {
     std::vector<TransitShortestPath> shortestPathList;
     shortestPathList.reserve(graphSize);
 
     //Convert states to shortest paths and add to collection
-    for(const auto& state: algorithmResultStates) {
-        shortestPathList.emplace_back(state);
+    for(int i = 0; i < graphSize; ++i) {
+        shortestPathList.emplace_back(algorithmResultStates.getBestSolution(i));
     }
 
     //Add the (startingInstant, pathVector) pair at the appropriate node index
