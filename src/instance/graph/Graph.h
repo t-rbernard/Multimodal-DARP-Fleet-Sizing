@@ -42,8 +42,16 @@ public:
         return nodesVector.at(nodeIndex);
     }
 
+    [[nodiscard]] size_t getNbNodes() const {
+        return nodesVector.size();
+    }
+
     [[nodiscard]] std::vector<LineStop> getPTLinesSet(int nodeIndex) const {
         return nodesVector.at(nodeIndex).getPTLinesSet();
+    }
+
+    [[nodiscard]] size_t getNbPTLines(int nodeIndex) const {
+        return nodesVector.at(nodeIndex).getPTLinesSet().size();
     }
 
     /**
@@ -51,6 +59,19 @@ public:
      */
     [[nodiscard]] const std::vector<Edge> &getEdgesVector() const {
         return edgesVector;
+    }
+
+    [[nodiscard]] size_t getNbIncomingEdges(int nodeIndex) const {
+        return nodesVector.at(nodeIndex).getIncomingEdges().size();
+    }
+
+    [[nodiscard]] size_t getNbOutgoingEdges(int nodeIndex) const {
+        return nodesVector.at(nodeIndex).getOutgoingEdges().size();
+    }
+
+
+    [[nodiscard]] size_t getNbEdges(int nodeIndex) const {
+        return nodesVector.at(nodeIndex).getIncomingEdges().size() + nodesVector.at(nodeIndex).getOutgoingEdges().size();
     }
 
     /**
