@@ -16,7 +16,7 @@ public:
 
     explicit TransitShortestPath(const TransitAlgorithmState& state) {
         _arrivalTime = state.getInstant();
-        std::move(state.getConnections().begin(), state.getConnections().end(),_keyPoints.begin());
+        std::move(state.getConnections().begin(), state.getConnections().end() - 1,_keyPoints.begin());
     }
 
     /**
