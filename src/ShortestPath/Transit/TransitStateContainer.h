@@ -43,7 +43,13 @@ public:
      * @param nodeIndex
      * @return The first solution of potentially two saved in this array
      */
-    std::vector<TransitAlgorithmState>& getBestSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
+    [[nodiscard]] const TransitAlgorithmState& getBestSolution(int nodeIndex) const{
+        if(solutionVector.at(1) < solutionVector.at(0))
+            return solutionVector.at(nodeIndex).at(1);
+        else
+            return solutionVector.at(nodeIndex).at(0);
+    }
+
     TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector.at(nodeIndex).at(nbConnections == 0 ? 0 : nbConnections - 1);}
     std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
     std::vector<std::vector<TransitAlgorithmState>>& getSolutionsVector(){ return solutionVector;}
