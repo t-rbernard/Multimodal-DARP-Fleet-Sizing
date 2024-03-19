@@ -19,7 +19,7 @@
 //      - Reference value still valid after popping (otherwise, pop at the end, before adding new state)
 TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Graph& graph, int nodeIndex, int instant) {
     //Init container, priority queue and state variables
-    TransitStateContainer solutionsContainer{graph.getNodesVector().size()};
+    TransitStateContainer solutionsContainer{graph.getNbNodes()};
     std::priority_queue<TransitAlgorithmState> statePriorityQueue;
     statePriorityQueue.emplace(nodeIndex, instant,0, nodeIndex);
 
