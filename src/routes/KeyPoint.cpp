@@ -41,6 +41,23 @@ bool KeyPoint::isAfterKeyPoint(const KeyPoint &kp) const {
     return _arrivalInstant >= kp.getDepartureInstant();
 }
 
+const TimeWindow &KeyPoint::getArrivalTimeWindow() const {
+    return _arrivalTimeWindow;
+}
+
+void KeyPoint::setArrivalTimeWindow(const TimeWindow &arrivalTimeWindow) {
+    _arrivalTimeWindow = arrivalTimeWindow;
+}
+
+const TimeWindow &KeyPoint::getDepartureTimeWindow() const {
+    return _departureTimeWindow;
+}
+
+void KeyPoint::setDepartureTimeWindow(const TimeWindow &departureTimeWindow) {
+    _departureTimeWindow = departureTimeWindow;
+}
+
+
 bool KeyPoint::check() const {
     return _arrivalInstant <= _departureInstant;
 }
