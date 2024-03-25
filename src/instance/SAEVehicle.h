@@ -11,7 +11,7 @@
 class SAEVehicle {
 private:
     const int _capacity;
-    SAEVRoute _route;
+    SAEVRoute _route{this}; //Associate the route with the vehicle via pointer
 
 public:
     explicit SAEVehicle(const int capacity) : _capacity(capacity) {}
@@ -20,7 +20,7 @@ public:
         return _capacity;
     }
 
-    void push_back(const SAEVKeyPoint& keyPoint);
+    void push_back(SAEVKeyPoint& keyPoint);
     void emplace_back(Request* request, bool  isEntry);
 };
 
