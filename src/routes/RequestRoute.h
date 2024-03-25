@@ -10,9 +10,11 @@
 
 class RequestRoute {
 private:
-    RequestKeyPoint route[4];
+    RequestKeyPoint _route[4];
+    Request* _requestPointer{};
 public:
     RequestRoute() = default;
+    explicit RequestRoute(Request* request) {_requestPointer = request; };
 
     [[nodiscard]] int getNodeIndex(int routeIndex) const;
     void setNodeIndex(int routeIndex, int nodeIndex);
@@ -29,6 +31,12 @@ public:
     [[nodiscard]] LineStop *getLineStop(int routeIndex) const;
     void setLineStop(int routeIndex, LineStop *lineStop);
 
+    [[nodiscard]] const RequestKeyPoint *getRoute() const;
+
+    [[nodiscard]] Request *getRequestPointer() const;
+    void setRequestPointer(Request *requestPointer);
+
+    void resetKeyPoint(int routeIndex);
 };
 
 
