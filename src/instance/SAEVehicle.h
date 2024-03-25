@@ -5,18 +5,21 @@
 #ifndef GREEDYALGORITHM_SAEVEHICLE_H
 #define GREEDYALGORITHM_SAEVEHICLE_H
 
+#define VEHICLE_CAPACITY 6
+
 
 #include "../routes/SAEVRoute.h"
 
 class SAEVehicle {
 private:
-    const int _capacity;
+    static const int _capacity{VEHICLE_CAPACITY};
     SAEVRoute _route{this}; //Associate the route with the vehicle via pointer
 
 public:
-    explicit SAEVehicle(const int capacity) : _capacity(capacity) {}
+    SAEVehicle() = default;
+//    explicit SAEVehicle(const int capacity) : _capacity(capacity) {}
 
-    [[nodiscard]] int getCapacity() const {
+    [[nodiscard]] static int getCapacity() {
         return _capacity;
     }
 
