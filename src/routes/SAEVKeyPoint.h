@@ -24,7 +24,9 @@ public:
     void setIsEntry(bool isEntry);
 
     [[nodiscard]] bool check() const override;
-};
+
+    ~SAEVKeyPoint() = default;
+}
 
 
 #endif //GREEDYALGORITHM_SAEVKEYPOINT_H

@@ -6,16 +6,22 @@
 #define GREEDYALGORITHM_SAEVEHICLE_H
 
 
+#include "../routes/SAEVRoute.h"
+
 class SAEVehicle {
 private:
-    const int capacity;
+    const int _capacity;
+    SAEVRoute _route;
 
 public:
-    explicit SAEVehicle(const int capacity) : capacity(capacity) {}
+    explicit SAEVehicle(const int capacity) : _capacity(capacity) {}
 
     [[nodiscard]] int getCapacity() const {
-        return capacity;
+        return _capacity;
     }
+
+    void push_back(const SAEVKeyPoint& keyPoint);
+    void emplace_back(Request* request, bool  isEntry);
 };
 
 

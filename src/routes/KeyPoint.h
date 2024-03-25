@@ -37,7 +37,9 @@ public:
      */
      [[nodiscard]] bool isAfterKeyPoint(const KeyPoint& kp) const;
 
-    virtual [[nodiscard]] bool check() const;
+    [[nodiscard]] virtual bool check() const;
+
+    ~KeyPoint() = default;
 };
 
 
