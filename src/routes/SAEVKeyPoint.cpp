@@ -4,6 +4,12 @@
 
 #include "SAEVKeyPoint.h"
 
+
+SAEVKeyPoint::SAEVKeyPoint(Request *request, bool isEntry) {
+    _request = request;
+    _isEntry = isEntry;
+}
+
 Request *SAEVKeyPoint::getRequest() const {
     return _request;
 }
@@ -18,4 +24,8 @@ bool SAEVKeyPoint::isEntry() const {
 
 void SAEVKeyPoint::setIsEntry(bool isEntry) {
     SAEVKeyPoint::_isEntry = isEntry;
+}
+
+bool SAEVKeyPoint::check() const {
+    return KeyPoint::check() && _request != nullptr;
 }

@@ -9,17 +9,21 @@
 #include "../instance/requests/Request.h"
 #include "KeyPoint.h"
 
-class SAEVKeyPoint : KeyPoint {
+class SAEVKeyPoint : public virtual KeyPoint {
 private:
     Request* _request;
     bool _isEntry;
 
 public:
+    SAEVKeyPoint(Request* request, bool  isEntry);
+
     [[nodiscard]] Request *getRequest() const;
     void setRequest(Request *request);
 
     [[nodiscard]] bool isEntry() const;
     void setIsEntry(bool isEntry);
+
+    [[nodiscard]] bool check() const override;
 };
 
 

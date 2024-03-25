@@ -41,3 +41,7 @@ bool KeyPoint::isAfterKeyPoint(const KeyPoint &kp) const {
     return _arrivalInstant >= kp.getDepartureInstant();
 }
 
+bool KeyPoint::check() const {
+    return _arrivalInstant <= _departureInstant;
+}
+

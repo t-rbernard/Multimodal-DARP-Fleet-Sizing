@@ -7,7 +7,7 @@
 
 
 class KeyPoint {
-private:
+protected:
     int _nodeIndex{};
     int _arrivalInstant{};
     int _departureInstant{};
@@ -36,6 +36,8 @@ public:
      * @return true if we arrive on the given key point after (or at the same time as) when we depart from this key point
      */
      [[nodiscard]] bool isAfterKeyPoint(const KeyPoint& kp) const;
+
+    virtual [[nodiscard]] bool check() const;
 };
 
 

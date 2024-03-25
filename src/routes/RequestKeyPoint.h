@@ -10,7 +10,7 @@
 #include "../instance/SAEVehicle.h"
 #include "../instance/graph/LineStop.h"
 
-class RequestKeyPoint : KeyPoint {
+class RequestKeyPoint : public virtual KeyPoint {
 private:
     SAEVehicle* _saev;
     LineStop* _lineStop;
@@ -18,12 +18,15 @@ private:
 public:
     RequestKeyPoint() = default;
     explicit RequestKeyPoint(SAEVehicle* vehicle) { _saev = vehicle; }
+    explicit RequestKeyPoint(LineStop* lineStop) { _lineStop = lineStop; }
 
     [[nodiscard]] SAEVehicle *getSAEV() const;
     void setSAEV(SAEVehicle *saev);
 
     [[nodiscard]] LineStop *getLineStop() const;
     void setLineStop(LineStop *lineStop);
+
+    [[nodiscard]] bool check() const override;
 };
 
 
