@@ -8,14 +8,13 @@
 
 class KeyPoint {
 protected:
-    int _nodeIndex{};
-    int _arrivalInstant{};
-    int _departureInstant{};
+    int _nodeIndex{-1};
+    int _arrivalInstant{-1};
+    int _departureInstant{-1};
 
 public:
-    KeyPoint(int nodeIndex, int arrivalInstant, int departureInstant);
-
     KeyPoint();
+    KeyPoint(int nodeIndex, int arrivalInstant, int departureInstant);
 
     [[nodiscard]] int getNodeIndex() const;
     void setNodeIndex(int nodeIndex);
