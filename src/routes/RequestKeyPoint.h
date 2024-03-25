@@ -12,8 +12,8 @@
 
 class RequestKeyPoint : public virtual KeyPoint {
 private:
-    SAEVehicle* _saev;
-    LineStop* _lineStop;
+    SAEVehicle* _saev{};
+    LineStop* _lineStop{};
 
 public:
     RequestKeyPoint() = default;
