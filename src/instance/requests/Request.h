@@ -22,11 +22,49 @@ private:
     int _currentDeltaTime; //deltaTime - currentRouteDuration
     int _requestServiceStart;
     int _requestServiceEnd;
-    RequestRoute _currentRoute;
+    RequestRoute _currentRoute{this};
     TimeWindow _departureTW; //For now, a virtual TW on departures, used for constraint propagation
 public:
     Request(const int departureNodeIndex, const int arrivalNodeIndex,
             const TimeWindow &arrivalTw, const int deltaTime, const int weight);
+
+    //Getters
+    [[nodiscard]] const int getDepartureNodeIndex() const;
+    [[nodiscard]] const int getArrivalNodeIndex() const;
+    [[nodiscard]] const TimeWindow &getArrivalTw() const;
+    [[nodiscard]] const int getDeltaTime() const;
+    [[nodiscard]] const int getWeight() const;
+    [[nodiscard]] int getCurrentDeltaTime() const;
+    [[nodiscard]] int getRequestServiceStart() const;
+    [[nodiscard]] int getRequestServiceEnd() const;
+    [[nodiscard]] const RequestRoute &getCurrentRoute() const;
+    [[nodiscard]] const TimeWindow &getDepartureTw() const;
+
+    //Setters
+    void setCurrentDeltaTime(int currentDeltaTime);
+    void setRequestServiceStart(int requestServiceStart);
+    void setRequestServiceEnd(int requestServiceEnd);
+    void setCurrentRoute(const RequestRoute &currentRoute);
+    void setDepartureTw(const TimeWindow &departureTw);
+
+    //Route API delegation
+    [[nodiscard]] int getNodeIndex(int routeIndex) const;
+    void setNodeIndex(int routeIndex, int nodeIndex);
+
+    [[nodiscard]] int getArrivalInstant(int routeIndex) const;
+    void setArrivalInstant(int routeIndex, int arrivalInstant);
+
+    [[nodiscard]] int getDepartureInstant(int routeIndex) const;
+    void setDepartureInstant(int routeIndex, int departureInstant);
+
+    [[nodiscard]] SAEVehicle *getSAEV(int routeIndex) const;
+    void setSAEV(int routeIndex, SAEVehicle *saev);
+
+    [[nodiscard]] LineStop *getLineStop(int routeIndex) const;
+    void setLineStop(int routeIndex, LineStop *lineStop);
+
+    void resetKeyPoint(int routeIndex);
+
 };
 
 
