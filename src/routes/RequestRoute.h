@@ -9,6 +9,13 @@
 #include "RequestKeyPoint.h"
 
 class RequestRoute {
+public:
+    enum RouteStructureEnum {
+        SAEV1 = 0,
+        TRANSIT1 = 1,
+        TRANSIT2 = 2,
+        SAEV2 = 3
+    };
 private:
     RequestKeyPoint _route[4];
     Request* _requestPointer{};

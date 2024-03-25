@@ -33,7 +33,7 @@ SAEVehicle *RequestRoute::getSAEV(int routeIndex) const {
 }
 
 void RequestRoute::setSAEV(int routeIndex, SAEVehicle *saev) {
-    if(routeIndex == 0 || routeIndex == 3)
+    if(routeIndex == SAEV1 || routeIndex == SAEV2)
         _route[routeIndex].setSAEV(saev);
 
 }
@@ -43,7 +43,7 @@ LineStop *RequestRoute::getLineStop(int routeIndex) const {
 }
 
 void RequestRoute::setLineStop(int routeIndex, LineStop *lineStop) {
-    if(routeIndex == 1 || routeIndex == 2)
+    if(routeIndex == TRANSIT1 || routeIndex == TRANSIT2)
         _route[routeIndex].setLineStop(lineStop);
 }
 
