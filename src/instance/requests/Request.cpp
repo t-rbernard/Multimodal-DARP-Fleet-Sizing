@@ -12,6 +12,15 @@ Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const
     _departureTW = _arrivalTW - deltaTime;
 }
 
+Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
+                 const int deltaTime, const int weight, const Graph& graph) :
+                 _departureNodeIndex(departureNodeIndex),_arrivalNodeIndex(arrivalNodeIndex),
+                 _arrivalTW(arrivalTw),_deltaTime(deltaTime), _weight(weight) {
+    _currentDeltaTime = deltaTime;
+    _departureTW.min = _arrivalTW.min - deltaTime;
+    _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
+}
+
 const int Request::getDepartureNodeIndex() const {
     return _departureNodeIndex;
 }
@@ -50,6 +59,24 @@ const RequestRoute &Request::getCurrentRoute() const {
 
 const TimeWindow &Request::getDepartureTw() const {
     return _departureTW;
+}
+
+const int &Request::getMinDepartureTw() const {
+    return _departureTW.min;
+}
+
+
+const int &Request::getMaxDepartureTw() const {
+    return _departureTW.max;
+}
+
+const int &Request::getMinArrivalTw() const {
+    return _arrivalTW.min;
+}
+
+
+const int &Request::getMaxArrivalTw() const {
+    return _arrivalTW.max;
 }
 
 //-----------------------------

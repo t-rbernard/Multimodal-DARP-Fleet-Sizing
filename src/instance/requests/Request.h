@@ -8,6 +8,7 @@
 
 #include "../../TimeWindow.h"
 #include "../../routes/RequestRoute.h"
+#include "../graph/Graph.h"
 
 class Request {
 private:
@@ -27,6 +28,8 @@ private:
 public:
     Request(const int departureNodeIndex, const int arrivalNodeIndex,
             const TimeWindow &arrivalTw, const int deltaTime, const int weight);
+    Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
+            const int deltaTime, const int weight, const Graph& graph);
 
     //Getters
     [[nodiscard]] const int getDepartureNodeIndex() const;
@@ -39,6 +42,10 @@ public:
     [[nodiscard]] int getRequestServiceEnd() const;
     [[nodiscard]] const RequestRoute &getCurrentRoute() const;
     [[nodiscard]] const TimeWindow &getDepartureTw() const;
+    [[nodiscard]] const int &getMinDepartureTw() const;
+    [[nodiscard]] const int &getMaxDepartureTw() const;
+    [[nodiscard]] const int &getMinArrivalTw() const;
+    [[nodiscard]] const int &getMaxArrivalTw() const;
 
     //Setters
     void setCurrentDeltaTime(int currentDeltaTime);

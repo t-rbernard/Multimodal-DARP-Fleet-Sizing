@@ -43,18 +43,22 @@ add_executable(GreedyAlgorithm
         src/ShortestPath/Transit/TransitShortestPathContainer.h
         src/routes/RequestRoute.cpp
         src/routes/RequestRoute.h
-        src/routes/SAEVRoute.cpp
-        src/routes/SAEVRoute.h
+        src/routes/vehicle/SAEVRoute.cpp
+        src/routes/vehicle/SAEVRoute.h
         src/TimeWindow.cpp
         src/TimeWindow.h
         src/routes/KeyPoint.cpp
         src/routes/KeyPoint.h
         src/routes/RequestKeyPoint.cpp
         src/routes/RequestKeyPoint.h
-        src/routes/SAEVKeyPoint.cpp
-        src/routes/SAEVKeyPoint.h
+        src/routes/vehicle/SAEVKeyPoint.cpp
+        src/routes/vehicle/SAEVKeyPoint.h
         src/instance/SAEVehicle.cpp
         src/instance/SAEVehicle.h
+        src/routes/vehicle/propagation/SAEVRouteChangelist.cpp
+        src/routes/vehicle/propagation/SAEVRouteChangelist.h
+        src/routes/vehicle/propagation/SAEVRouteChange.cpp
+        src/routes/vehicle/propagation/SAEVRouteChange.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
