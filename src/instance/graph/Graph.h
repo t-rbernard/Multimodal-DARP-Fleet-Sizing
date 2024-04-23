@@ -20,6 +20,7 @@ private:
     std::vector<Node> nodesVector; //The full list of nodes created in the graph
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
+    std::vector<std::vector<int>> shortestSAEVPaths;
 
     /**
      * For every LineStop on every node of the graph, verify the node returned by looking into LineStop->Line(stopIdx)
@@ -144,6 +145,8 @@ public:
      * @param length The length of this edge (in minutes)
      */
     void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
+
+    int getShortestSAEVPath(int x, int y) const { return shortestSAEVPaths.at(x).at(y); }
 };
 
 

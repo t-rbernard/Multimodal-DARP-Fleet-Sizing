@@ -37,6 +37,9 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
         parseNodeRow(row);
     }
 
+    shortestSAEVPaths.reserve(nodesVector.size());
+    for(std::vector<int> yValues : shortestSAEVPaths) { yValues.reserve(nodesVector.size()); }
+
     //Edges instantiation
     std::ifstream edgesFile(edgesFilePath);
     std::cout << "Edges instantiation" << std::endl;
