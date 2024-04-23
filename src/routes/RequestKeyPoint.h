@@ -15,6 +15,10 @@ private:
     SAEVehicle* _saev{};
     LineStop* _lineStop{};
 
+    //Constraint propagation variables
+    TimeWindow _arrivalTimeWindow{};
+    TimeWindow _departureTimeWindow{};
+
 public:
     RequestKeyPoint() = default;
     explicit RequestKeyPoint(SAEVehicle* vehicle) { _saev = vehicle; }
@@ -25,6 +29,13 @@ public:
 
     [[nodiscard]] LineStop *getLineStop() const;
     void setLineStop(LineStop *lineStop);
+
+    [[nodiscard]] const TimeWindow &getArrivalTimeWindow() const;
+    void setArrivalTimeWindow(const TimeWindow &arrivalTimeWindow);
+
+    [[nodiscard]] const TimeWindow &getDepartureTimeWindow() const;
+    void setDepartureTimeWindow(const TimeWindow &departureTimeWindow);
+
 
     [[nodiscard]] bool check() const override;
 };

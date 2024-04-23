@@ -11,17 +11,35 @@
 
 class SAEVKeyPoint : public virtual KeyPoint {
 private:
-    Request* _request;
-    bool _isEntry;
+    Request* _request{};
+    SAEVKeyPoint* _predecessor{};
+    SAEVKeyPoint* _successor{};
+    int _currentCapacity{0};
+    int _minTW{0};
+    int _maxTW{0};
+    SAEVehicle* _vehiclePointer{};
+
+public:
+    [[nodiscard]] SAEVKeyPoint *getPredecessor() const;
+    void setPredecessor(SAEVKeyPoint *predecessor);
+
+    [[nodiscard]] SAEVKeyPoint *getSuccessor() const;
+    void setSuccessor(SAEVKeyPoint *successor);
+
+    [[nodiscard]] int getCurrentCapacity() const;
+    void setCurrentCapacity(int currentCapacity);
+
+    [[nodiscard]] int getMinTw() const;
+    void setMinTw(int minTw);
+
+    [[nodiscard]] int getMaxTw() const;
+    void setMaxTw(int maxTw);
 
 public:
     SAEVKeyPoint(Request* request, bool  isEntry);
 
     [[nodiscard]] Request *getRequest() const;
     void setRequest(Request *request);
-
-    [[nodiscard]] bool isEntry() const;
-    void setIsEntry(bool isEntry);
 
     [[nodiscard]] bool check() const override;
 
