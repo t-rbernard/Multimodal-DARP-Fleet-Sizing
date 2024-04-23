@@ -6,20 +6,33 @@
 #define GREEDYALGORITHM_SAEVKEYPOINT_H
 
 
-#include "../instance/requests/Request.h"
-#include "KeyPoint.h"
+#include "../../instance/requests/Request.h"
+#include "../KeyPoint.h"
+#include "../../instance/graph/Graph.h"
 
 class SAEVKeyPoint : public virtual KeyPoint {
 private:
-    Request* _request{};
-    SAEVKeyPoint* _predecessor{};
-    SAEVKeyPoint* _successor{};
-    int _currentCapacity{0};
+    SAEVKeyPoint* _predecessor{nullptr};
+    SAEVKeyPoint* _successor{nullptr};
+    int _currentOccupation{0};
     int _minTW{0};
     int _maxTW{0};
     SAEVehicle* _vehiclePointer{};
 
 public:
+    /**
+     * Depot KP initialization
+     * @param isEntry
+     */
+    SAEVKeyPoint(bool isEntry);
+    /**
+     * SAEV KP initialization
+     * @param graph
+     * @param request
+     * @param isEntry
+     */
+    SAEVKeyPoint(const Graph &graph, const Request& request, bool isEntry);
+
     [[nodiscard]] SAEVKeyPoint *getPredecessor() const;
     void setPredecessor(SAEVKeyPoint *predecessor);
 
@@ -34,12 +47,6 @@ public:
 
     [[nodiscard]] int getMaxTw() const;
     void setMaxTw(int maxTw);
-
-public:
-    SAEVKeyPoint(Request* request, bool  isEntry);
-
-    [[nodiscard]] Request *getRequest() const;
-    void setRequest(Request *request);
 
     [[nodiscard]] bool check() const override;
 
