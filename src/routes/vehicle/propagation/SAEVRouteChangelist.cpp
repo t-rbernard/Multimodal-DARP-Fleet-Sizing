@@ -25,6 +25,7 @@ void SAEVRouteChangelist::applyChanges() const {
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
     }
+    //TODO: update key point weights here ? (only if changelist.size > 0 & score < +Inf)
 }
 
 void SAEVRouteChangelist::revertChanges() const {
@@ -32,6 +33,7 @@ void SAEVRouteChangelist::revertChanges() const {
     for(SAEVRouteChange change : _changelist) {
         change.revertChange();
     }
+    //TODO: update key point weights here ? (only if changelist.size > 0 & score < +Inf)
 }
 
 int SAEVRouteChangelist::getRequestIdx() const {
