@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "SAEVKeyPoint.h"
+#include "propagation/SAEVRouteChangelist.h"
 
 class SAEVRoute {
 private:
@@ -37,7 +38,29 @@ public:
      */
     void insertRequest(int requestIdx, int originRequestPredecessorIdx, int destinationRequestPredecessorIdx);
 
-    void insertRequestWithPropagation(int requestIdx, int originRequestPredecessorIdx, int destinationRequestPredecessorIdx);
+    /**
+     * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
+     * First we verify multiple constraints that don't require actually inserting the request or doing constraint propagation. \n
+     * Then we propagate our min/max bounds, iteratively rippling through every modification induced by min/max neighbour constraints or delta constraints. \n
+     * ⚠️ In case of infeasibility, tryAdd automatically reverts changes and the change list will be effectively empty, but otherwise it's the caller's responsibility to revert changes if necessary
+     * @param requestIdx Identifier/index in the instance's request vector for the request we wish to insert
+     * @param originRequestPredecessorIdx Identifier/index in the instance's request vector for the request that will precede our request's origin in the route
+     * @param destinationRequestPredecessorIdx Identifier/index in the instance's request vector for the request that will precede our request's destination in the route
+     * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
+     */
+    SAEVRouteChangelist tryAddRequest(int requestIdx, int originRequestPredecessorIdx, int destinationRequestPredecessorIdx);
+
+    /**
+     * Method called after having validated conditions not requiring request insertion. \n
+     * This will effectively insert our procedure and ripple through bound changes. \n
+     * If the bounds become infeasible (min > max), then the propagation stops with a changelist with score= +Infinity and changes will be immediately reverted.
+     * Otherwise, it's the responsibility of this method's callers to revert changes if wanted (or to defer this responsibility to its caller)
+     * @param requestIdx Identifier/index in the instance's request vector for the request we wish to insert
+     * @param originRequestPredecessorIdx Identifier/index in the instance's request vector for the request that will precede our request's origin in the route
+     * @param destinationRequestPredecessorIdx Identifier/index in the instance's request vector for the request that will precede our request's destination in the route
+     * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
+     */
+    SAEVRouteChangelist insertRequestWithPropagation(int requestIdx, int originRequestPredecessorIdx, int destinationRequestPredecessorIdx);
 
     /**
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member FIXME:make private
