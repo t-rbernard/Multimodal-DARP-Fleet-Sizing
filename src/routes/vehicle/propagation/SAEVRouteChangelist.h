@@ -10,9 +10,9 @@
 #include "../SAEVRoute.h"
 
 /**
- * This class serves as iterative memory for changes made to key points during constraint propagation
- * It memorizes the data to undo/redo request insertion and apply/revert changes made without losing time on duplicate feasibility checks
- * To allow comparison and ordering between multiple insertions if necessary, it also memorizes a score associated with this constraint propagation
+ * This class serves as iterative memory for changes made to key points during constraint propagation. \n
+ * It memorizes the data to undo/redo request insertion and apply/revert changes made without losing time on duplicate feasibility checks. \n
+ * To allow comparison and ordering between multiple insertions if necessary, it also memorizes a score associated with this constraint propagation (lower is better)
  */
 class SAEVRouteChangelist {
 private:
@@ -38,11 +38,27 @@ public:
     [[nodiscard]] SAEVRoute * getRoutePtr() const;
 
     [[nodiscard]] const std::vector<SAEVRouteChange> &getChangelist() const;
+    /**
+     * @return The index of the request that we want to insert to a route
+     */
     [[nodiscard]] int getRequestIdx() const;
+    /**
+     * @return The index of the request our origin will be inserted after
+     */
     [[nodiscard]] int getOriginIdx() const;
+    /**
+     * @return The index of the request our destination will be inserted after
+     */
     [[nodiscard]] int getDestinationIdx() const;
+    /**
+     * @return A score value associated with this changelist. A lower score is better
+     */
     [[nodiscard]] double getScore() const;
 
+    /**
+     * Updates this change list's score value if needed (namely, after the whole propagation has been done)
+     * @param score A value representing how good the insertion associated with this change list is (lower is better)
+     */
     void setScore(double score);
 
     void push_back(SAEVRouteChange change);
@@ -52,17 +68,23 @@ public:
     /**
      * Inserts the request associated to this changelist to the given route and iteratively applies every change memorized in this changelist.
      * Aside from OOB exceptions, no checks are done in this method
-     * @param route The route in which we wish to insert the request and apply the change list to
      */
-    void applyChanges(SAEVRoute route) const;
+    void applyChanges() const;
     /**
      * removes the request associated to this changelist from the given route and iteratively reverts every change memorized in this changelist.
      * Aside from OOB exceptions, no checks are done in this method
-     * @param route The route in which we wish to remove the request and revert the change list
      */
-    void revertChanges(SAEVRoute route) const;
+    void revertChanges() const;
 
+    /**
+     * @param rhs the value *this* will be compared to
+     * @return True iff this changelist's score is strictly higher than rhs' score
+     */
     bool operator>(const SAEVRouteChangelist& rhs) const;
+    /**
+     * @param rhs the value *this* will be compared to
+     * @return True iff this changelist's score is strictly lower than rhs' score
+     */
     bool operator<(const SAEVRouteChangelist& rhs) const;
 };
 
