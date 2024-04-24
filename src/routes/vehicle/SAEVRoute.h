@@ -44,8 +44,6 @@ public:
      * @param requestIdx index of the request we want to remove from the route
      */
     void removeRequest(int requestIdx);
-
-    void removeRequestWithPropagation(int requestIdx);
 };
 
 
