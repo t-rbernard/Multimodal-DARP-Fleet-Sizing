@@ -20,15 +20,15 @@ void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, int value)
     _changelist.emplace_back(kp, bound, value);
 }
 
-void SAEVRouteChangelist::applyChanges(SAEVRoute route) const {
-    route.insertRequest(_requestIdx, _originIdx, _destinationIdx);
+void SAEVRouteChangelist::applyChanges() const {
+    _routePtr->insertRequest(_requestIdx, _originIdx, _destinationIdx);
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
     }
 }
 
-void SAEVRouteChangelist::revertChanges(SAEVRoute route) const {
-    route.removeRequest(_requestIdx);
+void SAEVRouteChangelist::revertChanges() const {
+    _routePtr->removeRequest(_requestIdx);
     for(SAEVRouteChange change : _changelist) {
         change.revertChange();
     }
@@ -55,10 +55,13 @@ void SAEVRouteChangelist::setScore(double score) {
 }
 
 bool SAEVRouteChangelist::operator>(const SAEVRouteChangelist &rhs) const {
-    return _score > rhs.getScore();
+    return _routePtr == rhs.getRoutePtr() && _score > rhs.getScore();
 }
 
 bool SAEVRouteChangelist::operator<(const SAEVRouteChangelist &rhs) const {
-    return _score < rhs.getScore();
+    return _routePtr == rhs.getRoutePtr() && _score < rhs.getScore();
 }
 
+SAEVRoute * SAEVRouteChangelist::getRoutePtr() const {
+    return _routePtr;
+}

@@ -16,6 +16,7 @@
  */
 class SAEVRouteChangelist {
 private:
+    SAEVRoute * const _routePtr;
     const int _requestIdx, _originIdx, _destinationIdx;
     std::vector<SAEVRouteChange> _changelist{};
     double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
@@ -23,12 +24,18 @@ private:
 public:
     /**
      * Initializes a change list to memorize every iterative modification made during constraint propagation
+     * @param routePtr a pointer to the route the constraint propagation was applied on. revert/apply operations will be done on this route
      * @param requestIdx The index of the request in the global request list
      * @param originIdx The index of the request our origin will be inserted after
      * @param destinationIdx The index of the request our destination will be inserted after
      */
-    explicit SAEVRouteChangelist(const int requestIdx, const int originIdx, const int destinationIdx)
-    : _requestIdx(requestIdx), _originIdx(originIdx), _destinationIdx(destinationIdx) {};
+    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const int requestIdx, const int originIdx, const int destinationIdx)
+    : _routePtr(routePtr), _requestIdx(requestIdx), _originIdx(originIdx), _destinationIdx(destinationIdx) {};
+
+    /**
+     * @return A pointer to the route this change list applies/reverts changes to
+     */
+    [[nodiscard]] SAEVRoute * getRoutePtr() const;
 
     [[nodiscard]] const std::vector<SAEVRouteChange> &getChangelist() const;
     [[nodiscard]] int getRequestIdx() const;
