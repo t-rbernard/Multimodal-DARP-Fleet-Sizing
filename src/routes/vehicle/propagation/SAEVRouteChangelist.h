@@ -34,6 +34,8 @@ public:
     void applyChanges(SAEVRoute route) const;
     void revertChanges(SAEVRoute route) const;
 
+    bool operator>(const SAEVRouteChangelist& rhs) const;
+    bool operator<(const SAEVRouteChangelist& rhs) const;
 };
 
 

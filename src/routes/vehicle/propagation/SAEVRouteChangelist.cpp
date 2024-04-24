@@ -54,3 +54,11 @@ void SAEVRouteChangelist::setScore(double score) {
     SAEVRouteChangelist::_score = score;
 }
 
+bool SAEVRouteChangelist::operator>(const SAEVRouteChangelist &rhs) const {
+    return _score > rhs.getScore();
+}
+
+bool SAEVRouteChangelist::operator<(const SAEVRouteChangelist &rhs) const {
+    return _score < rhs.getScore();
+}
+
