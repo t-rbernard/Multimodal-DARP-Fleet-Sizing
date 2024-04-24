@@ -9,6 +9,11 @@
 #include "SAEVRouteChange.h"
 #include "../SAEVRoute.h"
 
+/**
+ * This class serves as iterative memory for changes made to key points during constraint propagation
+ * It memorizes the data to undo/redo request insertion and apply/revert changes made without losing time on duplicate feasibility checks
+ * To allow comparison and ordering between multiple insertions if necessary, it also memorizes a score associated with this constraint propagation
+ */
 class SAEVRouteChangelist {
 private:
     const int _requestIdx, _originIdx, _destinationIdx;
@@ -16,6 +21,12 @@ private:
     double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
 
 public:
+    /**
+     * Initializes a change list to memorize every iterative modification made during constraint propagation
+     * @param requestIdx The index of the request in the global request list
+     * @param originIdx The index of the request our origin will be inserted after
+     * @param destinationIdx The index of the request our destination will be inserted after
+     */
     explicit SAEVRouteChangelist(const int requestIdx, const int originIdx, const int destinationIdx)
     : _requestIdx(requestIdx), _originIdx(originIdx), _destinationIdx(destinationIdx) {};
 
@@ -31,7 +42,17 @@ public:
     void emplace_back(SAEVRouteChange change);
     void emplace_back(SAEVKeyPoint& kp, Bound bound, int value);
 
+    /**
+     * Inserts the request associated to this changelist to the given route and iteratively applies every change memorized in this changelist.
+     * Aside from OOB exceptions, no checks are done in this method
+     * @param route The route in which we wish to insert the request and apply the change list to
+     */
     void applyChanges(SAEVRoute route) const;
+    /**
+     * removes the request associated to this changelist from the given route and iteratively reverts every change memorized in this changelist.
+     * Aside from OOB exceptions, no checks are done in this method
+     * @param route The route in which we wish to remove the request and revert the change list
+     */
     void revertChanges(SAEVRoute route) const;
 
     bool operator>(const SAEVRouteChangelist& rhs) const;
