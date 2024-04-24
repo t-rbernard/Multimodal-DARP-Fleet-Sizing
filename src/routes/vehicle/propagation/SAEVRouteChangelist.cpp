@@ -46,3 +46,11 @@ int SAEVRouteChangelist::getDestinationIdx() const {
     return _destinationIdx;
 }
 
+double SAEVRouteChangelist::getScore() const {
+    return _score;
+}
+
+void SAEVRouteChangelist::setScore(double score) {
+    SAEVRouteChangelist::_score = score;
+}
+

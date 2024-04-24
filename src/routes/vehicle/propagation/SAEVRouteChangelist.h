@@ -13,6 +13,7 @@ class SAEVRouteChangelist {
 private:
     const int _requestIdx, _originIdx, _destinationIdx;
     std::vector<SAEVRouteChange> _changelist{};
+    double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
 
 public:
     explicit SAEVRouteChangelist(const int requestIdx, const int originIdx, const int destinationIdx)
@@ -22,6 +23,9 @@ public:
     [[nodiscard]] int getRequestIdx() const;
     [[nodiscard]] int getOriginIdx() const;
     [[nodiscard]] int getDestinationIdx() const;
+    [[nodiscard]] double getScore() const;
+
+    void setScore(double score);
 
     void push_back(SAEVRouteChange change);
     void emplace_back(SAEVRouteChange change);
