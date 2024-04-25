@@ -58,12 +58,7 @@ SAEVKeyPoint::SAEVKeyPoint(const Graph &graph, const Request &request, bool isEn
     }
 }
 
-SAEVKeyPoint::SAEVKeyPoint(bool isEntry) {
-    if(isEntry) {
-        _minTW =
-        _maxTW = request.getArrivalTw().max - graph.getShortestSAEVPath(request.getDepartureNodeIndex(), request.getArrivalNodeIndex());
-    } else {
-        _minTW = request.getArrivalTw().min;
-        _maxTW = request.getArrivalTw().max;
-    }
+SAEVKeyPoint::SAEVKeyPoint() {
+    _minTW = 0;
+    _maxTW = INT16_MAX;
 }

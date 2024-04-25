@@ -15,8 +15,8 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
 
     //Init start/end depot key points
     for(size_t i = _nbRequest; i < _nbRequest*2; ++i) {
-        _route.at(i*2) = SAEVKeyPoint(true); //start
-        _route.at(i*2+1) = SAEVKeyPoint(false); //end
+        _route.at(i*2) = SAEVKeyPoint(); //start
+        _route.at(i*2+1) = SAEVKeyPoint(); //end
     }
 }
 

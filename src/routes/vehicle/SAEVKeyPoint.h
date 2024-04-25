@@ -24,7 +24,7 @@ public:
      * Depot KP initialization
      * @param isEntry
      */
-    SAEVKeyPoint(bool isEntry);
+    SAEVKeyPoint();
     /**
      * SAEV KP initialization
      * @param graph
