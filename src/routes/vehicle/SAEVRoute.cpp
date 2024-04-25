@@ -67,4 +67,25 @@ void SAEVRoute::removeRequest(int requestIdx) {
     destinationKp.setMaxTw(_requestList->at(requestIdx).getMaxArrivalTw());
 }
 
+SAEVRouteChangelist
+SAEVRoute::tryAddRequest(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx) {
+    bool isFeasible = true;
+    SAEVKeyPoint originPredecessor = _route.at(originRequestPredecessorIdx);
+    SAEVKeyPoint destinationPredecessor = _route.at(destinationRequestPredecessorIdx);
+    if(true) {
+
+    }
+
+    if (isFeasible) {
+        return insertRequestWithPropagation(requestIdx, originRequestPredecessorIdx,destinationRequestPredecessorIdx);
+    } else {
+        return SAEVRouteChangelist(this, requestIdx, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
+    }
+}
+
+SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx,
+                                                            const int destinationRequestPredecessorIdx) {
+    return SAEVRouteChangelist(nullptr, 0, 0, 0);
+}
+
 
