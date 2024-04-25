@@ -19,7 +19,7 @@ public:
     [[nodiscard]] int getNodeIndex() const;
     void setNodeIndex(int nodeIndex);
 
-    [[nodiscard]] virtual bool check() const = 0;
+    [[nodiscard]] virtual bool check() const { return true; };
 
     ~KeyPoint() = default;
 };
