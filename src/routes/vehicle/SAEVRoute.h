@@ -8,8 +8,8 @@
 
 #include <vector>
 #include "SAEVKeyPoint.h"
-#include "propagation/SAEVRouteChangelist.h"
 
+class SAEVRouteChangelist;
 class SAEVRoute {
 private:
     std::vector<SAEVKeyPoint> _route;
@@ -69,5 +69,6 @@ public:
     void removeRequest(int requestIdx);
 };
 
+#include "propagation/SAEVRouteChangelist.h"
 
 #endif //GREEDYALGORITHM_SAEVROUTE_H

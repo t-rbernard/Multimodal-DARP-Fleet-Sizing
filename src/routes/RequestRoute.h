@@ -8,6 +8,7 @@
 
 #include "RequestKeyPoint.h"
 
+class Request;
 class RequestRoute {
 public:
     enum RouteStructureEnum {
@@ -40,5 +41,6 @@ public:
     void resetKeyPoint(int routeIndex);
 };
 
+#include "../instance/requests/Request.h"
 
 #endif //GREEDYALGORITHM_REQUESTROUTE_H
