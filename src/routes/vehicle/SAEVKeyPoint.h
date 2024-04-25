@@ -21,15 +21,14 @@ private:
 
 public:
     /**
-     * Depot KP initialization
-     * @param isEntry
+     * Depot KP initialization with [0;max] time windows
      */
     SAEVKeyPoint();
     /**
      * SAEV KP initialization
-     * @param graph
-     * @param request
-     * @param isEntry
+     * @param graph the instance's graph, used to get shortest path and estimate start time windows relative to distances
+     * @param request the request associated with our key point, required to initialize time windows
+     * @param isEntry true iff the key point represents the request's origin, false otherwise
      */
     SAEVKeyPoint(const Graph &graph, const Request& request, bool isEntry);
 
