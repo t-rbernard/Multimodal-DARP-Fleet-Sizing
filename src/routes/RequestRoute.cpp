@@ -12,22 +12,6 @@ void RequestRoute::setNodeIndex(int routeIndex, int nodeIndex) {
     _route[routeIndex].setNodeIndex(nodeIndex);
 }
 
-int RequestRoute::getArrivalInstant(int routeIndex) const {
-    return _route[routeIndex].getArrivalInstant();
-}
-
-void RequestRoute::setArrivalInstant(int routeIndex, int arrivalInstant) {
-    _route[routeIndex].setArrivalInstant(arrivalInstant);
-}
-
-int RequestRoute::getDepartureInstant(int routeIndex) const {
-    return _route[routeIndex].getDepartureInstant();
-}
-
-void RequestRoute::setDepartureInstant(int routeIndex, int departureInstant) {
-    _route[routeIndex].setDepartureInstant(departureInstant);
-}
-
 SAEVehicle *RequestRoute::getSAEV(int routeIndex) const {
     return _route[routeIndex].getSAEV();
 }
@@ -50,13 +34,6 @@ void RequestRoute::setLineStop(int routeIndex, LineStop *lineStop) {
 void RequestRoute::resetKeyPoint(int routeIndex) {
     RequestKeyPoint keyPoint = _route[routeIndex];
     keyPoint.setNodeIndex(-1);
-    if(routeIndex > 1) { //If possible, set the time values to be the same as the preceding node to keep _route continuity
-        keyPoint.setArrivalInstant(_route[routeIndex - 1].getArrivalInstant());
-        keyPoint.setDepartureInstant(keyPoint.getArrivalInstant());
-    } else { //otherwise use default values
-        keyPoint.setArrivalInstant(-1);
-        keyPoint.setDepartureInstant(-1);
-    }
     keyPoint.setSAEV(nullptr);
     keyPoint.setLineStop(nullptr);
 }

@@ -18,19 +18,13 @@ public:
     };
 private:
     RequestKeyPoint _route[4];
-    Request* _requestPointer{};
+    Request* _requestPointer{nullptr};
 public:
     RequestRoute() = default;
     explicit RequestRoute(Request* request) {_requestPointer = request; };
 
     [[nodiscard]] int getNodeIndex(int routeIndex) const;
     void setNodeIndex(int routeIndex, int nodeIndex);
-
-    [[nodiscard]] int getArrivalInstant(int routeIndex) const;
-    void setArrivalInstant(int routeIndex, int arrivalInstant);
-
-    [[nodiscard]] int getDepartureInstant(int routeIndex) const;
-    void setDepartureInstant(int routeIndex, int departureInstant);
 
     [[nodiscard]] SAEVehicle *getSAEV(int routeIndex) const;
     void setSAEV(int routeIndex, SAEVehicle *saev);

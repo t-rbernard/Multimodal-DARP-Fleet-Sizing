@@ -115,22 +115,6 @@ void Request::setNodeIndex(int routeIndex, int nodeIndex) {
     _currentRoute.setNodeIndex(routeIndex, nodeIndex);
 }
 
-int Request::getArrivalInstant(int routeIndex) const {
-    return _currentRoute.getArrivalInstant(routeIndex);
-}
-
-void Request::setArrivalInstant(int routeIndex, int arrivalInstant) {
-    _currentRoute.setArrivalInstant(routeIndex, arrivalInstant);
-}
-
-int Request::getDepartureInstant(int routeIndex) const {
-    return _currentRoute.getDepartureInstant(routeIndex);
-}
-
-void Request::setDepartureInstant(int routeIndex, int departureInstant) {
-    _currentRoute.setDepartureInstant(routeIndex, departureInstant);
-}
-
 SAEVehicle *Request::getSAEV(int routeIndex) const {
     return _currentRoute.getSAEV(routeIndex);
 }
