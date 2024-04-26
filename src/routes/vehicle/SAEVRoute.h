@@ -31,12 +31,21 @@ public:
     }
 
     /**
-     * Raw request route insertion method. Public for debug purposes, but should effectively never be called by an outside member FIXME:make private
+     * Raw request route insertion method. Public for debug purposes, but should effectively never be called by an outside member
      * @param requestIdx index of the request we want to insert in the route
      * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede the origin of the request we want to insert
      * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
      */
     void insertRequest(int requestIdx, int originRequestPredecessorIdx, int destinationRequestPredecessorIdx);
+
+    /**
+     * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
+     * @param requestIdx index of the request we want to remove from the route
+     */
+    void removeRequest(int requestIdx);
+
+    bool doNeighbouringTWChecks(const int requestIdx, const Request* request, const SAEVKeyPoint *originPredecessor,
+                                const SAEVKeyPoint *destinationPredecessor);
 
     /**
      * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
@@ -61,12 +70,6 @@ public:
      * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
      */
     SAEVRouteChangelist insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx);
-
-    /**
-     * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member FIXME:make private
-     * @param requestIdx index of the request we want to remove from the route
-     */
-    void removeRequest(int requestIdx);
 };
 
 #include "propagation/SAEVRouteChangelist.h"

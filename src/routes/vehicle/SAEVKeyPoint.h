@@ -37,8 +37,8 @@ public:
     [[nodiscard]] SAEVKeyPoint *getSuccessor() const;
     void setSuccessor(SAEVKeyPoint *successor);
 
-    [[nodiscard]] int getCurrentCapacity() const;
-    void setCurrentCapacity(int currentCapacity);
+    [[nodiscard]] int getCurrentOccupation() const;
+    void setCurrentOccupation(int currentCapacity);
 
     [[nodiscard]] int getMinTw() const;
     void setMinTw(int minTw);

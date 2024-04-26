@@ -24,11 +24,11 @@ void SAEVKeyPoint::setSuccessor(SAEVKeyPoint *successor) {
     _successor = successor;
 }
 
-int SAEVKeyPoint::getCurrentCapacity() const {
+int SAEVKeyPoint::getCurrentOccupation() const {
     return _currentOccupation;
 }
 
-void SAEVKeyPoint::setCurrentCapacity(int currentCapacity) {
+void SAEVKeyPoint::setCurrentOccupation(int currentCapacity) {
     _currentOccupation = currentCapacity;
 }
 
