@@ -10,20 +10,19 @@
 #include "../KeyPoint.h"
 #include "../../instance/graph/Graph.h"
 
-class SAEVKeyPoint : public virtual KeyPoint {
+class SAEVKeyPoint : public KeyPoint {
 private:
     SAEVKeyPoint* _predecessor{nullptr};
     SAEVKeyPoint* _successor{nullptr};
     int _currentOccupation{0};
     int _minTW{0};
-    int _maxTW{0};
+    int _maxTW{INT16_MAX};
     SAEVehicle* _vehiclePointer{};
-
 public:
     /**
      * Depot KP initialization with [0;max] time windows
      */
-    SAEVKeyPoint();
+    SAEVKeyPoint() = default;
     /**
      * SAEV KP initialization
      * @param graph the instance's graph, used to get shortest path and estimate start time windows relative to distances
@@ -49,7 +48,7 @@ public:
 
     [[nodiscard]] bool check() const override;
 
-    ~SAEVKeyPoint() = default;
+    ~SAEVKeyPoint() override = default;
 };
 
 

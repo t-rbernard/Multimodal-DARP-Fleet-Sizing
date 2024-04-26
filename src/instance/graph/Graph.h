@@ -87,7 +87,7 @@ public:
      * @param edge The edge to push in the graph's edge vector
      * @return The edge vector after having added the edge
      */
-    std::vector<Edge> addEdge(Edge& edge) {
+    std::vector<Edge> addEdge(Edge const& edge) {
         edgesVector.push_back(edge);
         return edgesVector;
     }
@@ -97,7 +97,7 @@ public:
      * @param node The node to push in the graph's node vector
      * @return The node vector after having added the node
      */
-    std::vector<Node> addNode(Node& node) {
+    std::vector<Node> addNode(Node const& node) {
         nodesVector.push_back(node);
         return nodesVector;
     }
@@ -146,7 +146,7 @@ public:
      */
     void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
 
-    int getShortestSAEVPath(int x, int y) const { return shortestSAEVPaths.at(x).at(y); }
+    [[nodiscard]] int getShortestSAEVPath(int x, int y) const { return shortestSAEVPaths.at(x).at(y); }
 };
 
 

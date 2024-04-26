@@ -9,7 +9,7 @@
 #include "../TimeWindow.h"
 
 class KeyPoint {
-protected:
+private:
     int _nodeIndex{-1};
 
 public:
@@ -21,7 +21,7 @@ public:
 
     [[nodiscard]] virtual bool check() const { return true; };
 
-    ~KeyPoint() = default;
+    virtual ~KeyPoint() = default;
 };
 
 
