@@ -44,9 +44,6 @@ public:
      */
     void removeRequest(int requestIdx);
 
-    bool doNeighbouringTWChecks(const int requestIdx, const Request* request, const SAEVKeyPoint *originPredecessor,
-                                const SAEVKeyPoint *destinationPredecessor);
-
     /**
      * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
      * First we verify multiple constraints that don't require actually inserting the request or doing constraint propagation. \n
@@ -58,6 +55,21 @@ public:
      * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
      */
     SAEVRouteChangelist tryAddRequest(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx);
+
+    /**
+     * Verifies time window constraints on our request's origin/destination's projected neighbour, aka originPredecessor/destinationPredecessor and their successor.
+     * There is a special case taken into account if originPredecessor and destinationPredecessor are the same KeyPoint, since then, Origin's successor would be Destination
+     * ⚠️ Weight constraints are checked separately
+     * ⚠️ Those checks don't modify the route => no rollback is needed at this point
+     * @param requestIdx Index of our request, necessary to retrieve the appropriate key points
+     * @param originNodeIndex The request's origin node index, necessary to compute travel times
+     * @param destinationNodeIndex The request's destination node index, necessary to compute travel times
+     * @param originPredecessor The origin's expected predecessor, aka the point after which we wish to insert our origin
+     * @param destinationPredecessor The destination's expected predecessor, aka the point after which we wish to insert our destination
+     * @return true iff all neighbouring time window conditions are valid at our insertion points, false otherwise
+     */
+    bool doNeighbouringTWChecks(const int requestIdx, const int originNodeIndex, const int destinationNodeIndex,
+                                const SAEVKeyPoint *originPredecessor, const SAEVKeyPoint *destinationPredecessor);
 
     /**
      * Method called after having validated conditions not requiring request insertion. \n

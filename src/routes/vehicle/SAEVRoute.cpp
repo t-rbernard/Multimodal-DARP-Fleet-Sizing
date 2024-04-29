@@ -83,7 +83,7 @@ SAEVRoute::tryAddRequest(const int requestIdx, const int originRequestPredecesso
     } while (currentKP != destinationPredecessor && currentKP != nullptr);
 
     //Do basic checks on neighbouring nodes from our Origin/Destination insertion points
-    bool isValid = doNeighbouringTWChecks(requestIdx, request, originPredecessor, destinationPredecessor);
+    bool isValid = doNeighbouringTWChecks(requestIdx, request->getOriginNodeIndex(), request->getDestinationNodeIndex(), originPredecessor, destinationPredecessor);
 
     if(isValid)
         return insertRequestWithPropagation(requestIdx, originRequestPredecessorIdx,destinationRequestPredecessorIdx);
@@ -92,13 +92,8 @@ SAEVRoute::tryAddRequest(const int requestIdx, const int originRequestPredecesso
 
 }
 
-SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx,
-                                                            const int destinationRequestPredecessorIdx) {
-    return SAEVRouteChangelist(nullptr, 0, 0, 0);
-}
-
 bool
-SAEVRoute::doNeighbouringTWChecks(const int requestIdx,  const Request* request,
+SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeIndex, const int destinationNodeIndex,
                                   const SAEVKeyPoint *originPredecessor, const SAEVKeyPoint *destinationPredecessor) {
 
     SAEVKeyPoint const* originKP = &_route.at(requestIdx);
@@ -107,12 +102,11 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx,  const Request* request,
 
     if(originPredecessor != destinationPredecessor)
     {
-
         SAEVKeyPoint const* destinationSuccessor = destinationPredecessor->getSuccessor();
 
         //Tests time windows Origin (yes this if-else could be one giant OR, but I'd rather separate every case)
-        int predOriginTimeWindow = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), request->getDepartureNodeIndex());
-        int predDestinationTimeWindow = destinationPredecessor->getMinTw() + _graph->getShortestSAEVPath(destinationPredecessor->getNodeIndex(), request->getArrivalNodeIndex());
+        int predOriginTimeWindow = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), originNodeIndex);
+        int predDestinationTimeWindow = destinationPredecessor->getMinTw() + _graph->getShortestSAEVPath(destinationPredecessor->getNodeIndex(), destinationNodeIndex);
         if(predOriginTimeWindow > originKP->getMaxTw())
             return false;
         else if(originKP->getMinTw() + _graph->getShortestSAEVPath(originKP->getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) // Could be removed ?
@@ -126,23 +120,26 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx,  const Request* request,
             return false;
         else if(predOriginTimeWindow + _graph->getShortestSAEVPath(destinationKP->getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw())
             return false;
-    } else {
-        int predMinTWToOrigin = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), request->getDepartureNodeIndex());
-        int predMinTWToDest = predMinTWToOrigin + _graph->getShortestSAEVPath(request->getDepartureNodeIndex(), request->getArrivalNodeIndex());
+    } else { //We need a specific case if origin and destination are inserted after the same node
+        int predMinTWToOrigin = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), originNodeIndex);
+        int predMinTWToDest = predMinTWToOrigin + _graph->getShortestSAEVPath(originNodeIndex, destinationNodeIndex);
         if(predMinTWToOrigin > originKP->getMaxTw()) //Path from pred to O
             return false;
         else if(predMinTWToDest > destinationKP->getMaxTw()) //Path from pred to D
             return false;
-        else if(predMinTWToDest + _graph->getShortestSAEVPath(request->getArrivalNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from pred to successor
+        else if(predMinTWToDest + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from pred to successor
             return false;
-        else if(originSuccessor->getMinTw() + _graph->getShortestSAEVPath(request->getArrivalNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from D to successor
+        else if(originSuccessor->getMinTw() + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from D to successor
             return false;
-        else if(originKP->getMinTw() + _graph->getShortestSAEVPath(request->getDepartureNodeIndex(), request->getArrivalNodeIndex()) //Path from O to successor
-        + _graph->getShortestSAEVPath(request->getArrivalNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw())
+        else if(originKP->getMinTw() + _graph->getShortestSAEVPath(originNodeIndex, destinationNodeIndex) //Path from O to successor
+        + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw())
             return false;
     }
 
     return true;
 }
 
-
+SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx,
+                                                            const int destinationRequestPredecessorIdx) {
+    return SAEVRouteChangelist(nullptr, 0, 0, 0);
+}
