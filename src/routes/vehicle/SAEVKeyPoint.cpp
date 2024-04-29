@@ -50,11 +50,12 @@ void SAEVKeyPoint::setMaxTw(int maxTw) {
 
 SAEVKeyPoint::SAEVKeyPoint(const Graph &graph, const Request &request, bool isEntry) {
     if(isEntry) {
-        setNodeIndex(request.getDepartureNodeIndex());
+        setNodeIndex(request.getOriginNodeIndex());
         _minTW = request.getArrivalTw().min - request.getDeltaTime();
-        _maxTW = request.getArrivalTw().max - graph.getShortestSAEVPath(request.getDepartureNodeIndex(), request.getArrivalNodeIndex());
+        _maxTW = request.getArrivalTw().max - graph.getShortestSAEVPath(request.getOriginNodeIndex(),
+                                                                        request.getDestinationNodeIndex());
     } else {
-        setNodeIndex(request.getArrivalNodeIndex());
+        setNodeIndex(request.getDestinationNodeIndex());
         _minTW = request.getArrivalTw().min;
         _maxTW = request.getArrivalTw().max;
     }

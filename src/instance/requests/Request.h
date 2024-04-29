@@ -13,8 +13,8 @@
 class Request {
 private:
     //Request base members (const and initialized on _request creation)
-    const int _departureNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
-    const int _arrivalNodeIndex; //
+    const int _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
+    const int _destinationNodeIndex; //
     const TimeWindow _arrivalTW; //[min,max] time window for arrival to the destination node
     const int _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
     const int _weight; //How much space the requests takes in the vehicle (defaults to 1)
@@ -32,8 +32,8 @@ public:
             const int deltaTime, const int weight, const Graph& graph);
 
     //Getters
-    [[nodiscard]] const int getDepartureNodeIndex() const;
-    [[nodiscard]] const int getArrivalNodeIndex() const;
+    [[nodiscard]] const int getOriginNodeIndex() const;
+    [[nodiscard]] const int getDestinationNodeIndex() const;
     [[nodiscard]] const TimeWindow &getArrivalTw() const;
     [[nodiscard]] const int getDeltaTime() const;
     [[nodiscard]] const int getWeight() const;

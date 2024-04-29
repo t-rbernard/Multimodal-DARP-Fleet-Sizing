@@ -5,8 +5,8 @@
 #include "Request.h"
 
 Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
-                 const int deltaTime, const int weight) : _departureNodeIndex(departureNodeIndex),
-                                                          _arrivalNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
+                 const int deltaTime, const int weight) : _originNodeIndex(departureNodeIndex),
+                                                          _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
                                                           _deltaTime(deltaTime), _weight(weight) {
     _currentDeltaTime = deltaTime;
     _departureTW = _arrivalTW - deltaTime;
@@ -14,19 +14,19 @@ Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const
 
 Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const int deltaTime, const int weight, const Graph& graph) :
-                 _departureNodeIndex(departureNodeIndex),_arrivalNodeIndex(arrivalNodeIndex),
-                 _arrivalTW(arrivalTw),_deltaTime(deltaTime), _weight(weight) {
+        _originNodeIndex(departureNodeIndex), _destinationNodeIndex(arrivalNodeIndex),
+        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight) {
     _currentDeltaTime = deltaTime;
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
 }
 
-const int Request::getDepartureNodeIndex() const {
-    return _departureNodeIndex;
+const int Request::getOriginNodeIndex() const {
+    return _originNodeIndex;
 }
 
-const int Request::getArrivalNodeIndex() const {
-    return _arrivalNodeIndex;
+const int Request::getDestinationNodeIndex() const {
+    return _destinationNodeIndex;
 }
 
 const TimeWindow &Request::getArrivalTw() const {
