@@ -139,7 +139,85 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
 
 SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx,
                                                             const int destinationRequestPredecessorIdx) {
-    return SAEVRouteChangelist(nullptr, 0, 0, 0);
+    //Init changelist
+    SAEVRouteChangelist changelist{this, requestIdx, originRequestPredecessorIdx, destinationRequestPredecessorIdx};
+    //Properly insert the request to facilitate constraint propagation
+    insertRequest(requestIdx, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
+
+    //Initialize bound propagation signal queue (each item signals a modification done on one of a KeyPoint
+    std::queue<std::pair<Bound, SAEVKeyPoint *>> boundPropagationQueue{};
+    const SAEVKeyPoint& originKP = getOrigin(requestIdx);
+    const SAEVKeyPoint& destinationKP = getDestination(requestIdx);
+    boundPropagationQueue.emplace(Min, originKP);
+    boundPropagationQueue.emplace(Max, originKP);
+    boundPropagationQueue.emplace(Min, destinationKP);
+    boundPropagationQueue.emplace(Max, destinationKP);
+
+    //Pre-init variables used in the loop
+    int oldValue;
+    int newValue;
+    SAEVKeyPoint * predecessorKP;
+    SAEVKeyPoint * successorKP;
+    SAEVKeyPoint * counterpartKP; //An Origin's Destination, or a Destination's Origin
+
+
+    while(!boundPropagationQueue.empty()) {
+        auto const& [bound, keyPoint] = boundPropagationQueue.front();
+        boundPropagationQueue.pop();
+
+        if(bound == Min) {
+            successorKP = keyPoint->getSuccessor();
+            oldValue = successorKP->getMinTw();
+            //Check neighbouring time window
+            newValue = keyPoint->getMinTw() + _graph->getShortestSAEVPath(keyPoint->getNodeIndex(), successorKP->getNodeIndex());
+            if(successorKP != nullptr && oldValue < newValue) {
+                if (newValue > successorKP->getMaxTw()) {
+                    return changelist;
+                }
+                changelist.emplace_back(*successorKP, Min, newValue - oldValue);
+                successorKP->setMinTw(newValue);
+                boundPropagationQueue.emplace(Min, successorKP);
+            }
+            //Check counterpart key point delta time
+            oldValue = counterpartKP->getMinTw();
+            newValue = keyPoint->getMinTw() - keyPoint.getRequest().getDeltaTime();
+            if(!counterpartKP.isOrigin() && oldValue < newValue) {
+                if (newValue > counterpartKP->getMaxTw()) {
+                    return changelist;
+                }
+                changelist.emplace_back(*counterpartKP, Min, newValue - oldValue);
+                counterpartKP->setMinTw(newValue);
+                boundPropagationQueue.emplace(Min, counterpartKP);
+            }
+        } else {
+            predecessorKP = keyPoint->getSuccessor();
+            oldValue = predecessorKP->getMaxTw();
+            //Check neighbouring time window
+            newValue = keyPoint->getMaxTw() - _graph->getShortestSAEVPath(predecessorKP->getNodeIndex(), keyPoint->getNodeIndex());
+            if(predecessorKP != nullptr && oldValue > newValue) {
+                if (predecessorKP->getMinTw() > newValue) {
+                    return changelist;
+                }
+                changelist.emplace_back(*predecessorKP, Max, newValue - oldValue);
+                predecessorKP->setMaxTw(newValue);
+                boundPropagationQueue.emplace(Max, predecessorKP);
+            }
+            //Check counterpart key point delta time
+            oldValue = counterpartKP->getMaxTw();
+            newValue = keyPoint->getMaxTw() + keyPoint.getRequest().getDeltaTime();
+            if(counterpartKP.isOrigin() && oldValue > newValue) {
+                if (counterpartKP->getMinTw() > newValue) {
+                    return changelist;
+                }
+                changelist.emplace_back(*counterpartKP, Max, oldValue - newValue);
+                counterpartKP->setMaxTw(newValue);
+                boundPropagationQueue.emplace(Max, counterpartKP);
+            }
+        }
+    }
+
+    changelist.setScore(getDetourScore(requestIdx, originRequestPredecessorIdx, destinationRequestPredecessorIdx));
+    return changelist;
 }
 
 double SAEVRoute::getDetourScore(const int requestIdx, const int originRequestPredecessorIdx,
