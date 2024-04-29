@@ -82,6 +82,12 @@ public:
      * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
      */
     SAEVRouteChangelist insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx);
+
+    SAEVKeyPoint& getOrigin(const size_t requestIdx) { return _route.at(requestIdx*2);}
+    SAEVKeyPoint& getDestination(const size_t requestIdx) { return _route.at(requestIdx*2 + 1);}
+
+    SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2);}
+    SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2 + 1);}
 };
 
 #include "propagation/SAEVRouteChangelist.h"

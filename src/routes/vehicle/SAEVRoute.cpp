@@ -7,16 +7,13 @@
 SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList) : _nbRequest(requestList.size()), _graph(&graph), _requestList(&requestList) {
     _route.reserve(_nbRequest*4); //nbRequest*2 O/D KeyPoints + nbRequest*2 Start/End depots (upper bound #vehicle = #requests
 
-    //Init Request O/D key points
+    //Init Request O/D and Depot start/end key points
     for(size_t i = 0; i < _nbRequest; ++i) {
-        _route.at(i*2) = SAEVKeyPoint(graph, requestList.at(i), true); //origin
-        _route.at(i*2+1) = SAEVKeyPoint(graph, requestList.at(i), false); //destination
-    }
+        getOrigin(i) = SAEVKeyPoint(graph, requestList.at(i), true); //origin
+        getDestination(i) = SAEVKeyPoint(graph, requestList.at(i), false); //destination
 
-    //Init start/end depot key points
-    for(size_t i = _nbRequest; i < _nbRequest*2; ++i) {
-        _route.at(i*2) = SAEVKeyPoint(); //start
-        _route.at(i*2+1) = SAEVKeyPoint(); //end
+        getOriginDepot(i) = SAEVKeyPoint(); //start
+        getDestinationDepot(i) = SAEVKeyPoint(); //end
     }
 }
 
@@ -96,9 +93,9 @@ bool
 SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeIndex, const int destinationNodeIndex,
                                   const SAEVKeyPoint *originPredecessor, const SAEVKeyPoint *destinationPredecessor) {
 
-    SAEVKeyPoint const* originKP = &_route.at(requestIdx);
-    SAEVKeyPoint const* destinationKP = &_route.at(requestIdx + 1);
-    SAEVKeyPoint const* originSuccessor = originPredecessor->getSuccessor();
+    const SAEVKeyPoint& originKP = getOrigin(requestIdx);
+    const SAEVKeyPoint& destinationKP = getDestination(requestIdx);
+    const SAEVKeyPoint* originSuccessor = originPredecessor->getSuccessor();
 
     if(originPredecessor != destinationPredecessor)
     {
@@ -109,23 +106,23 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
         int predDestinationTimeWindow = destinationPredecessor->getMinTw() + _graph->getShortestSAEVPath(destinationPredecessor->getNodeIndex(), destinationNodeIndex);
         if(predOriginTimeWindow > originKP->getMaxTw())
             return false;
-        else if(originKP->getMinTw() + _graph->getShortestSAEVPath(originKP->getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) // Could be removed ?
+        else if(originKP.getMinTw() + _graph->getShortestSAEVPath(originKP.getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) // Could be removed ?
             return false;
-        else if(predOriginTimeWindow + _graph->getShortestSAEVPath(originKP->getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw())
+        else if(predOriginTimeWindow + _graph->getShortestSAEVPath(originKP.getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw())
             return false;
         //Tests time windows Destination
-        else if(predDestinationTimeWindow > destinationKP->getMaxTw())
+        else if(predDestinationTimeWindow > destinationKP.getMaxTw())
             return false;
-        else if(destinationKP->getMinTw() + _graph->getShortestSAEVPath(destinationKP->getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw()) //could be removed ?
+        else if(destinationKP.getMinTw() + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw()) //could be removed ?
             return false;
         else if(predOriginTimeWindow + _graph->getShortestSAEVPath(destinationKP->getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw())
             return false;
     } else { //We need a specific case if origin and destination are inserted after the same node
         int predMinTWToOrigin = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), originNodeIndex);
         int predMinTWToDest = predMinTWToOrigin + _graph->getShortestSAEVPath(originNodeIndex, destinationNodeIndex);
-        if(predMinTWToOrigin > originKP->getMaxTw()) //Path from pred to O
+        if(predMinTWToOrigin > originKP.getMaxTw()) //Path from pred to O
             return false;
-        else if(predMinTWToDest > destinationKP->getMaxTw()) //Path from pred to D
+        else if(predMinTWToDest > destinationKP.getMaxTw()) //Path from pred to D
             return false;
         else if(predMinTWToDest + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from pred to successor
             return false;
