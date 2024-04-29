@@ -2,6 +2,7 @@
 // Created by romain on 22/03/24.
 //
 
+#include <queue>
 #include "SAEVRoute.h"
 
 SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList) : _nbRequest(requestList.size()), _graph(&graph), _requestList(&requestList) {
@@ -104,7 +105,7 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
         //Tests time windows Origin (yes this if-else could be one giant OR, but I'd rather separate every case)
         int predOriginTimeWindow = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), originNodeIndex);
         int predDestinationTimeWindow = destinationPredecessor->getMinTw() + _graph->getShortestSAEVPath(destinationPredecessor->getNodeIndex(), destinationNodeIndex);
-        if(predOriginTimeWindow > originKP->getMaxTw())
+        if(predOriginTimeWindow > originKP.getMaxTw())
             return false;
         else if(originKP.getMinTw() + _graph->getShortestSAEVPath(originKP.getNodeIndex(), originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) // Could be removed ?
             return false;
@@ -139,4 +140,34 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
 SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx,
                                                             const int destinationRequestPredecessorIdx) {
     return SAEVRouteChangelist(nullptr, 0, 0, 0);
+}
+
+double SAEVRoute::getDetourScore(const int requestIdx, const int originRequestPredecessorIdx,
+                                 const int destinationRequestPredecessorIdx) {
+    double score;
+    const SAEVKeyPoint& originKP = getOrigin(requestIdx);
+    const SAEVKeyPoint& destinationKP = getOrigin(requestIdx);
+    const SAEVKeyPoint& originPredKP = _route.at(originRequestPredecessorIdx);
+    const SAEVKeyPoint* originSuccKP = originPredKP.getSuccessor();
+
+    if(originRequestPredecessorIdx != destinationRequestPredecessorIdx) {
+        const SAEVKeyPoint* destinationPredKP = getDestination(requestIdx).getPredecessor();
+        const SAEVKeyPoint* destinationSuccKP = getDestination(requestIdx).getSuccessor();
+
+        //Origin Detour
+        score = _graph->getShortestSAEVPath(originPredKP.getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), D)
+                + _graph->getShortestSAEVPath(originKP.getNodeIndex(), originSuccKP->getNodeIndex()) //T(O, Succ(D))
+                - _graph->getShortestSAEVPath(originPredKP.getNodeIndex(), originSuccKP->getNodeIndex()); //T(Pred(O), Succ(O))
+
+        //Destination Detour
+        score += _graph->getShortestSAEVPath(destinationPredKP->getNodeIndex(), destinationKP.getNodeIndex()) //T(Pred(D), D))
+                + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccKP->getNodeIndex()) //T(D, Succ(D)))
+                - _graph->getShortestSAEVPath(destinationPredKP->getNodeIndex(), destinationSuccKP->getNodeIndex()); //T(Pred(D), Succ(D)))
+    } else {
+        score = _graph->getShortestSAEVPath(originPredKP.getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), O)
+                + _graph->getShortestSAEVPath(originKP.getNodeIndex(), destinationKP.getNodeIndex()) //T(O, D)
+                + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), originSuccKP->getNodeIndex()) //T(D, Succ(D))
+                - _graph->getShortestSAEVPath(originPredKP.getNodeIndex(), originSuccKP->getNodeIndex()); //T(Pred(O), Succ(D))
+    }
+    return score;
 }

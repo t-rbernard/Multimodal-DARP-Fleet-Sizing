@@ -83,6 +83,16 @@ public:
      */
     SAEVRouteChangelist insertRequestWithPropagation(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx);
 
+    /**
+     * Returns a score value equivalent to the detour implied by insertion of a request after the two given key point indexes.
+     * The specific case of origin/destination being inserted one after another is taken into account
+     * @param requestIdx Identifier/index in the instance's request vector for the request we wish to insert
+     * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
+     * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
+     * @return
+     */
+    double getDetourScore(const int requestIdx, const int originRequestPredecessorIdx, const int destinationRequestPredecessorIdx);
+
     SAEVKeyPoint& getOrigin(const size_t requestIdx) { return _route.at(requestIdx*2);}
     SAEVKeyPoint& getDestination(const size_t requestIdx) { return _route.at(requestIdx*2 + 1);}
 
