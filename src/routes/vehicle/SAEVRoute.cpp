@@ -10,11 +10,19 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
 
     //Init Request O/D and Depot start/end key points
     for(size_t i = 0; i < _nbRequest; ++i) {
+        //Create key O/D points
         getOrigin(i) = SAEVKeyPoint(graph, requestList.at(i), true); //origin
         getDestination(i) = SAEVKeyPoint(graph, requestList.at(i), false); //destination
+        //Link Origins and Destinations
+        getOrigin(i).setCounterpart(&getDestination(i));
+        getDestination(i).setCounterpart(&getOrigin(i));
 
+        //Create depot O/D KP (Upper Bound = nb requests)
         getOriginDepot(i) = SAEVKeyPoint(); //start
         getDestinationDepot(i) = SAEVKeyPoint(); //end
+        //Link Origin depots and Destination depots
+        getOriginDepot(i).setCounterpart(&getDestinationDepot(i));
+        getDestinationDepot(i).setCounterpart(&getOriginDepot(i));
     }
 }
 
