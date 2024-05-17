@@ -124,7 +124,7 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
             return false;
         else if(destinationKP.getMinTw() + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw()) //could be removed ?
             return false;
-        else if(predOriginTimeWindow + _graph->getShortestSAEVPath(destinationKP->getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw())
+        else if(predOriginTimeWindow + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccessor->getNodeIndex()) > destinationSuccessor->getMaxTw())
             return false;
     } else { //We need a specific case if origin and destination are inserted after the same node
         int predMinTWToOrigin = originPredecessor->getMinTw() + _graph->getShortestSAEVPath(originPredecessor->getNodeIndex(), originNodeIndex);
@@ -137,7 +137,7 @@ SAEVRoute::doNeighbouringTWChecks(const int requestIdx, const int originNodeInde
             return false;
         else if(originSuccessor->getMinTw() + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw()) //Path from D to successor
             return false;
-        else if(originKP->getMinTw() + _graph->getShortestSAEVPath(originNodeIndex, destinationNodeIndex) //Path from O to successor
+        else if(originKP.getMinTw() + _graph->getShortestSAEVPath(originNodeIndex, destinationNodeIndex) //Path from O to successor
         + _graph->getShortestSAEVPath(destinationNodeIndex, originSuccessor->getNodeIndex()) > originSuccessor->getMaxTw())
             return false;
     }
@@ -172,6 +172,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
     while(!boundPropagationQueue.empty()) {
         auto const& [bound, keyPoint] = boundPropagationQueue.front();
         boundPropagationQueue.pop();
+        counterpartKP = keyPoint->getCounterpart();
 
         if(bound == Min) {
             successorKP = keyPoint->getSuccessor();
@@ -188,8 +189,8 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
             }
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMinTw();
-            newValue = keyPoint->getMinTw() - keyPoint.getRequest().getDeltaTime();
-            if(!counterpartKP.isOrigin() && oldValue < newValue) {
+            newValue = keyPoint->getMinTw() - keyPoint->getRequest()->getDeltaTime();
+            if(!counterpartKP->isOrigin() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
                     return changelist;
                 }
@@ -212,8 +213,8 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
             }
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMaxTw();
-            newValue = keyPoint->getMaxTw() + keyPoint.getRequest().getDeltaTime();
-            if(counterpartKP.isOrigin() && oldValue > newValue) {
+            newValue = keyPoint->getMaxTw() + keyPoint->getRequest()->getDeltaTime();
+            if(counterpartKP->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
                     return changelist;
                 }
