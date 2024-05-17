@@ -48,8 +48,9 @@ void SAEVKeyPoint::setMaxTw(int maxTw) {
     _maxTW = maxTw;
 }
 
-SAEVKeyPoint::SAEVKeyPoint(const Graph &graph, const Request &request, bool isEntry) {
-    if(isEntry) {
+SAEVKeyPoint::SAEVKeyPoint(const Graph &graph, const Request &request, bool isOrigin) {
+    _isOrigin = isOrigin;
+    if(isOrigin) {
         setNodeIndex(request.getOriginNodeIndex());
         _minTW = request.getArrivalTw().min - request.getDeltaTime();
         _maxTW = request.getArrivalTw().max - graph.getShortestSAEVPath(request.getOriginNodeIndex(),
@@ -59,4 +60,32 @@ SAEVKeyPoint::SAEVKeyPoint(const Graph &graph, const Request &request, bool isEn
         _minTW = request.getArrivalTw().min;
         _maxTW = request.getArrivalTw().max;
     }
+}
+
+bool SAEVKeyPoint::operator==(const SAEVKeyPoint &rhs) const {
+    return this == &rhs;
+}
+
+bool SAEVKeyPoint::isOrigin() const {
+    return _isOrigin;
+}
+
+void SAEVKeyPoint::setIsOrigin(bool isOrigin) {
+    _isOrigin = isOrigin;
+}
+
+Request *SAEVKeyPoint::getRequest() const {
+    return _requestPointer;
+}
+
+void SAEVKeyPoint::setRequest(Request *requestPointer) {
+    _requestPointer = requestPointer;
+}
+
+SAEVKeyPoint *SAEVKeyPoint::getCounterpart() const {
+    return _counterpart;
+}
+
+void SAEVKeyPoint::setCounterpart(SAEVKeyPoint *counterpart) {
+    _counterpart = counterpart;
 }

@@ -9,15 +9,19 @@
 #include "../../instance/requests/Request.h"
 #include "../KeyPoint.h"
 #include "../../instance/graph/Graph.h"
+#include "propagation/SAEVRouteChange.h"
 
 class SAEVKeyPoint : public KeyPoint {
 private:
+    bool _isOrigin;
     SAEVKeyPoint* _predecessor{nullptr};
     SAEVKeyPoint* _successor{nullptr};
+    SAEVKeyPoint* _counterpart{nullptr};
     int _currentOccupation{0};
     int _minTW{0};
     int _maxTW{INT16_MAX};
     SAEVehicle* _vehiclePointer{};
+    Request* _requestPointer;
 public:
     /**
      * Depot KP initialization with [0;max] time windows
@@ -27,9 +31,9 @@ public:
      * SAEV KP initialization
      * @param graph the instance's graph, used to get shortest path and estimate start time windows relative to distances
      * @param request the request associated with our key point, required to initialize time windows
-     * @param isEntry true iff the key point represents the request's origin, false otherwise
+     * @param isOrigin true iff the key point represents the request's origin, false otherwise
      */
-    SAEVKeyPoint(const Graph &graph, const Request& request, bool isEntry);
+    SAEVKeyPoint(const Graph &graph, const Request& request, bool isOrigin);
 
     [[nodiscard]] SAEVKeyPoint *getPredecessor() const;
     void setPredecessor(SAEVKeyPoint *predecessor);
@@ -46,9 +50,27 @@ public:
     [[nodiscard]] int getMaxTw() const;
     void setMaxTw(int maxTw);
 
+    [[nodiscard]] bool isOrigin() const;
+    void setIsOrigin(bool isOrigin);
+
+    [[nodiscard]] Request *getRequest() const;
+    void setRequest(Request *requestPointer);
+
+    SAEVKeyPoint *getCounterpart() const;
+
+    void setCounterpart(SAEVKeyPoint *counterpart);
+
     [[nodiscard]] bool check() const override;
 
     ~SAEVKeyPoint() override = default;
+
+    /**
+     * Two SAEVKeyPoints are equal iff they're the same instance (located at the same adress)
+     * It is done this way because a KP doesn't hold the info of the Request O/D it references. Only the route knows this
+     * @param rhs right hand side of the comparison
+     * @return True iff this and rhs are the same instance at the same adress
+     */
+    bool operator==(const SAEVKeyPoint &rhs) const;
 };
 
 
