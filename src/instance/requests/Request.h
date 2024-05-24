@@ -13,11 +13,11 @@
 class Request {
 private:
     //Request base members (const and initialized on _request creation)
-    const int _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
-    const int _destinationNodeIndex; //
-    const TimeWindow _arrivalTW; //[min,max] time window for arrival to the destination node
-    const int _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
-    const int _weight; //How much space the requests takes in the vehicle (defaults to 1)
+    int _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
+    int _destinationNodeIndex; //
+    TimeWindow _arrivalTW; //[min,max] time window for arrival to the destination node
+    int _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
+    int _weight; //How much space the requests takes in the vehicle (defaults to 1)
 
     //Request helpful members (used for constraint propagation and remember the current state of the _request)
     int _currentDeltaTime; //deltaTime - currentRouteDuration
@@ -30,6 +30,7 @@ public:
             const TimeWindow &arrivalTw, const int deltaTime, const int weight);
     Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
             const int deltaTime, const int weight, const Graph& graph);
+    Request(const DATRow& currentRow, const Graph& graph);
 
     //Getters
     [[nodiscard]] const int getOriginNodeIndex() const;

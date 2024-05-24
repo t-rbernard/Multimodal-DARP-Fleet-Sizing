@@ -2,7 +2,9 @@
 // Created by rbernard on 22/01/24.
 //
 
+#include <charconv>
 #include "Request.h"
+#include "../../services/DatFile/DATRow.h"
 
 Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const int deltaTime, const int weight) : _originNodeIndex(departureNodeIndex),
@@ -19,6 +21,22 @@ Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const
     _currentDeltaTime = deltaTime;
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
+}
+
+Request::Request(const DATRow& currentRow, const Graph& graph) {
+    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].size(), _originNodeIndex);
+    std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].size(), _destinationNodeIndex);
+
+    int twMin, twMax;
+    std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), twMin);
+    std::from_chars(currentRow[3].data(), currentRow[3].data() + currentRow[3].size(), twMax);
+    _arrivalTW = TimeWindow(twMin, twMax);
+
+    std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), _deltaTime);
+    std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
+
+    _departureTW.min = _arrivalTW.min - _currentDeltaTime;
+    _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
 }
 
 const int Request::getOriginNodeIndex() const {
