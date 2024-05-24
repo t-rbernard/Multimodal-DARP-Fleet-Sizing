@@ -6,10 +6,9 @@
 #define GREEDYALGORITHM_SAEVKEYPOINT_H
 
 
-#include "../../instance/requests/Request.h"
 #include "../KeyPoint.h"
 #include "../../instance/graph/Graph.h"
-#include "propagation/SAEVRouteChange.h"
+#include "../../instance/requests/Request.h"
 
 class SAEVKeyPoint : public KeyPoint {
 private:

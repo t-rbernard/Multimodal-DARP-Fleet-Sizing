@@ -5,12 +5,11 @@
 #ifndef GREEDYALGORITHM_SAEVROUTECHANGE_H
 #define GREEDYALGORITHM_SAEVROUTECHANGE_H
 
-#include "../SAEVKeyPoint.h"
-
 enum Bound {
     Min, Max
 };
 
+class SAEVKeyPoint;
 class SAEVRouteChange {
 private:
     SAEVKeyPoint* const _kpPointer;
@@ -30,5 +29,6 @@ public:
     void revertChange();
 };
 
+#include "../SAEVKeyPoint.h"
 
 #endif //GREEDYALGORITHM_SAEVROUTECHANGE_H
