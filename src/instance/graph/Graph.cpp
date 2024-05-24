@@ -89,12 +89,20 @@ Graph::Graph(const std::string& datFilePath) {
     }
     //-- End of nodes
 
-    //-- Read Edges
-    std::cout << currentRow.toString() << std::endl;
-    while(infile >> currentRow && !currentRow[0].starts_with('#')) {
-        this->parseEdgeRow(currentRow);
+    //Node links (edges or matrix)
+    if(currentRow[0].starts_with("#Edges")) {
+        //-- Read Edges
+        std::cout << currentRow.toString() << std::endl;
+        while (infile >> currentRow && !currentRow[0].starts_with('#')) {
+            this->parseEdgeRow(currentRow);
+        }
+        //-- End of edges
+    } else if (currentRow[0].starts_with("#Matrix")) {
+        //-- Read Distance matrix
+        std::cout << currentRow.toString() << std::endl;
+        this->parseDistanceMatrix(infile, currentRow);
+        //-- End of edges
     }
-    //-- End of edges
 
     //-- Read Public transit line
     std::cout << currentRow.toString() << std::endl;
@@ -285,4 +293,15 @@ void Graph::createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, doubl
 
     Node exitNode = nodesVector.at(edgeEndNodeIndex);
     exitNode.getIncomingEdges().emplace_back(edgesVector.size() - 1);
+}
+
+void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {
+    int intVal;
+    while (infile >> currentRow && !currentRow[0].starts_with('#')) {
+        auto& matrixLine = shortestSAEVPaths.emplace_back();
+        for(int i = 0; i < currentRow.size(); ++i) {
+            std::from_chars(currentRow[i].data(), currentRow[i].data() + currentRow[i].size(), intVal);
+            matrixLine.emplace_back(intVal);
+        }
+    }
 }

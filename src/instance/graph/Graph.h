@@ -147,6 +147,8 @@ public:
     void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
 
     [[nodiscard]] int getShortestSAEVPath(int x, int y) const { return shortestSAEVPaths.at(x).at(y); }
+
+    void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
 };
 
 
