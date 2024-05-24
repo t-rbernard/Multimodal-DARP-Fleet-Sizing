@@ -12,7 +12,7 @@ void RequestRoute::setNodeIndex(int routeIndex, int nodeIndex) {
     _route[routeIndex].setNodeIndex(nodeIndex);
 }
 
-SAEVehicle *RequestRoute::getSAEV(int routeIndex) const {
+SAEVehicle const *RequestRoute::getSAEV(int routeIndex) const {
     return _route[routeIndex].getSAEV();
 }
 
@@ -22,7 +22,7 @@ void RequestRoute::setSAEV(int routeIndex, SAEVehicle *saev) {
 
 }
 
-LineStop *RequestRoute::getLineStop(int routeIndex) const {
+LineStop const *RequestRoute::getLineStop(int routeIndex) const {
     return _route[routeIndex].getLineStop();
 }
 

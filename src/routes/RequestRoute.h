@@ -22,15 +22,15 @@ private:
     Request* _requestPointer{nullptr};
 public:
     RequestRoute() = default;
-    explicit RequestRoute(Request* request) {_requestPointer = request; };
+    explicit RequestRoute(Request* request) : _requestPointer(request) {};
 
     [[nodiscard]] int getNodeIndex(int routeIndex) const;
     void setNodeIndex(int routeIndex, int nodeIndex);
 
-    [[nodiscard]] SAEVehicle *getSAEV(int routeIndex) const;
+    [[nodiscard]] const SAEVehicle *getSAEV(int routeIndex) const;
     void setSAEV(int routeIndex, SAEVehicle *saev);
 
-    [[nodiscard]] LineStop *getLineStop(int routeIndex) const;
+    [[nodiscard]] const LineStop *getLineStop(int routeIndex) const;
     void setLineStop(int routeIndex, LineStop *lineStop);
 
     [[nodiscard]] const RequestKeyPoint *getRoute() const;

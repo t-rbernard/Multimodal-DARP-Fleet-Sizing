@@ -10,10 +10,10 @@
 #include "../instance/SAEVehicle.h"
 #include "../instance/graph/LineStop.h"
 
-class RequestKeyPoint : public virtual KeyPoint {
+class RequestKeyPoint : public KeyPoint {
 private:
-    SAEVehicle* _saev{};
-    LineStop* _lineStop{};
+    SAEVehicle const * _saev{};
+    LineStop const * _lineStop{};
 
     //Constraint propagation variables
     TimeWindow _arrivalTimeWindow{};
@@ -21,14 +21,14 @@ private:
 
 public:
     RequestKeyPoint() = default;
-    explicit RequestKeyPoint(SAEVehicle* vehicle) { _saev = vehicle; }
-    explicit RequestKeyPoint(LineStop* lineStop) { _lineStop = lineStop; }
+    explicit RequestKeyPoint(SAEVehicle const* vehicle) : _saev(vehicle) {}
+    explicit RequestKeyPoint(LineStop const* lineStop) : _lineStop(lineStop) {}
 
-    [[nodiscard]] SAEVehicle *getSAEV() const;
-    void setSAEV(SAEVehicle *saev);
+    [[nodiscard]] const SAEVehicle *getSAEV() const;
+    void setSAEV(const SAEVehicle *saev);
 
-    [[nodiscard]] LineStop *getLineStop() const;
-    void setLineStop(LineStop *lineStop);
+    [[nodiscard]] const LineStop *getLineStop() const;
+    void setLineStop(const LineStop *lineStop);
 
     [[nodiscard]] const TimeWindow &getArrivalTimeWindow() const;
     void setArrivalTimeWindow(const TimeWindow &arrivalTimeWindow);

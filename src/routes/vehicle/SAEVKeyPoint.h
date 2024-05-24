@@ -13,15 +13,15 @@
 
 class SAEVKeyPoint : public KeyPoint {
 private:
-    bool _isOrigin;
+    bool _isOrigin{};
     SAEVKeyPoint* _predecessor{nullptr};
     SAEVKeyPoint* _successor{nullptr};
     SAEVKeyPoint* _counterpart{nullptr};
     int _currentOccupation{0};
     int _minTW{0};
     int _maxTW{INT16_MAX};
-    SAEVehicle* _vehiclePointer{};
-    Request* _requestPointer;
+    SAEVehicle const * _vehiclePointer{};
+    Request const * _requestPointer{};
 public:
     /**
      * Depot KP initialization with [0;max] time windows
@@ -53,10 +53,10 @@ public:
     [[nodiscard]] bool isOrigin() const;
     void setIsOrigin(bool isOrigin);
 
-    [[nodiscard]] Request *getRequest() const;
-    void setRequest(Request *requestPointer);
+    [[nodiscard]] const Request *getRequest() const;
+    void setRequest(const Request *requestPointer);
 
-    SAEVKeyPoint *getCounterpart() const;
+    [[nodiscard]] SAEVKeyPoint *getCounterpart() const;
 
     void setCounterpart(SAEVKeyPoint *counterpart);
 

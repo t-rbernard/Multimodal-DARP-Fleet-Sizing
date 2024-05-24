@@ -65,10 +65,10 @@ public:
     [[nodiscard]] int getDepartureInstant(int routeIndex) const;
     void setDepartureInstant(int routeIndex, int departureInstant);
 
-    [[nodiscard]] SAEVehicle *getSAEV(int routeIndex) const;
+    [[nodiscard]] const SAEVehicle *getSAEV(int routeIndex) const;
     void setSAEV(int routeIndex, SAEVehicle *saev);
 
-    [[nodiscard]] LineStop *getLineStop(int routeIndex) const;
+    [[nodiscard]] const LineStop *getLineStop(int routeIndex) const;
     void setLineStop(int routeIndex, LineStop *lineStop);
 
     void resetKeyPoint(int routeIndex);

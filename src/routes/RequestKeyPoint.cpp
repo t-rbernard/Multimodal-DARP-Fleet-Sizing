@@ -4,20 +4,20 @@
 
 #include "RequestKeyPoint.h"
 
-SAEVehicle *RequestKeyPoint::getSAEV() const {
+SAEVehicle const *RequestKeyPoint::getSAEV() const {
     return _saev;
 }
 
-void RequestKeyPoint::setSAEV(SAEVehicle *saev) {
+void RequestKeyPoint::setSAEV(const SAEVehicle *saev) {
     _saev = saev;
     _lineStop = nullptr;
 }
 
-LineStop *RequestKeyPoint::getLineStop() const {
+LineStop const *RequestKeyPoint::getLineStop() const {
     return _lineStop;
 }
 
-void RequestKeyPoint::setLineStop(LineStop *lineStop) {
+void RequestKeyPoint::setLineStop(const LineStop *lineStop) {
     _lineStop = lineStop;
     _saev = nullptr;
 }
