@@ -154,8 +154,8 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
 
     //Initialize bound propagation signal queue (each item signals a modification done on one of a KeyPoint
     std::queue<std::pair<Bound, SAEVKeyPoint *>> boundPropagationQueue{};
-    const SAEVKeyPoint& originKP = getOrigin(requestIdx);
-    const SAEVKeyPoint& destinationKP = getDestination(requestIdx);
+    SAEVKeyPoint * originKP = &getOrigin(requestIdx);
+    SAEVKeyPoint * destinationKP = &getDestination(requestIdx);
     boundPropagationQueue.emplace(Min, originKP);
     boundPropagationQueue.emplace(Max, originKP);
     boundPropagationQueue.emplace(Min, destinationKP);
