@@ -8,15 +8,15 @@
 #include "../src/ShortestPath/Transit/TransitShortestPathContainer.h"
 
 int main() {
-//    Graph give_me_a_name("../resources/test/instances/basic_debug_instance/nodes.csv",
-//          "../resources/test/instances/basic_debug_instance/edges.csv",
-//          "../resources/test/instances/basic_debug_instance/PT_lines.csv");
+//    Graph give_me_a_name("../resources/test/instances/PT Shortest Path/basic_debug_instance/nodes.csv",
+//          "../resources/test/instances/PT Shortest Path/basic_debug_instance/edges.csv",
+//          "../resources/test/instances/PT Shortest Path/basic_debug_instance/PT_lines.csv");
 
 //    std::string instanceFolder = "basic_debug_instance/";
     std::string instanceFolder = "contiguous_lines_debug_instance/";
     std::string datFile = "graph.dat";
 
-    Graph graphFromSingleFile("../resources/test/instances/" + instanceFolder + datFile);
+    Graph graphFromSingleFile("../resources/test/instances/PT Shortest Path/" + instanceFolder + datFile);
     graphFromSingleFile.exportGraphToFiles("../resources/test/outputs/" + instanceFolder);
     TransitShortestPathContainer contiguousContainer(graphFromSingleFile.getNbNodes());
     for(auto& ptLine : graphFromSingleFile.getPTLines()) {
@@ -30,7 +30,7 @@ int main() {
     }
 
     TransitShortestPathContainer crossingContainer(graphFromSingleFile.getNbNodes());
-    Graph crossingLinesGraph("../resources/test/instances/multiple_crossing_lines_debug_instance/" + datFile);
+    Graph crossingLinesGraph("../resources/test/instances/PT Shortest Path/multiple_crossing_lines_debug_instance/" + datFile);
     for(auto& ptLine : crossingLinesGraph.getPTLines()) {
         for(int i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
@@ -42,7 +42,7 @@ int main() {
     }
 
     TransitShortestPathContainer cycleContainer(graphFromSingleFile.getNbNodes());
-    Graph cyclingLineGraph("../resources/test/instances/cycling_line_debug_instance/" + datFile);
+    Graph cyclingLineGraph("../resources/test/instances/PT Shortest Path/cycling_line_debug_instance/" + datFile);
     for(auto& ptLine : cyclingLineGraph.getPTLines()) {
         for(int i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
@@ -55,7 +55,7 @@ int main() {
 
 
     TransitShortestPathContainer multiCycleContainer(graphFromSingleFile.getNbNodes());
-    Graph multipleCyclingLinesGraph("../resources/test/instances/multiple_cycling_lines_debug_instance/" + datFile);
+    Graph multipleCyclingLinesGraph("../resources/test/instances/PT Shortest Path/multiple_cycling_lines_debug_instance/" + datFile);
     for(auto& ptLine : multipleCyclingLinesGraph.getPTLines()) {
         for(int i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
