@@ -69,7 +69,6 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
 Graph::Graph(const std::string& datFilePath) {
     std::ifstream infile(datFilePath);
     DATRow currentRow = DATRow(',');
-    std::string currentLine;
 
     //-- Read params
     infile >> currentRow;
@@ -77,7 +76,7 @@ Graph::Graph(const std::string& datFilePath) {
     // Seeded random number generator
     infile >> currentRow;
     unsigned long rngSeed;
-    std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].length(), rngSeed);
+    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].length(), rngSeed);
     auto rng = std::mt19937(rngSeed);
     //-- End of params
 
