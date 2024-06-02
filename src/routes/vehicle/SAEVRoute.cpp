@@ -18,8 +18,8 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
         getDestination(i).setCounterpart(&getOrigin(i));
 
         //Create depot O/D KP (Upper Bound = nb requests)
-        getOriginDepot(i) = SAEVKeyPoint(); //start
-        getDestinationDepot(i) = SAEVKeyPoint(); //end
+        getOriginDepot(i) = SAEVKeyPoint(graph.getDepotNodeIdx()); //start
+        getDestinationDepot(i) = SAEVKeyPoint(graph.getDepotNodeIdx()); //end
         //Link Origin depots and Destination depots
         getOriginDepot(i).setCounterpart(&getDestinationDepot(i));
         getDestinationDepot(i).setCounterpart(&getOriginDepot(i));

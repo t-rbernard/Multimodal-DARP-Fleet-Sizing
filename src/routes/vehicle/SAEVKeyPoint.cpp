@@ -88,3 +88,8 @@ SAEVKeyPoint *SAEVKeyPoint::getCounterpart() const {
 void SAEVKeyPoint::setCounterpart(SAEVKeyPoint *counterpart) {
     _counterpart = counterpart;
 }
+
+SAEVKeyPoint::SAEVKeyPoint(int depotNodeIdx) : KeyPoint(depotNodeIdx) {
+    _isDepot = true;
+    setNodeIndex(depotNodeIdx);
+}

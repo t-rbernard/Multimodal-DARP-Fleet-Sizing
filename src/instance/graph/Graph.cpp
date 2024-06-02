@@ -103,6 +103,11 @@ Graph::Graph(const std::string& datFilePath) {
         //-- End of edges
     }
 
+    if(currentRow[0].starts_with("#Depot")) {
+        infile >> currentRow;
+        std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].length(), _depotNodeIdx);
+    }
+
     //-- Read Public transit line
     std::cout << currentRow.toString() << std::endl;
     std::uniform_int_distribution<uint32_t> uint_dist10(1,10);
@@ -303,4 +308,12 @@ void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {
             matrixLine.emplace_back(intVal);
         }
     }
+}
+
+int Graph::getDepotNodeIdx() const {
+    return _depotNodeIdx;
+}
+
+void Graph::setDepotNodeIdx(int depotNodeIdx) {
+    _depotNodeIdx = depotNodeIdx;
 }

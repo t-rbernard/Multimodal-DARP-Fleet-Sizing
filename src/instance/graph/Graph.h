@@ -21,6 +21,7 @@ private:
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
     std::vector<std::vector<int>> shortestSAEVPaths;
+    int _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
 
     /**
      * For every LineStop on every node of the graph, verify the node returned by looking into LineStop->Line(stopIdx)
@@ -54,6 +55,9 @@ public:
     [[nodiscard]] size_t getNbPTLines(int nodeIndex) const {
         return nodesVector.at(nodeIndex).getPTLinesSet().size();
     }
+
+    [[nodiscard]] int getDepotNodeIdx() const;
+    void setDepotNodeIdx(int depotNodeIdx);
 
     /**
      * @return The graph's edge vector

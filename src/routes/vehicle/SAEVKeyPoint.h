@@ -13,6 +13,7 @@
 class SAEVKeyPoint : public KeyPoint {
 private:
     bool _isOrigin{};
+    bool _isDepot{false};
     SAEVKeyPoint* _predecessor{nullptr};
     SAEVKeyPoint* _successor{nullptr};
     SAEVKeyPoint* _counterpart{nullptr};
@@ -23,9 +24,13 @@ private:
     Request const * _requestPointer{};
 public:
     /**
-     * Depot KP initialization with [0;max] time windows
+     * Default KP constructor to allow pre-allocation of our route vector
      */
     SAEVKeyPoint() = default;
+    /**
+     * Depot KP initialization with [0;max] time windows and a depot node index
+     */
+    explicit SAEVKeyPoint(int depotNodeIdx);
     /**
      * SAEV KP initialization
      * @param graph the instance's graph, used to get shortest path and estimate start time windows relative to distances
