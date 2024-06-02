@@ -39,6 +39,50 @@ Request::Request(const DATRow& currentRow, const Graph& graph) {
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
 }
 
+Request::Request(const DATRow& currentRow, double deltaRatio, const Graph& graph) {
+    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].size(), _originNodeIndex);
+    std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].size(), _destinationNodeIndex);
+
+    int twMin, twMax;
+    std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), twMin);
+    std::from_chars(currentRow[3].data(), currentRow[3].data() + currentRow[3].size(), twMax);
+    _arrivalTW = TimeWindow(twMin, twMax);
+
+    //Assign value (direct time to
+    std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), _deltaTime);
+    _deltaTime = floor(_deltaTime * deltaRatio);
+
+    std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
+
+    _departureTW.min = _arrivalTW.min - _currentDeltaTime;
+    _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
+}
+
+std::vector<Request> Request::getRequestsFromFile(const std::string& datFilePath, const Graph& graph) {
+    std::vector<Request> requests;
+
+    std::ifstream infile(datFilePath);
+    DATRow currentRow = DATRow(',');
+
+    //-- Read params
+    infile >> currentRow;
+    std::cout << currentRow[0] << std::endl;
+    // Delta ratio
+    infile >> currentRow;
+    double deltaRatio;
+    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].length(), deltaRatio);
+    //-- End of params
+
+    //-- Read requests
+    infile >> currentRow; // Read and print comment line for format
+    std::cout << currentRow.toString() << std::endl;
+    while(infile >> currentRow && !currentRow[0].starts_with('#')) {
+        requests.emplace_back(currentRow, deltaRatio, graph);
+    }
+
+    return requests;
+}
+
 const int Request::getOriginNodeIndex() const {
     return _originNodeIndex;
 }

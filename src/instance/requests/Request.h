@@ -31,6 +31,9 @@ public:
     Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
             const int deltaTime, const int weight, const Graph& graph);
     Request(const DATRow& currentRow, const Graph& graph);
+    Request(const DATRow& currentRow, double deltaRatio, const Graph& graph);
+
+    static std::vector<Request> getRequestsFromFile(const std::string& datFilePath, const Graph& graph);
 
     //Getters
     [[nodiscard]] const int getOriginNodeIndex() const;
