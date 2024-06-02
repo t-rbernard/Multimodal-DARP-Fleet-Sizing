@@ -98,6 +98,12 @@ public:
 
     SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2);}
     SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2 + 1);}
+
+    [[nodiscard]] size_t getRequestOriginIdx(const size_t requestIdx) const { return requestIdx * 2;}
+    [[nodiscard]] size_t getRequestDestinationIdx(const size_t requestIdx) const { return requestIdx * 2 + 1;}
+
+    [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2;}
+    [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2 + 1;}
 };
 
 #include "propagation/SAEVRouteChangelist.h"
