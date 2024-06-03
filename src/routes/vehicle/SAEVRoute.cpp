@@ -190,21 +190,23 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
 
         if(bound == Min) {
             successorKP = keyPoint->getSuccessor();
-            oldValue = successorKP->getMinTw();
-            //Check neighbouring time window
-            newValue = keyPoint->getMinTw() + _graph->getShortestSAEVPath(keyPoint->getNodeIndex(), successorKP->getNodeIndex());
             if(successorKP != nullptr && oldValue < newValue) {
-                if (newValue > successorKP->getMaxTw()) {
-                    return changelist;
+                //Check neighbouring time window
+                oldValue = successorKP->getMinTw();
+                newValue = keyPoint->getMinTw() + _graph->getShortestSAEVPath(keyPoint->getNodeIndex(), successorKP->getNodeIndex());
+                if (oldValue < newValue) {
+                    if (newValue > successorKP->getMaxTw()) {
+                        return changelist;
+                    }
+                    changelist.emplace_back(*successorKP, Min, newValue - oldValue);
+                    successorKP->setMinTw(newValue);
+                    boundPropagationQueue.emplace(Min, successorKP);
                 }
-                changelist.emplace_back(*successorKP, Min, newValue - oldValue);
-                successorKP->setMinTw(newValue);
-                boundPropagationQueue.emplace(Min, successorKP);
             }
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMinTw();
-            newValue = keyPoint->getMinTw() - keyPoint->getRequest()->getDeltaTime();
-            if(!counterpartKP->isOrigin() && oldValue < newValue) {
+            newValue = keyPoint->getMinTw() - keyPoint->getDeltaTime();
+            if(!keyPoint->isDepot() && !counterpartKP->isOrigin() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
                     return changelist;
                 }
@@ -213,22 +215,24 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const int requestIdx
                 boundPropagationQueue.emplace(Min, counterpartKP);
             }
         } else {
-            predecessorKP = keyPoint->getSuccessor();
-            oldValue = predecessorKP->getMaxTw();
-            //Check neighbouring time window
-            newValue = keyPoint->getMaxTw() - _graph->getShortestSAEVPath(predecessorKP->getNodeIndex(), keyPoint->getNodeIndex());
-            if(predecessorKP != nullptr && oldValue > newValue) {
-                if (predecessorKP->getMinTw() > newValue) {
-                    return changelist;
+            predecessorKP = keyPoint->getPredecessor();
+            if(predecessorKP != nullptr) {
+                //Check neighbouring time window
+                oldValue = predecessorKP->getMaxTw();
+                newValue = keyPoint->getMaxTw() - _graph->getShortestSAEVPath(predecessorKP->getNodeIndex(), keyPoint->getNodeIndex());
+                if(oldValue > newValue) {
+                    if (predecessorKP->getMinTw() > newValue) {
+                        return changelist;
+                    }
+                    changelist.emplace_back(*predecessorKP, Max, newValue - oldValue);
+                    predecessorKP->setMaxTw(newValue);
+                    boundPropagationQueue.emplace(Max, predecessorKP);
                 }
-                changelist.emplace_back(*predecessorKP, Max, newValue - oldValue);
-                predecessorKP->setMaxTw(newValue);
-                boundPropagationQueue.emplace(Max, predecessorKP);
             }
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMaxTw();
-            newValue = keyPoint->getMaxTw() + keyPoint->getRequest()->getDeltaTime();
-            if(counterpartKP->isOrigin() && oldValue > newValue) {
+            newValue = keyPoint->getMaxTw() + keyPoint->getDeltaTime();
+            if(!keyPoint->isDepot() && counterpartKP->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
                     return changelist;
                 }
