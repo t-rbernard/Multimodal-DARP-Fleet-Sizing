@@ -57,11 +57,13 @@ public:
     [[nodiscard]] bool isOrigin() const;
     void setIsOrigin(bool isOrigin);
 
+    [[nodiscard]] bool isDepot() const;
+    void setIsDepot(bool isDepot);
+
     [[nodiscard]] const Request *getRequest() const;
     void setRequest(const Request *requestPointer);
 
     [[nodiscard]] SAEVKeyPoint *getCounterpart() const;
-
     void setCounterpart(SAEVKeyPoint *counterpart);
 
     [[nodiscard]] bool check() const override;
@@ -75,6 +77,8 @@ public:
      * @return True iff this and rhs are the same instance at the same adress
      */
     bool operator==(const SAEVKeyPoint &rhs) const;
+
+    int getDeltaTime() const;
 };
 
 

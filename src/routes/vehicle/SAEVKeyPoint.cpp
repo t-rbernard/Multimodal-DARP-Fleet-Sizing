@@ -77,6 +77,10 @@ Request const *SAEVKeyPoint::getRequest() const {
     return _requestPointer;
 }
 
+int SAEVKeyPoint::getDeltaTime() const {
+    return _isDepot ? 0 : _requestPointer->getDeltaTime();
+}
+
 void SAEVKeyPoint::setRequest(const Request *requestPointer) {
     _requestPointer = requestPointer;
 }
@@ -92,4 +96,12 @@ void SAEVKeyPoint::setCounterpart(SAEVKeyPoint *counterpart) {
 SAEVKeyPoint::SAEVKeyPoint(int depotNodeIdx) : KeyPoint(depotNodeIdx) {
     _isDepot = true;
     setNodeIndex(depotNodeIdx);
+}
+
+bool SAEVKeyPoint::isDepot() const {
+    return _isDepot;
+}
+
+void SAEVKeyPoint::setIsDepot(bool isDepot) {
+    _isDepot = isDepot;
 }
