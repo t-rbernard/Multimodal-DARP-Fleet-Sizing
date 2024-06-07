@@ -23,8 +23,14 @@ TEST(TransitPreprocessUnitTest, DebugFunction) {
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
 
-    SAEVRouteChangelist req0Changelist = routesContainer.tryAddRequest(0, routesContainer.getOriginDepotIdx(1), routesContainer.getOriginDepotIdx(1));
-    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepotIdx(1), routesContainer.getRequestOriginIdx(0));
+    std::cout << "------------------Fin parsing instance et route-------------------" << std::endl << std::endl;
+    int vehicleId = 1;
+    SAEVRouteChangelist req0Changelist = routesContainer.tryAddRequest(0, routesContainer.getOriginDepotIdx(vehicleId), routesContainer.getOriginDepotIdx(1));
+    std::cout << routesContainer.to_string(vehicleId) << std::endl;
+    std::cout << "------------------------------------------------------------------" << std::endl;
+    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepotIdx(vehicleId), routesContainer.getRequestDestinationIdx(0));
+    std::cout << routesContainer.to_string(vehicleId) << std::endl << std::endl;
+    std::cout << "------------------------------------------------------------------" << std::endl;
 
     //Test changelist revert/apply
     req1Changelist.revertChanges();
