@@ -104,6 +104,9 @@ public:
 
     [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2;}
     [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2 + 1;}
+
+    std::string to_string(size_t vehicleId);
+    void exportToFile();
 };
 
 #include "propagation/SAEVRouteChangelist.h"

@@ -276,3 +276,20 @@ double SAEVRoute::getDetourScore(const int requestIdx, const int originRequestPr
     }
     return score;
 }
+
+std::string SAEVRoute::to_string(size_t vehicleId) {
+    std::string routeString;
+    SAEVKeyPoint* currentKeyPoint = &getOriginDepot(vehicleId);
+    while(currentKeyPoint != nullptr) {
+        routeString += currentKeyPoint->to_string() + " --> ";
+        currentKeyPoint = currentKeyPoint->getSuccessor();
+    }
+    routeString.erase(routeString.length() - 5, routeString.length());
+
+    return routeString;
+}
+
+void SAEVRoute::exportToFile() {
+    //TODO
+}
+

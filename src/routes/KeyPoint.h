@@ -6,6 +6,7 @@
 #define GREEDYALGORITHM_KEYPOINT_H
 
 
+#include <string>
 #include "../TimeWindow.h"
 
 class KeyPoint {
@@ -22,6 +23,8 @@ public:
     [[nodiscard]] virtual bool check() const { return true; };
 
     virtual ~KeyPoint() = default;
+
+    virtual std::string to_string() const { return std::to_string(_nodeIndex); }
 };
 
 
