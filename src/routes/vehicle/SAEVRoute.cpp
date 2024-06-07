@@ -278,8 +278,8 @@ double SAEVRoute::getDetourScore(const size_t requestId, const size_t originRequ
     const SAEVKeyPoint* originSuccKP = originPredKP.getSuccessor();
 
     if(originRequestPredecessorIdx != destinationRequestPredecessorIdx) {
-        const SAEVKeyPoint* destinationPredKP = getDestination(requestIdx).getPredecessor();
-        const SAEVKeyPoint* destinationSuccKP = getDestination(requestIdx).getSuccessor();
+        const SAEVKeyPoint* destinationPredKP = destinationKP.getPredecessor();
+        const SAEVKeyPoint* destinationSuccKP = destinationKP.getSuccessor();
 
         //Origin Detour
         score = _graph->getShortestSAEVPath(originPredKP.getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), D)
