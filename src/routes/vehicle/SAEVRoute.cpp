@@ -217,7 +217,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMinTw();
             newValue = keyPoint->getMinTw() - keyPoint->getDeltaTime();
-            if(!keyPoint->isDepot() && !counterpartKP->isOrigin() && oldValue < newValue) {
+            if(!keyPoint->isDepot() && keyPoint->isDestination() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
                     DEBUG_MSG("Infaisabilité MIN DELTA Destination->Origine");
                     return changelist;
@@ -250,7 +250,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             //Check counterpart key point delta time
             oldValue = counterpartKP->getMaxTw();
             newValue = keyPoint->getMaxTw() + keyPoint->getDeltaTime();
-            if(!keyPoint->isDepot() && counterpartKP->isOrigin() && oldValue > newValue) {
+            if(!keyPoint->isDepot() && keyPoint->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
                     DEBUG_MSG("Infaisabilité MAX DELTA Origine->Destination");
                     return changelist;
