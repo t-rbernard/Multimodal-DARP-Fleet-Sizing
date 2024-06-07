@@ -301,7 +301,7 @@ double SAEVRoute::getDetourScore(const size_t requestId, const size_t originRequ
 
 std::string SAEVRoute::to_string(size_t vehicleId) {
     std::string routeString;
-    SAEVKeyPoint* currentKeyPoint = &getOriginDepot(vehicleId);
+    SAEVKeyPoint const* currentKeyPoint = &getOriginDepot(vehicleId);
     while(currentKeyPoint != nullptr) {
         routeString += currentKeyPoint->to_string() + " --> ";
         currentKeyPoint = currentKeyPoint->getSuccessor();
