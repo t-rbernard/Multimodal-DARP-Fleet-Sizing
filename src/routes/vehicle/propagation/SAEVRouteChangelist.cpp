@@ -21,7 +21,7 @@ void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, int value)
 }
 
 void SAEVRouteChangelist::applyChanges() const {
-    _routePtr->insertRequest(_requestIdx, _originPredecessorIdx, _destinationPredecessorIdx);
+    _routePtr->insertRequest(_requestId, _originPredecessorIdx, _destinationPredecessorIdx);
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
     }
@@ -29,15 +29,15 @@ void SAEVRouteChangelist::applyChanges() const {
 }
 
 void SAEVRouteChangelist::revertChanges() const {
-    _routePtr->removeRequest(_requestIdx);
+    _routePtr->removeRequest(_requestId);
     for(SAEVRouteChange change : _changelist) {
         change.revertChange();
     }
     //TODO: update key point weights here ? (only if changelist.size > 0 & score < +Inf)
 }
 
-int SAEVRouteChangelist::getRequestIdx() const {
-    return _requestIdx;
+size_t SAEVRouteChangelist::getRequestId() const {
+    return _requestId;
 }
 
 int SAEVRouteChangelist::getOriginPredecessorIdx() const {

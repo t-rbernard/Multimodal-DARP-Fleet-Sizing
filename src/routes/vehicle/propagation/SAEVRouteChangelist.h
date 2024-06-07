@@ -17,7 +17,9 @@
 class SAEVRouteChangelist {
 private:
     SAEVRoute * const _routePtr;
-    const int _requestIdx, _originPredecessorIdx, _destinationPredecessorIdx;
+    const size_t _requestId;
+    const size_t _originPredecessorIdx;
+    const size_t _destinationPredecessorIdx;
     std::vector<SAEVRouteChange> _changelist{};
     double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
 
@@ -25,12 +27,12 @@ public:
     /**
      * Initializes a change list to memorize every iterative modification made during constraint propagation
      * @param routePtr a pointer to the route the constraint propagation was applied on. revert/apply operations will be done on this route
-     * @param requestIdx The index of the request in the global request list
+     * @param requestId The index of the request in the global request list
      * @param originPredecessorIdx The index of the request our origin will be inserted after
      * @param destinationPredecessorIdx The index of the request our destination will be inserted after
      */
-    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const int requestIdx, const int originPredecessorIdx, const int destinationPredecessorIdx)
-    : _routePtr(routePtr), _requestIdx(requestIdx), _originPredecessorIdx(originPredecessorIdx), _destinationPredecessorIdx(destinationPredecessorIdx) {};
+    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, const size_t originPredecessorIdx, const size_t destinationPredecessorIdx)
+    : _routePtr(routePtr), _requestId(requestId), _originPredecessorIdx(originPredecessorIdx), _destinationPredecessorIdx(destinationPredecessorIdx) {};
 
     /**
      * @return A pointer to the route this change list applies/reverts changes to
@@ -41,15 +43,15 @@ public:
     /**
      * @return The index of the request that we want to insert to a route
      */
-    [[nodiscard]] int getRequestIdx() const;
+    [[nodiscard]] size_t getRequestId() const;
     /**
      * @return The index of the request our origin will be inserted after
      */
-    [[nodiscard]] int getOriginPredecessorIdx() const;
+    [[nodiscard]] size_t getOriginPredecessorIdx() const;
     /**
      * @return The index of the request our destination will be inserted after
      */
-    [[nodiscard]] int getDestinationPredecessorIdx() const;
+    [[nodiscard]] size_t getDestinationPredecessorIdx() const;
     /**
      * @return A score value associated with this changelist. A lower score is better
      */
