@@ -105,6 +105,13 @@ public:
     [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2;}
     [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2 + 1;}
 
+    /**
+     * Verifies that time windows have been properly propagated for a given vehicle's route
+     * @param vehicleId
+     * @return true iff all time windows have been properly shrunk
+     */
+    bool checkRouteTimeWindows(size_t vehicleId);
+
     std::string to_string(size_t vehicleId);
     void exportToFile();
 };

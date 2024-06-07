@@ -315,3 +315,33 @@ void SAEVRoute::exportToFile() {
     //TODO
 }
 
+bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
+    SAEVKeyPoint const* currentKeyPoint = &getOriginDepot(vehicleId);
+    SAEVKeyPoint const* succKP;
+    SAEVKeyPoint const* counterpartKP;
+    while(currentKeyPoint != nullptr) {
+        succKP = currentKeyPoint->getSuccessor();
+        counterpartKP = currentKeyPoint->getCounterpart();
+        //MIN/MAX
+        if(succKP != nullptr) {
+            if(currentKeyPoint->getMinTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) > succKP->getMaxTw() ) {
+                DEBUG_MSG("MIN TW VIOLATION : " + currentKeyPoint->to_string() + " > " + succKP->to_string());
+                return false;
+            }
+            if(currentKeyPoint->getMaxTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) < succKP->getMaxTw() ) {
+                DEBUG_MSG("MAX TW VIOLATION : " + currentKeyPoint->to_string() + " < " + succKP->to_string());
+                return false;
+            }
+        }
+        //DELTA
+        if((!currentKeyPoint->isDepot() && currentKeyPoint->isOrigin() && counterpartKP != nullptr)
+        && (counterpartKP->getMinTw() - currentKeyPoint->getMinTw() > currentKeyPoint->getRequest()->getDeltaTime()
+        ||  counterpartKP->getMaxTw() - currentKeyPoint->getMaxTw() > currentKeyPoint->getRequest()->getDeltaTime())) {
+            DEBUG_MSG("DELTA VIOLATION : " + currentKeyPoint->to_string() + " " + counterpartKP->to_string());
+            return false;
+        }
+    }
+
+    return true;
+}
+
