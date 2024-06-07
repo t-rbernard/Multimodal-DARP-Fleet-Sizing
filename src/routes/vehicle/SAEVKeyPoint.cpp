@@ -69,6 +69,10 @@ bool SAEVKeyPoint::isOrigin() const {
     return _isOrigin;
 }
 
+bool SAEVKeyPoint::isDestination() const {
+    return !_isOrigin;
+}
+
 void SAEVKeyPoint::setIsOrigin(bool isOrigin) {
     _isOrigin = isOrigin;
 }
@@ -104,4 +108,13 @@ bool SAEVKeyPoint::isDepot() const {
 
 void SAEVKeyPoint::setIsDepot(bool isDepot) {
     _isDepot = isDepot;
+}
+
+std::string SAEVKeyPoint::to_string() const {
+    std::string nodeType = "Depot, ";
+    if(!isDepot() && isOrigin()) { nodeType = "Origin, ";}
+    else if(!isDepot()) { nodeType = "Destination,"; }
+
+    return "(nodeIdx=" + std::to_string(getNodeIndex()) + ", Type=" + nodeType +
+    + "TW=[" + std::to_string(getMinTw()) + ";" + std::to_string(getMaxTw()) + "])";
 }

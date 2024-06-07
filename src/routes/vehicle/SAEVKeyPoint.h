@@ -55,6 +55,7 @@ public:
     void setMaxTw(int maxTw);
 
     [[nodiscard]] bool isOrigin() const;
+    [[nodiscard]] bool isDestination() const;
     void setIsOrigin(bool isOrigin);
 
     [[nodiscard]] bool isDepot() const;
@@ -78,7 +79,9 @@ public:
      */
     bool operator==(const SAEVKeyPoint &rhs) const;
 
-    int getDeltaTime() const;
+    [[nodiscard]] int getDeltaTime() const;
+
+    [[nodiscard]] std::string to_string() const override;
 };
 
 
