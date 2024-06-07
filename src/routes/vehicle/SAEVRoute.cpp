@@ -3,7 +3,15 @@
 //
 
 #include <queue>
+#include <iostream>
 #include "SAEVRoute.h"
+
+#ifdef DEBUG_TRANSIT_PRECOMPUTE
+#include <iostream>
+#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#else
+#define DEBUG_MSG(str) do { } while ( false )
+#endif
 
 SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList) : _nbRequest(requestList.size()), _graph(&graph), _requestList(&requestList) {
     _route.resize(_nbRequest*4); //nbRequest*2 O/D KeyPoints + nbRequest*2 Start/End depots (upper bound #vehicle = #requests
@@ -187,7 +195,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
         auto const& [bound, keyPoint] = boundPropagationQueue.front();
         boundPropagationQueue.pop();
         counterpartKP = keyPoint->getCounterpart();
-
+        DEBUG_MSG("KP=" + keyPoint->to_string() + "\n");
         if(bound == Min) {
             successorKP = keyPoint->getSuccessor();
             if(successorKP != nullptr && oldValue < newValue) {
@@ -198,9 +206,12 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                     if (newValue > successorKP->getMaxTw()) {
                         return changelist;
                     }
+                    DEBUG_MSG("\tMIN Successeur KP=" + successorKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
                     changelist.emplace_back(*successorKP, Min, newValue - oldValue);
                     successorKP->setMinTw(newValue);
                     boundPropagationQueue.emplace(Min, successorKP);
+                } else {
+//                    DEBUG_MSG("Pas de changement pour Min du noeud " + successorKP->to_string() + " successeur de " + keyPoint->to_string());
                 }
             }
             //Check counterpart key point delta time
@@ -208,13 +219,17 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             newValue = keyPoint->getMinTw() - keyPoint->getDeltaTime();
             if(!keyPoint->isDepot() && !counterpartKP->isOrigin() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
+                    DEBUG_MSG("Infaisabilité MIN DELTA Destination->Origine");
                     return changelist;
                 }
+                DEBUG_MSG("\tMIN Counterpart KP=" + counterpartKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
                 changelist.emplace_back(*counterpartKP, Min, newValue - oldValue);
                 counterpartKP->setMinTw(newValue);
                 boundPropagationQueue.emplace(Min, counterpartKP);
+            } else if(!keyPoint->isDepot() && keyPoint->isDestination()) {
+//                DEBUG_MSG("Pas de changement pour Min du noeud " + counterpartKP->to_string() + " via  sa destination " + keyPoint->to_string());
             }
-        } else {
+        } else { //MAX
             predecessorKP = keyPoint->getPredecessor();
             if(predecessorKP != nullptr) {
                 //Check neighbouring time window
@@ -224,9 +239,12 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                     if (predecessorKP->getMinTw() > newValue) {
                         return changelist;
                     }
+                    DEBUG_MSG("\tMAX Predecessor KP=" + predecessorKP->to_string() + "\n\tModif Max=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
                     changelist.emplace_back(*predecessorKP, Max, newValue - oldValue);
                     predecessorKP->setMaxTw(newValue);
                     boundPropagationQueue.emplace(Max, predecessorKP);
+                } else {
+//                    DEBUG_MSG("Pas de changement pour Max pour noeud " + predecessorKP->to_string() + " prédécesseur de " + predecessorKP->to_string());
                 }
             }
             //Check counterpart key point delta time
@@ -234,16 +252,20 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             newValue = keyPoint->getMaxTw() + keyPoint->getDeltaTime();
             if(!keyPoint->isDepot() && counterpartKP->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
+                    DEBUG_MSG("Infaisabilité MAX DELTA Origine->Destination");
                     return changelist;
                 }
                 changelist.emplace_back(*counterpartKP, Max, oldValue - newValue);
                 counterpartKP->setMaxTw(newValue);
                 boundPropagationQueue.emplace(Max, counterpartKP);
+                DEBUG_MSG("\tMAX Destination KP=" + counterpartKP->to_string() + "\n\tModif Max=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
+            } else if(!keyPoint->isDepot() && keyPoint->isOrigin()) {
+//                DEBUG_MSG("Pas de changement pour Max du noeud " + counterpartKP->to_string() + " via son origine " + keyPoint->to_string());
             }
         }
     }
 
-    changelist.setScore(getDetourScore(requestIdx, originRequestPredecessorIdx, destinationRequestPredecessorIdx));
+    changelist.setScore(getDetourScore(requestId, originRequestPredecessorIdx, destinationRequestPredecessorIdx));
     return changelist;
 }
 
