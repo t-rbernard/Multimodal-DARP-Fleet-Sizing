@@ -198,7 +198,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
         DEBUG_MSG("KP=" + keyPoint->to_string() + "\n");
         if(bound == Min) {
             successorKP = keyPoint->getSuccessor();
-            if(successorKP != nullptr && oldValue < newValue) {
+            if(successorKP != nullptr) {
                 //Check neighbouring time window
                 oldValue = successorKP->getMinTw();
                 newValue = keyPoint->getMinTw() + _graph->getShortestSAEVPath(keyPoint->getNodeIndex(), successorKP->getNodeIndex());
