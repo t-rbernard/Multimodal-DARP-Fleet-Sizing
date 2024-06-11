@@ -340,6 +340,7 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
             DEBUG_MSG("DELTA VIOLATION : " + currentKeyPoint->to_string() + " " + counterpartKP->to_string());
             return false;
         }
+        currentKeyPoint = currentKeyPoint->getSuccessor();
     }
 
     return true;
