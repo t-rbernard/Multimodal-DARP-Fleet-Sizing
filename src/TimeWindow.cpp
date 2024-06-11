@@ -5,21 +5,21 @@
 #include "TimeWindow.h"
 
 
-TimeWindow TimeWindow::operator+(int rhs) const {
+TimeWindow TimeWindow::operator+(uint rhs) const {
     return TimeWindow(this->min + rhs, this->max + rhs);
 }
 
-TimeWindow& TimeWindow::operator+=(int rhs) {
+TimeWindow& TimeWindow::operator+=(uint rhs) {
     this->min += rhs;
     this->max += rhs;
     return *this;
 }
 
-TimeWindow TimeWindow::operator-(int rhs) const {
+TimeWindow TimeWindow::operator-(uint rhs) const {
     return TimeWindow(this->min - rhs, this->max - rhs);
 }
 
-TimeWindow& TimeWindow::operator-=(int rhs) {
+TimeWindow& TimeWindow::operator-=(uint rhs) {
     this->min -= rhs;
     this->max -= rhs;
     return *this;
@@ -45,7 +45,7 @@ TimeWindow& TimeWindow::operator-=(const TimeWindow& rhs) {
     return *this;
 }
 
-bool TimeWindow::isInTimeWindow(int instant) const {
+bool TimeWindow::isInTimeWindow(uint instant) const {
     return this->min <= instant && this->max >= instant;
 }
 
