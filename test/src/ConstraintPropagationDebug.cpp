@@ -8,8 +8,9 @@
 #include "../../src/ShortestPath/Transit/TransitShortestPathPrecompute.h"
 #include "../../src/instance/Instance.h"
 #include "../../src/routes/vehicle/SAEVRoute.h"
+#include "../../src/utils/InstanceGenerator.h"
 
-TEST(TransitPreprocessUnitTest, DebugFunction) {
+TEST(ConstraintPropagationDebug, DebugBaseInstance) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "basic_debug_instance/";
     std::string graphDatFile = "graph.dat";
@@ -40,6 +41,26 @@ TEST(TransitPreprocessUnitTest, DebugFunction) {
     req1Changelist.applyChanges();
     req1Changelist.revertChanges();
     req0Changelist.revertChanges();
+}
+
+TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
+    std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
+    std::string instanceFolder = "basic_debug_instance/";
+    std::string graphDatFile = "graph.dat";
+    std::string requestsDatFile = "requests.dat";
+
+    //Parse graph
+    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
+    std::vector<Request> requests = InstanceGenerator::generateRequests(graphFromSingleFile, 100, 110620241720);
+    std::vector<Request> requestsParameterized = InstanceGenerator::generateRequests(graphFromSingleFile, 100, 1.5, 15, 15, 480, 600, 110620241739);
+
+    assert(requests.size() == 100);
+    assert(requestsParameterized.size() == 100);
+
+    //Init instance
+    Instance instance(requests,graphFromSingleFile,4);
+    SAEVRoute routesContainer(graphFromSingleFile, requests);
+
 }
 
 int main(int argc, char* argv[]) {
