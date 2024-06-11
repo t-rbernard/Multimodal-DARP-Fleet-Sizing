@@ -105,6 +105,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, const size_t originRequestPrede
     SAEVKeyPoint const* currentKP = originPredecessor;
     do {
         if(currentKP->getCurrentOccupation() + request->getWeight() > SAEVehicle::getCapacity()) {
+            DEBUG_MSG("WEIGHT VIOLATION : request weight = " + std::to_string(request->getWeight()) + " incompatible KP = " + currentKP->to_string());
             return SAEVRouteChangelist(this, requestId, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
         }
         currentKP = currentKP->getSuccessor();
@@ -113,11 +114,12 @@ SAEVRoute::tryAddRequest(const size_t requestId, const size_t originRequestPrede
     //Do basic checks on neighbouring nodes from our Origin/Destination insertion points
     bool isValid = doNeighbouringTWChecks(requestId, request->getOriginNodeIndex(), request->getDestinationNodeIndex(), originPredecessor, destinationPredecessor);
 
-    if(isValid)
+    if(isValid) {
         return insertRequestWithPropagation(requestId, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
-    else
+    } else {
+        DEBUG_MSG("TW VIOLATION on neighbour KPs");
         return SAEVRouteChangelist(this, requestId, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
-
+    }
 }
 
 bool
@@ -219,7 +221,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             newValue = keyPoint->getMinTw() - keyPoint->getDeltaTime();
             if(!keyPoint->isDepot() && keyPoint->isDestination() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
-                    DEBUG_MSG("Infaisabilité MIN DELTA Destination->Origine");
+                    DEBUG_MSG("\tMIN DELTA Destination->Origine");
                     return changelist;
                 }
                 DEBUG_MSG("\tMIN Counterpart KP=" + counterpartKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
@@ -252,7 +254,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             newValue = keyPoint->getMaxTw() + keyPoint->getDeltaTime();
             if(!keyPoint->isDepot() && keyPoint->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
-                    DEBUG_MSG("Infaisabilité MAX DELTA Origine->Destination");
+                    DEBUG_MSG("\tMAX DELTA Origine->Destination");
                     return changelist;
                 }
                 changelist.emplace_back(*counterpartKP, Max, oldValue - newValue);
