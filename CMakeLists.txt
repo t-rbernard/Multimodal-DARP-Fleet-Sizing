@@ -58,6 +58,8 @@ add_executable(GreedyAlgorithm
         src/routes/vehicle/propagation/SAEVRouteChangelist.h
         src/routes/vehicle/propagation/SAEVRouteChange.cpp
         src/routes/vehicle/propagation/SAEVRouteChange.h
+        src/utils/InstanceGenerator.cpp
+        src/utils/InstanceGenerator.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
