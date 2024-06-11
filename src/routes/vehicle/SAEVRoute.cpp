@@ -324,11 +324,11 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
         counterpartKP = currentKeyPoint->getCounterpart();
         //MIN/MAX
         if(succKP != nullptr) {
-            if(currentKeyPoint->getMinTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) > succKP->getMaxTw() ) {
+            if(!currentKeyPoint->isDepot() && currentKeyPoint->getMinTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) > succKP->getMaxTw() ) {
                 DEBUG_MSG("MIN TW VIOLATION : " + currentKeyPoint->to_string() + " > " + succKP->to_string());
                 return false;
             }
-            if(currentKeyPoint->getMaxTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) < succKP->getMaxTw() ) {
+            if(!succKP->isDepot() && currentKeyPoint->getMaxTw() + _graph->getShortestSAEVPath(currentKeyPoint->getNodeIndex(), succKP->getNodeIndex()) < succKP->getMaxTw() ) {
                 DEBUG_MSG("MAX TW VIOLATION : " + currentKeyPoint->to_string() + " < " + succKP->to_string());
                 return false;
             }
