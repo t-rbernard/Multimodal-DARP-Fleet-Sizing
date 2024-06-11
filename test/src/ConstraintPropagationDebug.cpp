@@ -25,11 +25,14 @@ TEST(TransitPreprocessUnitTest, DebugFunction) {
 
     std::cout << "------------------Fin parsing instance et route-------------------" << std::endl << std::endl;
     int vehicleId = 1;
+    assert(routesContainer.checkRouteTimeWindows(vehicleId));
     SAEVRouteChangelist req0Changelist = routesContainer.tryAddRequest(0, routesContainer.getOriginDepotIdx(vehicleId), routesContainer.getOriginDepotIdx(1));
     std::cout << routesContainer.to_string(vehicleId) << std::endl;
+    assert(routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
     SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepotIdx(vehicleId), routesContainer.getRequestDestinationIdx(0));
     std::cout << routesContainer.to_string(vehicleId) << std::endl << std::endl;
+    assert(!routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
 
     //Test changelist revert/apply
