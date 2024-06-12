@@ -8,7 +8,7 @@
 #include "../../src/ShortestPath/Transit/TransitShortestPathPrecompute.h"
 #include "../../src/instance/Instance.h"
 #include "../../src/routes/vehicle/SAEVRoute.h"
-#include "../../src/utils/InstanceGenerator.h"
+#include "../../src/utils/RequestsGenerator.h"
 
 TEST(ConstraintPropagationDebug, DebugBaseInstance) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
@@ -51,8 +51,8 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
 
     //Parse graph
     Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
-    std::vector<Request> requests = InstanceGenerator::generateRequests(graphFromSingleFile, 100, 110620241720);
-    std::vector<Request> requestsParameterized = InstanceGenerator::generateRequests(graphFromSingleFile, 100, 1.5, 15, 15, 480, 600, 110620241739);
+    std::vector<Request> requests = RequestsGenerator::generateRequests(graphFromSingleFile, 100, 110620241720);
+    std::vector<Request> requestsParameterized = RequestsGenerator::generateRequests(graphFromSingleFile, 100, 1.5, 15, 15, 480, 600, 110620241739);
 
     assert(requests.size() == 100);
     assert(requestsParameterized.size() == 100);

@@ -2,10 +2,10 @@
 // Created by romain on 11/06/24.
 //
 
-#include "InstanceGenerator.h"
+#include "RequestsGenerator.h"
 
 std::vector<Request>
-InstanceGenerator::generateRequests(const Graph &graph, size_t requestAmount, double deltaRatio, uint deltaMinDuration,
+RequestsGenerator::generateRequests(const Graph &graph, size_t requestAmount, double deltaRatio, uint deltaMinDuration,
                                     uint timeWindowWidth, uint periodStartTime, uint periodEndTime, ulong rngSeed) {
     std::mt19937 rng(rngSeed);
     std::vector<Request> requests;
@@ -44,6 +44,23 @@ InstanceGenerator::generateRequests(const Graph &graph, size_t requestAmount, do
     return requests;
 }
 
-std::vector<Request> InstanceGenerator::generateRequests(const Graph &graph, size_t requestAmount, ulong rngSeed) {
+std::vector<Request> RequestsGenerator::generateRequests(const Graph &graph, size_t requestAmount, ulong rngSeed) {
     return generateRequests(graph, requestAmount, 1.25, 10, 30, 360, 660, rngSeed);
+}
+
+bool
+RequestsGenerator::generateAndExportRequests(const std::string exportFolderPath, const Graph &graph,
+                                             size_t requestAmount, ulong rngSeed) {
+    std::vector<Request> generatedRequests = generateRequests(graph, requestAmount, rngSeed);
+
+    return true;
+}
+
+bool
+RequestsGenerator::generateAndExportRequests(const std::string exportFolderPath, const Graph &graph, size_t requestAmount,
+                                             double deltaRatio, uint deltaMinDuration, uint timeWindowWidth,
+                                             uint periodStartTime, uint periodEndTime, ulong rngSeed) {
+    std::vector<Request> generatedRequests = generateRequests(graph, requestAmount, deltaRatio, deltaMinDuration, timeWindowWidth,
+                                                              periodStartTime, periodEndTime, rngSeed);
+    return true;
 }
