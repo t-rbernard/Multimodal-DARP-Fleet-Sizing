@@ -134,7 +134,7 @@ public:
      * The function creates the folders if need be, and will overwrite existing files if data has been outputted to this folder before
      * @param exportFolderPath A path to a folder where we can export edges.txt, nodes.txt and ptlines.txt
      */
-    void exportGraphToFiles(std::filesystem::path exportFolderPath);
+    void exportGraphToFile(const std::filesystem::path& exportFolderPath);
 
     /**
      * Executes defined check functions on every node and transit line in the graph

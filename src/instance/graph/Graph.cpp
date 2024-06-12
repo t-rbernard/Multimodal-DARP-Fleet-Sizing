@@ -118,65 +118,75 @@ Graph::Graph(const std::string& datFilePath) {
 }
 
 namespace fs = std::filesystem;
-void Graph::exportGraphToFiles(fs::path exportFolderPath) {
+void Graph::exportGraphToFile(const fs::path& exportFolderPath) {
     fs::create_directories(exportFolderPath);
 
     //Nodes
-    std::ofstream outfileNodes(exportFolderPath.string() + "nodes.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& node : this->nodesVector)
+    std::ofstream outfileGraph(exportFolderPath.string() + "graph.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
+    outfileGraph << "#Nodes format : status (work, leisure, residential),x,y" << std::endl;
+    for(auto const& node : this->nodesVector)
     {
-        outfileNodes << node.getX() << " " << node.getY() << std::endl;
+        outfileGraph << node.getStatus() << "," << node.getX() << "," << node.getY() << std::endl;
     }
-    outfileNodes.close();
 
     //Edges
-    std::ofstream outfileEdges(exportFolderPath.string() + "edges.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& edge : this->edgesVector)
-    {
-        outfileEdges << edge.getNodeStart() << " " << edge.getNodeEnd() << " " << edge.getLength() << std::endl;
+    if(!edgesVector.empty()) {
+        outfileGraph << "#Edges format : node_in,node_out,length" << std::endl;
+        for (auto &edge: this->edgesVector) {
+            outfileGraph << edge.getNodeStart() << "," << edge.getNodeEnd() << "," << edge.getLength() << std::endl;
+        }
     }
-    outfileEdges.close();
+
+    //Matrix
+    if(!shortestSAEVPaths.empty()) {
+        outfileGraph << "#Matrix" << std::endl;
+        std::stringstream lineStringStream;
+        for (auto &matrixLine: this->shortestSAEVPaths) {
+            std::ranges::copy(matrixLine.begin(), matrixLine.end() - 1,
+                              std::ostream_iterator<int>(lineStringStream, ","));
+            lineStringStream << matrixLine.back();
+            outfileGraph << lineStringStream.rdbuf() << std::endl;
+        }
+    }
 
     //Transit lines
-    std::ofstream outfilePT(exportFolderPath.string() + "ptlines.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& ptline : this->transitLines)
-    {
-        //Print nodes in order on one line
-        std::ostringstream ossNodes;
-        std::vector<int> lineNodesVector = ptline.getNodes();
-        if (!lineNodesVector.empty())
-        {
-            // Convert all but the last element to avoid a trailing ","
-            std::copy(lineNodesVector.begin(), lineNodesVector.end()-1,
-                      std::ostream_iterator<int>(ossNodes, " "));
-
-            // Now add the last element with no delimiter
-            ossNodes << lineNodesVector.back();
-        }
-        std::cout << ossNodes.view() << std::endl;
-        outfilePT << ossNodes.str() << std::endl;
-        ossNodes.clear();
-
-        //Reuse string stream to print schedules line by line
-        for(auto& schedule : ptline.getTimetables())
-        {
-            std::ostringstream ossSchedule;
-            if (!schedule.empty())
-            {
+    if(!getPTLines().empty()) {
+        outfileGraph << "#PT Lines" << std::endl;
+        for (auto const &ptline: this->transitLines) {
+            //Print nodes in order on one line
+            std::stringstream ossNodes;
+            std::vector<int> lineNodesVector = ptline.getNodes();
+            if (!lineNodesVector.empty()) {
                 // Convert all but the last element to avoid a trailing ","
-                std::copy(schedule.begin(), schedule.end()-1,
-                          std::ostream_iterator<int>(ossSchedule, " "));
+                std::copy(lineNodesVector.begin(), lineNodesVector.end() - 1,
+                          std::ostream_iterator<int>(ossNodes, ","));
 
                 // Now add the last element with no delimiter
-                ossSchedule << schedule.back();
+                ossNodes << lineNodesVector.back();
             }
-            std::cout << ossSchedule.view() << std::endl;
-            outfilePT << ossSchedule.str() << std::endl;
-            ossSchedule.clear();
+            std::cout << ossNodes.view() << std::endl;
+            outfileGraph << ossNodes.rdbuf() << std::endl;
+            ossNodes.clear();
+
+            //Reuse string stream to print schedules line by line
+            std::stringstream ossSchedule;
+            for (auto &schedule: ptline.getTimetables()) {
+                if (!schedule.empty()) {
+                    // Convert all but the last element to avoid a trailing ","
+                    std::copy(schedule.begin(), schedule.end() - 1,
+                              std::ostream_iterator<int>(ossSchedule, ","));
+
+                    // Now add the last element with no delimiter
+                    ossSchedule << schedule.back();
+                }
+                std::cout << ossSchedule.view() << std::endl;
+                outfileGraph << ossSchedule.rdbuf() << std::endl;
+                ossSchedule.str("");
+                ossSchedule.clear();
+            }
         }
-        outfilePT << "#PT line end" <<std::endl;
     }
-    outfilePT.close();
+    outfileGraph.close();
     std::cout << "results of graph validations : " << this->check() << std::endl;
 }
 
