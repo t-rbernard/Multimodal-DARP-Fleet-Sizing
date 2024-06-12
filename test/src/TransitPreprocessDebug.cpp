@@ -7,13 +7,13 @@
 #include "../../src/ShortestPath/Transit/TransitShortestPathContainer.h"
 #include "../../src/ShortestPath/Transit/TransitShortestPathPrecompute.h"
 
-TEST(TransitPreprocessUnitTest, DebugFunction) {
+TEST(Transit_Preprocess_DEB, DebugFunction) {
     std::string instancesPath = "../../resources/test/instances/PT Shortest Path/";
     std::string instanceFolder = "contiguous_lines_debug_instance/";
     std::string datFile = "graph.dat";
 
     Graph graphFromSingleFile(instancesPath + instanceFolder + datFile);
-    graphFromSingleFile.exportGraphToFiles("../resources/test/outputs/" + instanceFolder);
+    graphFromSingleFile.exportGraphToFile("../../resources/test/outputs/" + instanceFolder);
     TransitShortestPathContainer contiguousContainer(graphFromSingleFile.getNbNodes());
     for(auto& ptLine : graphFromSingleFile.getPTLines()) {
         for(int i = 0; i < ptLine.size(); ++i) {

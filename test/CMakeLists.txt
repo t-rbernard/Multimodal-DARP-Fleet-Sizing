@@ -19,7 +19,7 @@ add_executable(Line_UT
         ../src/instance/graph/Line.h
 )
 
-add_executable(Transit_preprocess_DEB
+add_executable(Transit_Preprocess_DEB
         src/TransitPreprocessDebug.cpp
         ../src/instance/graph/Node.cpp
         ../src/instance/graph/Node.h
@@ -66,10 +66,10 @@ add_executable(Constraint_Propag_DEB
         ../src/routes/RequestKeyPoint.h
         ../src/routes/RequestRoute.cpp
         ../src/routes/RequestRoute.h
-        ../src/utils/InstanceGenerator.cpp
-        ../src/utils/InstanceGenerator.h
+        ../src/utils/RequestsGenerator.cpp
+        ../src/utils/RequestsGenerator.h
 )
 
 target_link_libraries(Line_UT gtest gtest_main)
-target_link_libraries(Transit_preprocess_DEB gtest gtest_main)
+target_link_libraries(Transit_Preprocess_DEB gtest gtest_main)
 target_link_libraries(Constraint_Propag_DEB gtest gtest_main)
