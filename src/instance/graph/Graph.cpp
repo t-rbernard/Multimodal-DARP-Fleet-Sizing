@@ -192,7 +192,7 @@ void Graph::exportGraphToFile(const fs::path& exportFolderPath) {
 
 bool Graph::check() {
     bool checkResult = true;
-    for(auto& transitLine : this->transitLines)
+    for(auto const& transitLine : this->transitLines)
     {
         checkResult &= transitLine.check();
     }
@@ -202,12 +202,12 @@ bool Graph::check() {
 
 bool Graph::checkLineToNodeLinks() {
     int nodeIndexFromLine;
-    Node* nodeFromGraph; //Forced to init here
+    Node const* nodeFromGraph; //Forced to init here
 
     bool checkResult = true;
-    for(auto& node : nodesVector)
+    for(auto const& node : nodesVector)
     {
-        for(auto& lineStop : node.getPTLinesSet())
+        for(auto const& lineStop : node.getPTLinesSet())
         {
             nodeIndexFromLine = lineStop.getLineRef().getNode(lineStop.getStopIndex());
             nodeFromGraph = &this->nodesVector.at(nodeIndexFromLine);
@@ -280,7 +280,7 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
     }
 
     //Create subsequent timetables according to preceding timetable and travel time
-    for(int i = 1; i < newLine.getNodes().size(); ++i)
+    for(size_t i = 1; i < newLine.getNodes().size(); ++i)
     {
         int travelTime = travelTimeDistribution(rng); //FIXME travel time is randomized for now, we should get edge length if it exists I guess
         std::vector<int> precedingTimeTable = newLine.getTimetable(i - 1);
