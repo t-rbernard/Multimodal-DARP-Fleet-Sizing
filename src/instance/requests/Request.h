@@ -76,6 +76,13 @@ public:
 
     void resetKeyPoint(int routeIndex);
 
+    /**
+     * Creates a string in an appropriate format for the request to be exported to a file that can be imported again
+     * <br> <br>
+     * Format : origin_idx,destination_idx,min,max,delta,capacity
+     * @return A properly formatted string to import back again
+     */
+    std::string to_string_export();
 };
 
 

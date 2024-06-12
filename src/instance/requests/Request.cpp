@@ -196,3 +196,10 @@ void Request::setLineStop(int routeIndex, LineStop *lineStop) {
 void Request::resetKeyPoint(int routeIndex) {
     _currentRoute.resetKeyPoint(routeIndex);
 }
+
+std::string Request::to_string_export() {
+    std::string res = std::to_string(_originNodeIndex) + "," + std::to_string(_destinationNodeIndex) //FIXME:replace with std::format whenever possible
+            + "," + std::to_string(_arrivalTW.min) + "," + std::to_string(_arrivalTW.max)
+            + "," + std::to_string(_deltaTime) + "," + std::to_string(_weight);
+    return res;
+}

@@ -50,23 +50,19 @@ RequestsGenerator::generateRequests(const Graph &graph, RequestGenerationParamet
     return requests;
 }
 
-std::vector<Request> RequestsGenerator::generateRequests(const Graph &graph, size_t requestAmount, ulong rngSeed) {
-    return generateRequests(graph, requestAmount, 1.25, 10, 30, 360, 660, rngSeed);
-}
-
-bool
-RequestsGenerator::generateAndExportRequests(const std::string exportFolderPath, const Graph &graph,
-                                             size_t requestAmount, ulong rngSeed) {
-    std::vector<Request> generatedRequests = generateRequests(graph, requestAmount, rngSeed);
-
-    return true;
-}
-
-bool
-RequestsGenerator::generateAndExportRequests(const std::string exportFolderPath, const Graph &graph, size_t requestAmount,
-                                             double deltaRatio, uint deltaMinDuration, uint timeWindowWidth,
-                                             uint periodStartTime, uint periodEndTime, ulong rngSeed) {
-    std::vector<Request> generatedRequests = generateRequests(graph, requestAmount, deltaRatio, deltaMinDuration, timeWindowWidth,
-                                                              periodStartTime, periodEndTime, rngSeed);
-    return true;
+std::vector<Request>
+RequestsGenerator::generateAndExportRequests(const fs::path &exportFolderPath, const Graph &graph, const RequestGenerationParameters &generationParameters) {
+    std::vector<Request> generatedRequests = generateRequests(graph, generationParameters);
+    //Write requests to files
+    fs::create_directories(exportFolderPath);
+    std::ofstream outfileGraph(exportFolderPath.string() + "requests.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
+    for(Request request : generatedRequests) {
+        outfileGraph << request.to_string_export() << std::endl;
+    }
+    outfileGraph.close();
+    //Export parameters to file
+    std::ofstream outfileParams(exportFolderPath.string() + "requestParameters.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
+    outfileParams << generationParameters;
+    outfileParams.close();
+    return generatedRequests;
 }
