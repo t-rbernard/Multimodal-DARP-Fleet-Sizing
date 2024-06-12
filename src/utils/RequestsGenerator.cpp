@@ -19,10 +19,6 @@ RequestsGenerator::generateRequests(const Graph &graph, size_t requestAmount, do
     uint requestTWStart;
     ulong originNodeIdx, destinationNodeIdx;
     for(size_t i = 0; i < requestAmount; ++i) {
-        //Reset values
-        originNodeIdx = -1;
-        destinationNodeIdx = -1;
-
         //Generate new values
         requestTWStart = requestTWStartDistribution(rng);
         originNodeIdx = nodeDistribution(rng);
