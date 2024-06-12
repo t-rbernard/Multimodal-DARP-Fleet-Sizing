@@ -68,6 +68,7 @@ add_executable(Constraint_Propag_DEB
         ../src/routes/RequestRoute.h
         ../src/utils/RequestsGenerator.cpp
         ../src/utils/RequestsGenerator.h
+        ../src/utils/RequestGenerationParameters.h
 )
 
 target_link_libraries(Line_UT gtest gtest_main)

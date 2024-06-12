@@ -51,8 +51,10 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
 
     //Parse graph
     Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
-    std::vector<Request> requests = RequestsGenerator::generateRequests(graphFromSingleFile, 100, 110620241720);
-    std::vector<Request> requestsParameterized = RequestsGenerator::generateRequests(graphFromSingleFile, 100, 1.5, 15, 15, 480, 600, 110620241739);
+    std::vector<Request> requests = RequestsGenerator::generateAndExportRequests("../../resources/test/outputs/propag/" + instanceFolder, graphFromSingleFile,
+                                                                                 RequestGenerationParameters(100, 110620241720));
+    std::vector<Request> requestsParameterized = RequestsGenerator::generateAndExportRequests("../../resources/test/outputs/propag/" + instanceFolder,graphFromSingleFile,
+                                                                                              RequestGenerationParameters(100, 1.5, 15, 15, 480, 600, 110620241739));
 
     assert(requests.size() == 100);
     assert(requestsParameterized.size() == 100);
