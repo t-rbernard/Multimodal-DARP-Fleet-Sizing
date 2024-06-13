@@ -6,16 +6,16 @@
 
 void SAEVRouteChange::applyChange() {
     if(_bound == Min) {
-        _kpPointer->getMinTw() + _value;
+        _kpPointer->setMinTw(_kpPointer->getMinTw() + _value);
     } else {
-        _kpPointer->getMaxTw() - _value;
+        _kpPointer->setMaxTw(_kpPointer->getMaxTw() - _value);
     }
 }
 
 void SAEVRouteChange::revertChange() {
     if(_bound == Min) {
-        _kpPointer->getMinTw() - _value;
+        _kpPointer->setMinTw(_kpPointer->getMinTw() - _value);
     } else {
-        _kpPointer->getMaxTw() + _value;
+        _kpPointer->setMaxTw(_kpPointer->getMaxTw() + _value);
     }
 }
