@@ -58,9 +58,58 @@ add_executable(GreedyAlgorithm
         src/routes/vehicle/propagation/SAEVRouteChangelist.h
         src/routes/vehicle/propagation/SAEVRouteChange.cpp
         src/routes/vehicle/propagation/SAEVRouteChange.h
-        src/utils/RequestsGenerator.cpp
-        src/utils/RequestsGenerator.h
-        src/utils/RequestGenerationParameters.h
+        "src/utils/Instance Generation/Requests/RequestsGenerator.cpp"
+        "src/utils/Instance Generation/Requests/RequestsGenerator.h"
+        "src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
+        "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
+)
+
+add_executable(RequestGenerator
+        src/instance/graph/Node.cpp
+        src/instance/graph/Node.h
+        src/instance/graph/Edge.cpp
+        src/instance/graph/Edge.h
+        src/instance/graph/Graph.cpp
+        src/instance/graph/Graph.h
+        src/instance/requests/Request.cpp
+        src/instance/requests/Request.h
+        src/instance/Instance.cpp
+        src/instance/Instance.h
+        src/instance/graph/Line.cpp
+        src/instance/graph/Line.h
+        src/services/CSV/CSVRange.h
+        src/services/CSV/CSVIterator.h
+        src/instance/graph/LineStop.cpp
+        src/instance/graph/LineStop.h
+        src/services/DatFile/DATRow.h
+        src/routes/vehicle/SAEVRoute.cpp
+        src/routes/vehicle/SAEVRoute.h
+        src/TimeWindow.cpp
+        src/TimeWindow.h
+        "src/utils/Instance Generation/Requests/RequestsGenerator.cpp"
+        "src/utils/Instance Generation/Requests/RequestsGenerator.h"
+        "src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
+        "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
+)
+
+add_executable(GraphGeneration
+        src/instance/graph/Node.cpp
+        src/instance/graph/Node.h
+        src/instance/graph/Edge.cpp
+        src/instance/graph/Edge.h
+        src/instance/graph/Graph.cpp
+        src/instance/graph/Graph.h
+        src/instance/Instance.cpp
+        src/instance/Instance.h
+        src/instance/graph/Line.cpp
+        src/instance/graph/Line.h
+        src/services/CSV/CSVRange.h
+        src/services/CSV/CSVIterator.h
+        src/instance/graph/LineStop.cpp
+        src/instance/graph/LineStop.h
+        src/services/DatFile/DATRow.h
+        "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
+        "src/utils/Instance Generation/Graph/GraphGenerator.h"
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})

@@ -8,7 +8,7 @@
 #include "../../src/ShortestPath/Transit/TransitShortestPathPrecompute.h"
 #include "../../src/instance/Instance.h"
 #include "../../src/routes/vehicle/SAEVRoute.h"
-#include "../../src/utils/RequestsGenerator.h"
+#include "../../src/utils/Instance Generation/Requests/RequestsGenerator.h"
 
 TEST(ConstraintPropagationDebug, DebugBaseInstance) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";

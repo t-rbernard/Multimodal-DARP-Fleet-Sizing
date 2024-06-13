@@ -66,9 +66,10 @@ add_executable(Constraint_Propag_DEB
         ../src/routes/RequestKeyPoint.h
         ../src/routes/RequestRoute.cpp
         ../src/routes/RequestRoute.h
-        ../src/utils/RequestsGenerator.cpp
-        ../src/utils/RequestsGenerator.h
-        ../src/utils/RequestGenerationParameters.h
+        "../src/utils/Instance Generation/Requests/RequestsGenerator.cpp"
+        "../src/utils/Instance Generation/Requests/RequestsGenerator.h"
+        "../src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
+        "../src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
 )
 
 target_link_libraries(Line_UT gtest gtest_main)
