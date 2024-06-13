@@ -100,6 +100,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, const size_t originRequestPrede
     const Request* request = &_requestList->at(requestId);
     SAEVKeyPoint const* originPredecessor = &_route.at(originRequestPredecessorIdx);
     SAEVKeyPoint const* destinationPredecessor = &_route.at(destinationRequestPredecessorIdx);
+    SAEVKeyPoint const* destinationSuccessor = destinationPredecessor->getSuccessor();
 
     //Check vehicle capacity
     SAEVKeyPoint const* currentKP = originPredecessor;
@@ -109,7 +110,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, const size_t originRequestPrede
             return SAEVRouteChangelist(this, requestId, originRequestPredecessorIdx, destinationRequestPredecessorIdx);
         }
         currentKP = currentKP->getSuccessor();
-    } while (currentKP != destinationPredecessor && currentKP != nullptr);
+    } while (currentKP != destinationSuccessor && currentKP != nullptr);
 
     //Do basic checks on neighbouring nodes from our Origin/Destination insertion points
     bool isValid = doNeighbouringTWChecks(requestId, request->getOriginNodeIndex(), request->getDestinationNodeIndex(), originPredecessor, destinationPredecessor);
