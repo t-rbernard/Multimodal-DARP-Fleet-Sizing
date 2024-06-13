@@ -93,6 +93,8 @@ void SAEVRoute::removeRequest(int requestId) {
     originKp.setMaxTw(_requestList->at(requestId).getMaxDepartureTw());
     destinationKp.setMinTw(_requestList->at(requestId).getMinArrivalTw());
     destinationKp.setMaxTw(_requestList->at(requestId).getMaxArrivalTw());
+    originKp.setCurrentOccupation(0);
+    destinationKp.setCurrentOccupation(0);
 }
 
 SAEVRouteChangelist
@@ -347,5 +349,19 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
     }
 
     return true;
+}
+
+void SAEVRoute::finalizeRequestInsertion(const size_t requestId) {
+    SAEVKeyPoint * currentKeyPoint = &_route.at(getRequestOriginIdx(requestId));
+    SAEVKeyPoint const * counterpartKP = currentKeyPoint->getCounterpart();
+    int requestWeight = counterpartKP->getRequest()->getWeight();
+    //Init weight value for Origin KP
+    currentKeyPoint->setCurrentOccupation(currentKeyPoint->getPredecessor()->getCurrentOccupation() + requestWeight);
+    //Iterate over KPs in-between Origin and Destination
+    currentKeyPoint = currentKeyPoint->getSuccessor();
+    while(currentKeyPoint != counterpartKP) {
+        currentKeyPoint->setCurrentOccupation(currentKeyPoint->getCurrentOccupation() + requestWeight);
+        currentKeyPoint = currentKeyPoint->getSuccessor();
+    }
 }
 
