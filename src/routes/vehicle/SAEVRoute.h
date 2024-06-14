@@ -111,8 +111,8 @@ public:
     [[nodiscard]] size_t getRequestOriginIdx(const size_t requestId) const { return requestId * 2;}
     [[nodiscard]] size_t getRequestDestinationIdx(const size_t requestId) const { return requestId * 2 + 1;}
 
-    [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2;}
-    [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest + vehicleId*2 + 1;}
+    [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2;}
+    [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2 + 1;}
 
     /**
      * Verifies that time windows have been properly propagated for a given vehicle's route
