@@ -209,6 +209,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                 newValue = keyPoint->getMinTw() + _graph->getShortestSAEVPath(keyPoint->getNodeIndex(), successorKP->getNodeIndex());
                 if (oldValue < newValue) {
                     if (newValue > successorKP->getMaxTw()) {
+                        DEBUG_MSG("\tMIN TW VIOLATION");
                         return changelist;
                     }
                     DEBUG_MSG("\tMIN Successeur KP=" + successorKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
@@ -242,6 +243,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                 newValue = keyPoint->getMaxTw() - _graph->getShortestSAEVPath(predecessorKP->getNodeIndex(), keyPoint->getNodeIndex());
                 if(oldValue > newValue) {
                     if (predecessorKP->getMinTw() > newValue) {
+                        DEBUG_MSG("\tMAX TW VIOLATION");
                         return changelist;
                     }
                     DEBUG_MSG("\tMAX Predecessor KP=" + predecessorKP->to_string() + "\n\tModif Max=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
