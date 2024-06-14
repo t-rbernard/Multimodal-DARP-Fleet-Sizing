@@ -35,7 +35,7 @@ Request::Request(const DATRow& currentRow, const Graph& graph) {
     std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), _deltaTime);
     std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
 
-    _departureTW.min = _arrivalTW.min - _currentDeltaTime;
+    _departureTW.min = _arrivalTW.min - _deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
 }
 
@@ -54,7 +54,7 @@ Request::Request(const DATRow& currentRow, double deltaRatio, const Graph& graph
 
     std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
 
-    _departureTW.min = _arrivalTW.min - _currentDeltaTime;
+    _departureTW.min = _arrivalTW.min - _deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
 }
 
