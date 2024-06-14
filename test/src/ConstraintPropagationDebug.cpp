@@ -47,7 +47,6 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "basic_debug_instance/";
     std::string graphDatFile = "graph.dat";
-    std::string requestsDatFile = "requests.dat";
 
     //Parse graph
     Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
@@ -62,6 +61,30 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
+TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
+    std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
+    std::string instanceFolder = "Instance_Alain_140624/";
+    std::string graphDatFile = "graph.dat";
+    std::string requestsDatFile = "requests.dat";
+
+    //Parse graph
+    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
+    std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
+
+    //Init instance
+    Instance instance(requests,graphFromSingleFile,4);
+    SAEVRoute routesContainer(graphFromSingleFile, requests);
+
+    //Vehicle 1 insertions
+    routesContainer.tryAddRequest(0,routesContainer.getOriginDepotIdx(0),routesContainer.getOriginDepotIdx(0));
+    routesContainer.tryAddRequest(1,routesContainer.getRequestOriginIdx(0),routesContainer.getRequestOriginIdx(0));
+    routesContainer.tryAddRequest(2,routesContainer.getRequestOriginIdx(1),routesContainer.getRequestDestinationIdx(0));
+
+    //Vehicle 2 insertions
+    routesContainer.tryAddRequest(5,routesContainer.getOriginDepotIdx(1),routesContainer.getOriginDepotIdx(1));
+    routesContainer.tryAddRequest(4,routesContainer.getOriginDepotIdx(1),routesContainer.getRequestDestinationIdx(5));
+    routesContainer.tryAddRequest(3,routesContainer.getOriginDepotIdx(1),routesContainer.getRequestOriginIdx(4));
+}
 
 }
 
