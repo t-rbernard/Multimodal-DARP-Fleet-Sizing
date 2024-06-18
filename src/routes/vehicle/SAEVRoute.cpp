@@ -183,6 +183,10 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
     std::queue<std::pair<Bound, SAEVKeyPoint *>> boundPropagationQueue{};
     SAEVKeyPoint * originKP = &getOrigin(requestId);
     SAEVKeyPoint * destinationKP = &getDestination(requestId);
+    boundPropagationQueue.emplace(Min, originKP->getPredecessor());
+    boundPropagationQueue.emplace(Max, originKP->getSuccessor());
+    boundPropagationQueue.emplace(Min, destinationKP->getPredecessor());
+    boundPropagationQueue.emplace(Max, destinationKP->getSuccessor());
     boundPropagationQueue.emplace(Min, originKP);
     boundPropagationQueue.emplace(Max, originKP);
     boundPropagationQueue.emplace(Min, destinationKP);
