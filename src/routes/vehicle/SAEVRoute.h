@@ -105,8 +105,8 @@ public:
     SAEVKeyPoint& getOrigin(const size_t requestId) { return _route.at(requestId * 2);}
     SAEVKeyPoint& getDestination(const size_t requestId) { return _route.at(requestId * 2 + 1);}
 
-    SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2);}
-    SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route.at(_nbRequest + vehicleId*2 + 1);}
+    SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route.at(_nbRequest*2 + vehicleId*2);}
+    SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route.at(_nbRequest*2 + vehicleId*2 + 1);}
 
     [[nodiscard]] size_t getRequestOriginIdx(const size_t requestId) const { return requestId * 2;}
     [[nodiscard]] size_t getRequestDestinationIdx(const size_t requestId) const { return requestId * 2 + 1;}
