@@ -61,6 +61,9 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
+}
+
+
 TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "Instance_Alain_140624/";
