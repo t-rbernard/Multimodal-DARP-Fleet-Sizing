@@ -28,34 +28,36 @@ Request::Request(const DATRow& currentRow, const Graph& graph) {
     std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].size(), _destinationNodeIndex);
 
     int twMin, twMax;
-    std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), twMin);
-    std::from_chars(currentRow[3].data(), currentRow[3].data() + currentRow[3].size(), twMax);
-    _arrivalTW = TimeWindow(twMin, twMax);
+    bool setDepartureTW{false};
+    bool setArrivalTW{false};
+    if(!currentRow[2].empty() && !currentRow[3].empty()) { //Departure TW
+        std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), twMin);
+        std::from_chars(currentRow[3].data(), currentRow[3].data() + currentRow[3].size(), twMax);
+        _departureTW = TimeWindow(twMin, twMax);
+        setDepartureTW = true;
+    }
+    if(!currentRow[4].empty() && !currentRow[5].empty()) { //Arrival TW
+        std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), twMin);
+        std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), twMax);
+        _arrivalTW = TimeWindow(twMin, twMax);
+        setArrivalTW = true;
+    }
 
-    std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), _deltaTime);
-    std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
+    std::from_chars(currentRow[6].data(), currentRow[6].data() + currentRow[6].size(), _deltaTime);
+    std::from_chars(currentRow[7].data(), currentRow[7].data() + currentRow[7].size(), _weight);
 
-    _departureTW.min = _arrivalTW.min - _deltaTime;
-    _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
+    if(!setDepartureTW) {
+        _departureTW.min = _arrivalTW.min - _deltaTime;
+        _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
+    }
+    if(!setArrivalTW) {
+        _arrivalTW.min = _departureTW.min + graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
+        _arrivalTW.max = _departureTW.max + _deltaTime;
+    }
 }
 
-Request::Request(const DATRow& currentRow, double deltaRatio, const Graph& graph) {
-    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].size(), _originNodeIndex);
-    std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].size(), _destinationNodeIndex);
-
-    int twMin, twMax;
-    std::from_chars(currentRow[2].data(), currentRow[2].data() + currentRow[2].size(), twMin);
-    std::from_chars(currentRow[3].data(), currentRow[3].data() + currentRow[3].size(), twMax);
-    _arrivalTW = TimeWindow(twMin, twMax);
-
-    //Assign value (direct time to
-    std::from_chars(currentRow[4].data(), currentRow[4].data() + currentRow[4].size(), _deltaTime);
+Request::Request(const DATRow& currentRow, double deltaRatio, const Graph& graph) : Request(currentRow, graph){
     _deltaTime = floor(_deltaTime * deltaRatio);
-
-    std::from_chars(currentRow[5].data(), currentRow[5].data() + currentRow[5].size(), _weight);
-
-    _departureTW.min = _arrivalTW.min - _deltaTime;
-    _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
 }
 
 std::vector<Request> Request::getRequestsFromFile(const std::string& datFilePath, const Graph& graph) {
