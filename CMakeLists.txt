@@ -110,6 +110,7 @@ add_executable(GraphGeneration
         src/services/DatFile/DATRow.h
         "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         "src/utils/Instance Generation/Graph/GraphGenerator.h"
+        "src/utils/Instance Generation/Graph/PTLineGenerationParameters.h"
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
