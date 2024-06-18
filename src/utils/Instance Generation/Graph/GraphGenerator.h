@@ -7,6 +7,7 @@
 
 
 #include "../../../instance/graph/Graph.h"
+#include "PTLineGenerationParameters.h"
 
 class GraphGenerator {
     /**
@@ -15,7 +16,13 @@ class GraphGenerator {
      * @param nodeFile The file containing the required data. Format : (status,x,y)
      */
     static void importNodeFromCSV(Graph baseGraph, std::filesystem::path nodeFile);
+    static void generateNodes(Graph baseGraph, uint maxX, uint maxY, uint nbNodes) {
+
+    }
+    static void importDistanceMatrixFromCSV(Graph baseGraph, std::filesystem::path nodeFile);
+    static void generateDistanceMatrix(Graph baseGraph, std::filesystem::path nodeFile);
     static void importPTNetworkFromCSV(Graph baseGraph, std::filesystem::path ptNetworkFile);
+    static void generatePTNetwork(Graph baseGraph, PTLineGenerationParameters parameters);
 };
 
 
