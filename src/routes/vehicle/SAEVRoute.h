@@ -8,6 +8,8 @@
 
 #include <vector>
 #include "SAEVKeyPoint.h"
+#include "BestRequestInsertion.h"
+#include "BestInsertionQueue.h"
 
 class SAEVRouteChangelist;
 class SAEVRoute {
@@ -101,6 +103,8 @@ public:
      * @return
      */
     double getDetourScore(const size_t requestId, const size_t originRequestPredecessorIdx, const size_t destinationRequestPredecessorIdx);
+
+    BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
 
     SAEVKeyPoint& getOrigin(const size_t requestId) { return _route.at(requestId * 2);}
     SAEVKeyPoint& getDestination(const size_t requestId) { return _route.at(requestId * 2 + 1);}

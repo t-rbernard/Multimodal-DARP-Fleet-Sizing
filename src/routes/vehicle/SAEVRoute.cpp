@@ -5,6 +5,7 @@
 #include <queue>
 #include <iostream>
 #include "SAEVRoute.h"
+#include "BestInsertionQueue.h"
 
 #ifdef DEBUG_TRANSIT_PRECOMPUTE
 #include <iostream>
@@ -369,5 +370,39 @@ void SAEVRoute::finalizeRequestInsertion(const size_t requestId) {
         currentKeyPoint->setCurrentOccupation(currentKeyPoint->getCurrentOccupation() + requestWeight);
         currentKeyPoint = currentKeyPoint->getSuccessor();
     }
+}
+
+/**
+ * Initializes a BestInsertionQueue to guide the best insertion heuristic
+ * @param requestId
+ * @param vehicleId
+ * @return
+ */
+BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t vehicleId) {
+    BestInsertionQueue bestInsertionQueue(requestId, vehicleId, _nbRequest^2);
+
+    //Init variables used during iteration
+    double score;
+    size_t originNodeIndex;
+    size_t destinationNodeIndex;
+    SAEVKeyPoint const* originKeyPoint = &getOriginDepot(vehicleId);
+    SAEVKeyPoint const* destinationKeyPoint = originKeyPoint;
+
+    //iterate over possible origin/destination pairs for the given vehicle
+    while(originKeyPoint->getSuccessor() != nullptr) {
+        originNodeIndex = originKeyPoint->getNodeIndex();
+        while(destinationKeyPoint->getSuccessor() != nullptr) {
+            destinationNodeIndex = destinationKeyPoint->getNodeIndex();
+            score = getDetourScore(requestId, originNodeIndex, destinationNodeIndex);
+            bestInsertionQueue.emplace(originNodeIndex, destinationNodeIndex,score);
+            destinationKeyPoint = destinationKeyPoint->getSuccessor();
+        }
+
+        //Iterate over possible origins and reset destination to being the same point as the origin
+        originKeyPoint = originKeyPoint->getSuccessor();
+        destinationKeyPoint = originKeyPoint;
+    }
+
+    return bestInsertionQueue;
 }
 

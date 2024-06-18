@@ -72,6 +72,39 @@ add_executable(Constraint_Propag_DEB
         "../src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
 )
 
+add_executable(BestInsertionHeuristic_DEB
+        src/BestInsertionHeuristicDebug.cpp
+        ../src/TimeWindow.cpp
+        ../src/TimeWindow.h
+        ../src/instance/graph/Node.cpp
+        ../src/instance/graph/Node.h
+        ../src/instance/graph/Edge.cpp
+        ../src/instance/graph/Edge.h
+        ../src/instance/graph/Graph.cpp
+        ../src/instance/graph/Graph.h
+        ../src/instance/graph/Line.cpp
+        ../src/instance/graph/Line.h
+        ../src/instance/requests/Request.cpp
+        ../src/instance/requests/Request.h
+        ../src/routes/vehicle/SAEVRoute.cpp
+        ../src/routes/vehicle/SAEVRoute.h
+        ../src/routes/vehicle/propagation/SAEVRouteChange.cpp
+        ../src/routes/vehicle/propagation/SAEVRouteChange.h
+        ../src/routes/vehicle/propagation/SAEVRouteChangelist.cpp
+        ../src/routes/vehicle/propagation/SAEVRouteChangelist.h
+        ../src/routes/vehicle/SAEVKeyPoint.cpp
+        ../src/routes/vehicle/SAEVKeyPoint.h
+        ../src/routes/KeyPoint.cpp
+        ../src/routes/KeyPoint.h
+        ../src/routes/RequestKeyPoint.cpp
+        ../src/routes/RequestKeyPoint.h
+        ../src/routes/RequestRoute.cpp
+        ../src/routes/RequestRoute.h
+        ../src/routes/vehicle/BestRequestInsertion.h
+        ../src/routes/vehicle/BestInsertionQueue.h
+)
+
 target_link_libraries(Line_UT gtest gtest_main)
 target_link_libraries(Transit_Preprocess_DEB gtest gtest_main)
 target_link_libraries(Constraint_Propag_DEB gtest gtest_main)
+target_link_libraries(BestInsertionHeuristic_DEB gtest gtest_main)
