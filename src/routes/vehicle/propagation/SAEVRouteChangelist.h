@@ -15,6 +15,16 @@
  * To allow comparison and ordering between multiple insertions if necessary, it also memorizes a score associated with this constraint propagation (lower is better)
  */
 class SAEVRouteChangelist {
+public:
+    enum class InsertionStatus{
+        SUCCESS,
+        FAILURE_PRECONDITION_TW,
+        FAILURE_PRECONDITION_WEIGHT,//To check if you need to remove a request, check status > FAILURE_PRECONDITION_WEIGHT
+        FAILURE_MIN,
+        FAILURE_MAX,
+        FAILURE_DELTA_MIN,
+        FAILURE_DELTA_MAX
+    };
 private:
     SAEVRoute * const _routePtr;
     const size_t _requestId;
