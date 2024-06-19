@@ -109,7 +109,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPred
     do {
         if(currentKP->getCurrentOccupation() + request->getWeight() > SAEVehicle::getCapacity()) {
             DEBUG_MSG("WEIGHT VIOLATION : request weight = " + std::to_string(request->getWeight()) + " incompatible KP = " + currentKP->to_string());
-            return SAEVRouteChangelist(this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
+            return SAEVRouteChangelist(this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP, SAEVRouteChangelist::InsertionStatus::FAILURE_PRECONDITION_WEIGHT);
         }
         currentKP = currentKP->getSuccessor();
     } while (currentKP != destinationSuccessor && currentKP != nullptr);
@@ -121,7 +121,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPred
         return insertRequestWithPropagation(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
     } else {
         DEBUG_MSG("TW VIOLATION on neighbour KPs");
-        return SAEVRouteChangelist(this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
+        return SAEVRouteChangelist(this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP, SAEVRouteChangelist::InsertionStatus::FAILURE_PRECONDITION_TW);
     }
 }
 
@@ -175,7 +175,7 @@ SAEVRoute::doNeighbouringTWChecks(const size_t requestId, const size_t originNod
 SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP,
                                                             SAEVKeyPoint &destinationRequestPredecessorKP) {
     //Init changelist
-    SAEVRouteChangelist changelist{this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP};
+    SAEVRouteChangelist changelist{this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP, SAEVRouteChangelist::InsertionStatus::FAILURE_MIN};
     //Properly insert the request to facilitate constraint propagation
     insertRequest(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
 
@@ -214,6 +214,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                 if (oldValue < newValue) {
                     if (newValue > successorKP->getMaxTw()) {
                         DEBUG_MSG("\tMIN TW VIOLATION");
+                        changelist.setStatus(SAEVRouteChangelist::InsertionStatus::FAILURE_MIN);
                         return changelist;
                     }
                     DEBUG_MSG("\tMIN Successeur KP=" + successorKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
@@ -230,6 +231,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             if(!keyPoint->isDepot() && keyPoint->isDestination() && oldValue < newValue) {
                 if (newValue > counterpartKP->getMaxTw()) {
                     DEBUG_MSG("\tMIN DELTA Destination->Origine");
+                    changelist.setStatus(SAEVRouteChangelist::InsertionStatus::FAILURE_DELTA_MIN);
                     return changelist;
                 }
                 DEBUG_MSG("\tMIN Counterpart KP=" + counterpartKP->to_string() + "\n\tModif Min=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
@@ -248,6 +250,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                 if(oldValue > newValue) {
                     if (predecessorKP->getMinTw() > newValue) {
                         DEBUG_MSG("\tMAX TW VIOLATION");
+                        changelist.setStatus(SAEVRouteChangelist::InsertionStatus::FAILURE_MAX);
                         return changelist;
                     }
                     DEBUG_MSG("\tMAX Predecessor KP=" + predecessorKP->to_string() + "\n\tModif Max=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
@@ -264,6 +267,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
             if(!keyPoint->isDepot() && keyPoint->isOrigin() && oldValue > newValue) {
                 if (counterpartKP->getMinTw() > newValue) {
                     DEBUG_MSG("\tMAX DELTA Origine->Destination");
+                    changelist.setStatus(SAEVRouteChangelist::InsertionStatus::FAILURE_DELTA_MAX);
                     return changelist;
                 }
                 changelist.emplace_back(*counterpartKP, Max, oldValue - newValue);

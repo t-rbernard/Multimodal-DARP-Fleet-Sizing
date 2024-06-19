@@ -18,12 +18,13 @@ class SAEVRouteChangelist {
 public:
     enum class InsertionStatus{
         SUCCESS,
-        FAILURE_PRECONDITION_TW,
-        FAILURE_PRECONDITION_WEIGHT,//To check if you need to remove a request, check status > FAILURE_PRECONDITION_WEIGHT
         FAILURE_MIN,
         FAILURE_MAX,
         FAILURE_DELTA_MIN,
-        FAILURE_DELTA_MAX
+        FAILURE_DELTA_MAX,
+        FAILURE_PRECONDITION_TW, //To check if you need to remove a request, check status > FAILURE_PRECONDITION_WEIGHT
+        FAILURE_PRECONDITION_WEIGHT,
+        CHANGELIST_REVERTED
     };
 private:
     SAEVRoute * const _routePtr;
@@ -33,6 +34,9 @@ private:
     std::vector<SAEVRouteChange> _changelist{};
     double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
 
+    InsertionStatus _status; //Status on changelist creation
+    InsertionStatus _currentStatus; //Updated status after applying/reverting changelist
+
 public:
     /**
      * Initializes a change list to memorize every iterative modification made during constraint propagation
@@ -41,8 +45,8 @@ public:
      * @param originPredecessorKP The index of the request our origin will be inserted after
      * @param destinationPredecessorKP The index of the request our destination will be inserted after
      */
-    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, SAEVKeyPoint &originPredecessorKP, SAEVKeyPoint &destinationPredecessorKP)
-    : _routePtr(routePtr), _requestId(requestId), _originPredecessorKP(originPredecessorKP), _destinationPredecessorKP(destinationPredecessorKP) {};
+    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, SAEVKeyPoint &originPredecessorKP, SAEVKeyPoint &destinationPredecessorKP, InsertionStatus status)
+    : _routePtr(routePtr), _requestId(requestId), _originPredecessorKP(originPredecessorKP), _destinationPredecessorKP(destinationPredecessorKP), _status(status), _currentStatus(status) {};
 
     /**
      * @return A pointer to the route this change list applies/reverts changes to
@@ -59,10 +63,21 @@ public:
 
     [[nodiscard]] const SAEVKeyPoint &getDestinationPredecessorKP() const;
 
+    [[nodiscard]] InsertionStatus getStatus() const;
+    void setStatus(InsertionStatus status);
+
+    [[nodiscard]] InsertionStatus getCurrentStatus() const;
+    void setCurrentStatus(InsertionStatus currentStatus);
+
     /**
      * @return A score value associated with this changelist. A lower score is better
      */
     [[nodiscard]] double getScore() const;
+
+    /**
+     * @return True iff the current state of the route wrt change list requires to remove undo an insertion
+     */
+    [[nodiscard]] bool shouldUndoInsertion() const;
 
     /**
      * Updates this change list's score value if needed (namely, after the whole propagation has been done)
@@ -76,14 +91,15 @@ public:
 
     /**
      * Inserts the request associated to this changelist to the given route and iteratively applies every change memorized in this changelist.
+     * Changelist status is updated to reflect the original value associated with the changes
      * Aside from OOB exceptions, no checks are done in this method
      */
-    void applyChanges() const;
+    void applyChanges();
     /**
      * removes the request associated to this changelist from the given route and iteratively reverts every change memorized in this changelist.
      * Aside from OOB exceptions, no checks are done in this method
      */
-    void revertChanges() const;
+    void revertChanges();
 
     /**
      * @param rhs the value *this* will be compared to

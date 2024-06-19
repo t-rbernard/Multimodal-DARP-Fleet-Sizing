@@ -20,20 +20,24 @@ void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, int value)
     _changelist.emplace_back(kp, bound, value);
 }
 
-void SAEVRouteChangelist::applyChanges() const {
-    _routePtr->insertRequest(_requestId, _originPredecessorKP, _destinationPredecessorKP);
+void SAEVRouteChangelist::applyChanges() {
+    if(_status < InsertionStatus::FAILURE_PRECONDITION_TW) {
+        _routePtr->insertRequest(_requestId, _originPredecessorKP, _destinationPredecessorKP);
+    }
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
     }
-    //TODO: update key point weights here ? (only if changelist.size > 0 & score < +Inf)
+    _currentStatus = _status;
 }
 
-void SAEVRouteChangelist::revertChanges() const {
-    _routePtr->removeRequest(_requestId);
+void SAEVRouteChangelist::revertChanges() {
+    if(_status < InsertionStatus::FAILURE_PRECONDITION_TW) {
+        _routePtr->removeRequest(_requestId);
+    }
     for(SAEVRouteChange change : _changelist) {
         change.revertChange();
     }
-    //TODO: update key point weights here ? (only if changelist.size > 0 & score < +Inf)
+    _currentStatus = InsertionStatus::CHANGELIST_REVERTED;
 }
 
 size_t SAEVRouteChangelist::getRequestId() const {
@@ -66,4 +70,24 @@ bool SAEVRouteChangelist::operator<(const SAEVRouteChangelist &rhs) const {
 
 SAEVRoute * SAEVRouteChangelist::getRoutePtr() const {
     return _routePtr;
+}
+
+SAEVRouteChangelist::InsertionStatus SAEVRouteChangelist::getStatus() const {
+    return _status;
+}
+
+SAEVRouteChangelist::InsertionStatus SAEVRouteChangelist::getCurrentStatus() const {
+    return _currentStatus;
+}
+
+bool SAEVRouteChangelist::shouldUndoInsertion() const {
+    return _currentStatus > InsertionStatus::FAILURE_DELTA_MAX;
+}
+
+void SAEVRouteChangelist::setStatus(SAEVRouteChangelist::InsertionStatus status) {
+    _status = status;
+}
+
+void SAEVRouteChangelist::setCurrentStatus(SAEVRouteChangelist::InsertionStatus currentStatus) {
+    _currentStatus = currentStatus;
 }
