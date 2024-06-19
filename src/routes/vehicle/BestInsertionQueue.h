@@ -9,7 +9,7 @@
 #include <queue>
 #include "BestRequestInsertion.h"
 
-class BestInsertionQueue : public std::priority_queue<BestRequestInsertion, std::vector<BestRequestInsertion>> {
+class BestInsertionQueue : public std::priority_queue<BestRequestInsertion, std::vector<BestRequestInsertion>, std::greater<>> {
 private:
     size_t _requestId{std::numeric_limits<size_t>::max()};
     size_t _vehicleId{std::numeric_limits<size_t>::max()};
