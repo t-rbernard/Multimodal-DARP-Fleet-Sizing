@@ -399,24 +399,24 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
 }
 
 void SAEVRoute::addRequestWeightToRoute(size_t requestId) {
-    SAEVKeyPoint& currentKP = getOrigin(requestId);
-    int requestWeight = currentKP.getRequest()->getWeight();
-    currentKP.setCurrentOccupation(currentKP.getPredecessor()->getCurrentOccupation() + requestWeight); //O.Weight = Prec(O).Weight + R.Weight (request enters the vehicle=)
+    SAEVKeyPoint* currentKP = &getOrigin(requestId);
+    int requestWeight = currentKP->getRequest()->getWeight();
+    currentKP->setCurrentOccupation(currentKP->getPredecessor()->getCurrentOccupation() + requestWeight); //O.Weight = Prec(O).Weight + R.Weight (request enters the vehicle=)
     do {
-        currentKP = *currentKP.getSuccessor();
-        currentKP.setCurrentOccupation(currentKP.getCurrentOccupation() + requestWeight);
-    } while (currentKP != getDestination(requestId));
-    currentKP.setCurrentOccupation(currentKP.getPredecessor()->getCurrentOccupation() - requestWeight); //D.Weight = Prec(D).Weight - R.Weight (request leaves the vehicle)
+        currentKP = currentKP->getSuccessor();
+        currentKP->setCurrentOccupation(currentKP->getCurrentOccupation() + requestWeight);
+    } while (currentKP != &getDestination(requestId));
+    currentKP->setCurrentOccupation(currentKP->getPredecessor()->getCurrentOccupation() - requestWeight); //D.Weight = Prec(D).Weight - R.Weight (request leaves the vehicle)
 }
 
 void SAEVRoute::removeRequestWeightFromRoute(size_t requestId) {
-    SAEVKeyPoint& currentKP = getOrigin(requestId);
-    int requestWeight = currentKP.getRequest()->getWeight();
-    currentKP.setCurrentOccupation(0); //reset request weight on origin KP
+    SAEVKeyPoint* currentKP = &getOrigin(requestId);
+    int requestWeight = currentKP->getRequest()->getWeight();
+    currentKP->setCurrentOccupation(0); //reset request weight on origin KP
     do {
-        currentKP = *currentKP.getSuccessor();
-        currentKP.setCurrentOccupation(currentKP.getCurrentOccupation() - requestWeight);
-    } while (currentKP != getDestination(requestId));
-    currentKP.setCurrentOccupation(0); //reset request weight on destination KP
+        currentKP = currentKP->getSuccessor();
+        currentKP->setCurrentOccupation(currentKP->getCurrentOccupation() - requestWeight);
+    } while (currentKP != &getDestination(requestId));
+    currentKP->setCurrentOccupation(0); //reset request weight on destination KP
 }
 
