@@ -21,7 +21,7 @@ void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, int value)
 }
 
 void SAEVRouteChangelist::applyChanges() const {
-    _routePtr->insertRequest(_requestId, _originPredecessorIdx, _destinationPredecessorIdx);
+    _routePtr->insertRequest(_requestId, _originPredecessorKP, _destinationPredecessorKP);
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
     }
@@ -40,12 +40,12 @@ size_t SAEVRouteChangelist::getRequestId() const {
     return _requestId;
 }
 
-int SAEVRouteChangelist::getOriginPredecessorIdx() const {
-    return _originPredecessorIdx;
+const SAEVKeyPoint &SAEVRouteChangelist::getOriginPredecessorKP() const {
+    return _originPredecessorKP;
 }
 
-int SAEVRouteChangelist::getDestinationPredecessorIdx() const {
-    return _destinationPredecessorIdx;
+const SAEVKeyPoint &SAEVRouteChangelist::getDestinationPredecessorKP() const {
+    return _destinationPredecessorKP;
 }
 
 double SAEVRouteChangelist::getScore() const {

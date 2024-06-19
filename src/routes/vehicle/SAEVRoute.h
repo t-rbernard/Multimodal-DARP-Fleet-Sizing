@@ -35,10 +35,10 @@ public:
     /**
      * Raw request route insertion method. Public for debug purposes, but should effectively never be called by an outside member
      * @param requestId index of the request we want to insert in the route
-     * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede the origin of the request we want to insert
-     * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
+     * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the origin of the request we want to insert
+     * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
      */
-    void insertRequest(size_t requestId, size_t originRequestPredecessorIdx, size_t destinationRequestPredecessorIdx);
+    void insertRequest(size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
 
     /**
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
@@ -52,11 +52,11 @@ public:
      * Then we propagate our min/max bounds, iteratively rippling through every modification induced by min/max neighbour constraints or delta constraints. \n
      * ⚠️ In case of infeasibility, tryAdd automatically reverts changes and the change list will be effectively empty, but otherwise it's the caller's responsibility to revert changes if necessary
      * @param requestId Identifier/index in the instance's request vector for the request we wish to insert
-     * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
-     * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
+     * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
+     * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist tryAddRequest(const size_t requestId, const size_t originRequestPredecessorIdx, const size_t destinationRequestPredecessorIdx);
+    SAEVRouteChangelist tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
 
     /**
      * Call this function whenever a request insertion is considered final (Insertion success + satisfied with result)
@@ -88,21 +88,21 @@ public:
      * If the bounds become infeasible (min > max), then the propagation stops with a changelist with score= +Infinity and changes will be immediately reverted.
      * Otherwise, it's the responsibility of this method's callers to revert changes if wanted (or to defer this responsibility to its caller)
      * @param requestId Identifier/index in the instance's request vector for the request we wish to insert
-     * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
-     * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
+     * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
+     * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist insertRequestWithPropagation(const size_t requestId, const size_t originRequestPredecessorIdx, const size_t destinationRequestPredecessorIdx);
+    SAEVRouteChangelist insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
 
     /**
      * Returns a score value equivalent to the detour implied by insertion of a request after the two given key point indexes.
      * The specific case of origin/destination being inserted one after another is taken into account
      * @param requestId Identifier/index in the instance's request vector for the request we wish to insert
-     * @param originRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
-     * @param destinationRequestPredecessorIdx Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
+     * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
+     * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return
      */
-    double getDetourScore(const size_t requestId, const size_t originRequestPredecessorIdx, const size_t destinationRequestPredecessorIdx);
+    double getDetourScore(const size_t requestId, const SAEVKeyPoint &originRequestPredecessorKP, const SAEVKeyPoint &destinationRequestPredecessorKP);
 
     BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
 

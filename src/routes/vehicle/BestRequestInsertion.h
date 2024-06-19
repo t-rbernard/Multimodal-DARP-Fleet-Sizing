@@ -13,8 +13,8 @@
 
 class BestRequestInsertion {
 private:
-    size_t _originInsertionIndex{std::numeric_limits<size_t>::max()};
-    size_t _destinationInsertionIndex{std::numeric_limits<size_t>::max()};
+    const SAEVKeyPoint* _originInsertionKP;
+    const SAEVKeyPoint* _destinationInsertionKP;
     double _score{ std::numeric_limits<double>::max() };
 
 public:
@@ -24,28 +24,28 @@ public:
     BestRequestInsertion() {};
     /**
      * Constructs a BestRequestInsertion object, containing Origin/Destination insertion indexes and the score associated
-     * @param originInsertionIndex Index of insertion for the origin of the request in the route
-     * @param destinationInsertionIndex Index of insertion for the destination of the request in the route
+     * @param originInsertionKP Index of insertion for the origin of the request in the route
+     * @param destinationInsertionKP Index of insertion for the destination of the request in the route
      * @param score
      */
-    BestRequestInsertion(size_t originInsertionIndex, size_t destinationInsertionIndex, double score)
-            : _originInsertionIndex(originInsertionIndex), _destinationInsertionIndex(destinationInsertionIndex),
+    BestRequestInsertion(const SAEVKeyPoint *originInsertionKP, const SAEVKeyPoint *destinationInsertionKP, double score)
+            : _originInsertionKP(originInsertionKP), _destinationInsertionKP(destinationInsertionKP),
               _score(score) {};
 
-    [[nodiscard]] size_t getOriginInsertionIndex() const {
-        return _originInsertionIndex;
+    [[nodiscard]] const SAEVKeyPoint *getOriginInsertionKp() const {
+        return _originInsertionKP;
     }
 
-    void setOriginInsertionIndex(size_t originInsertionIndex) {
-        BestRequestInsertion::_originInsertionIndex = originInsertionIndex;
+    void setOriginInsertionKp(SAEVKeyPoint *originInsertionKp) {
+        _originInsertionKP = originInsertionKp;
     }
 
-    [[nodiscard]] size_t getDestinationInsertionIndex() const {
-        return _destinationInsertionIndex;
+    [[nodiscard]] const SAEVKeyPoint *getDestinationInsertionKp() const {
+        return _destinationInsertionKP;
     }
 
-    void setDestinationInsertionIndex(size_t destinationInsertionIndex) {
-        BestRequestInsertion::_destinationInsertionIndex = destinationInsertionIndex;
+    void setDestinationInsertionKp(SAEVKeyPoint *destinationInsertionKp) {
+        _destinationInsertionKP = destinationInsertionKp;
     }
 
     [[nodiscard]] double getScore() const {
