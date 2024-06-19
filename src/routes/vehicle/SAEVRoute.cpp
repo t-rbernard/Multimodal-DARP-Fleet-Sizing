@@ -270,8 +270,6 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
                 counterpartKP->setMaxTw(newValue);
                 boundPropagationQueue.emplace(Max, counterpartKP);
                 DEBUG_MSG("\tMAX Destination KP=" + counterpartKP->to_string() + "\n\tModif Max=" + std::to_string(oldValue) + "->" + std::to_string(newValue));
-            } else if(!keyPoint->isDepot() && keyPoint->isOrigin()) {
-//                DEBUG_MSG("Pas de changement pour Max du noeud " + counterpartKP->to_string() + " via son origine " + keyPoint->to_string());
             }
         }
     }
