@@ -67,11 +67,16 @@ void SAEVRoute::insertRequest(size_t requestId, SAEVKeyPoint &originRequestPrede
         originRequestPredecessorKP.setSuccessor(&originKp);
         originSuccKp->setPredecessor(&destinationKp);
     }
+    //Once insertion is done, update weights on the route
+    addRequestWeightToRoute(requestId);
 }
 
-void SAEVRoute::removeRequest(int requestId) {
-    SAEVKeyPoint& originKp = _route.at(requestId);
-    SAEVKeyPoint& destinationKp = _route.at(requestId + 1);
+void SAEVRoute::removeRequest(size_t requestId) {
+    //Before undoing the insertion, update weights on the route
+    addRequestWeightToRoute(requestId);
+
+    SAEVKeyPoint& originKp = getOrigin(requestId);
+    SAEVKeyPoint& destinationKp = getDestination(requestId);
 
     //get predecessor and successor for request
     SAEVKeyPoint* originPredecessor = originKp.getPredecessor();
@@ -92,8 +97,6 @@ void SAEVRoute::removeRequest(int requestId) {
     originKp.setMaxTw(_requestList->at(requestId).getMaxDepartureTw());
     destinationKp.setMinTw(_requestList->at(requestId).getMinArrivalTw());
     destinationKp.setMaxTw(_requestList->at(requestId).getMaxArrivalTw());
-    originKp.setCurrentOccupation(0);
-    destinationKp.setCurrentOccupation(0);
 }
 
 SAEVRouteChangelist
@@ -395,5 +398,27 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
     }
 
     return bestInsertionQueue;
+}
+
+void SAEVRoute::addRequestWeightToRoute(size_t requestId) {
+    SAEVKeyPoint& currentKP = getOrigin(requestId);
+    int requestWeight = currentKP.getRequest()->getWeight();
+    currentKP.setCurrentOccupation(currentKP.getPredecessor()->getCurrentOccupation() + requestWeight); //O.Weight = Prec(O).Weight + R.Weight (request enters the vehicle=)
+    do {
+        currentKP = *currentKP.getSuccessor();
+        currentKP.setCurrentOccupation(currentKP.getCurrentOccupation() + requestWeight);
+    } while (currentKP != getDestination(requestId));
+    currentKP.setCurrentOccupation(currentKP.getPredecessor()->getCurrentOccupation() - requestWeight); //D.Weight = Prec(D).Weight - R.Weight (request leaves the vehicle)
+}
+
+void SAEVRoute::removeRequestWeightFromRoute(size_t requestId) {
+    SAEVKeyPoint& currentKP = getOrigin(requestId);
+    int requestWeight = currentKP.getRequest()->getWeight();
+    currentKP.setCurrentOccupation(0); //reset request weight on origin KP
+    do {
+        currentKP = *currentKP.getSuccessor();
+        currentKP.setCurrentOccupation(currentKP.getCurrentOccupation() - requestWeight);
+    } while (currentKP != getDestination(requestId));
+    currentKP.setCurrentOccupation(0); //reset request weight on destination KP
 }
 

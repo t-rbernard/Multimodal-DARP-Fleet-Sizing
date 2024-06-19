@@ -44,7 +44,18 @@ public:
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
      * @param requestId index of the request we want to remove from the route
      */
-    void removeRequest(int requestId);
+    void removeRequest(size_t requestId);
+
+    /**
+     * Updates weight in-between request's Origin/Destination (both included) to account for the given request's weight
+     * @param requestId ID of the request that serves as basis for iteration and weight to add
+     */
+    void addRequestWeightToRoute(size_t requestId);
+    /**
+     * Resets current weight to 0 on the request Origin/Destination key points and decreases weight on the nodes in-between by the request's weight
+     * @param requestId ID of the request that serves as basis for iteration and weight to remove
+     */
+    void removeRequestWeightFromRoute(size_t requestId);
 
     /**
      * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
