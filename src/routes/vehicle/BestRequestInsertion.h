@@ -59,6 +59,12 @@ public:
     std::partial_ordering operator<=>(const BestRequestInsertion &rhs) const {
         return _score <=> rhs._score;
     }
+
+    std::string to_string() {
+        return "Insertion points (Origin:" + _originInsertionKP->to_string()
+        + "; Destination:" + _destinationInsertionKP->to_string()
+        + ") score = " + std::to_string(_score);
+    }
 };
 
 
