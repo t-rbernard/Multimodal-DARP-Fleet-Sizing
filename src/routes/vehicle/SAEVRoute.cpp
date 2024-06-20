@@ -358,7 +358,7 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
     return true;
 }
 
-/**
+/** TODO: move to BestInsertionQueue class with a route parameter ?
  * Initializes a BestInsertionQueue to guide the best insertion heuristic
  * @param requestId
  * @param vehicleId
@@ -378,6 +378,39 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
             score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
             bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
             destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
+        }
+
+        //Iterate over possible origins and reset destination to being the same point as the origin
+        originInsertionKeyPoint = originInsertionKeyPoint->getSuccessor();
+        destinationInsertionKeyPoint = originInsertionKeyPoint;
+    }
+
+    return bestInsertionQueue;
+}
+
+/** TODO: move to BestInsertionQueue class with a route parameter ?
+ * Initializes a BestInsertionQueue to guide the best insertion heuristic while checking neighbouring TW checks
+ * @param requestId
+ * @param vehicleId
+ * @return
+ */
+ BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId) {
+    BestInsertionQueue bestInsertionQueue(requestId, vehicleId, _nbRequest^2);
+
+    //Init variables used during iteration
+    double score;
+    SAEVKeyPoint * originInsertionKeyPoint = &getOriginDepot(vehicleId);
+    SAEVKeyPoint * destinationInsertionKeyPoint = originInsertionKeyPoint;
+
+    //iterate over possible origin/destination pairs for the given vehicle
+    while(originInsertionKeyPoint->getSuccessor() != nullptr) {
+        while(destinationInsertionKeyPoint->getSuccessor() != nullptr) {
+            if(doNeighbouringTWChecks(requestId, getRequestOriginIdx(requestId), getRequestDestinationIdx(requestId),
+                                      originInsertionKeyPoint, destinationInsertionKeyPoint)) {
+                score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
+                bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
+                destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
+            }
         }
 
         //Iterate over possible origins and reset destination to being the same point as the origin

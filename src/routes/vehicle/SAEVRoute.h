@@ -109,6 +109,7 @@ public:
     double getDetourScore(const size_t requestId, const SAEVKeyPoint &originRequestPredecessorKP, const SAEVKeyPoint &destinationRequestPredecessorKP);
 
     BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
+    BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);
 
     SAEVKeyPoint& getOrigin(const size_t requestId) { return _route.at(requestId * 2);}
     SAEVKeyPoint& getDestination(const size_t requestId) { return _route.at(requestId * 2 + 1);}
