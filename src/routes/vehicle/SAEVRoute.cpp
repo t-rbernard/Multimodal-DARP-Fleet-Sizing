@@ -369,20 +369,20 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
 
     //Init variables used during iteration
     double score;
-    SAEVKeyPoint const* originKeyPoint = &getOriginDepot(vehicleId);
-    SAEVKeyPoint const* destinationKeyPoint = originKeyPoint;
+    SAEVKeyPoint * originInsertionKeyPoint = &getOriginDepot(vehicleId);
+    SAEVKeyPoint * destinationInsertionKeyPoint = originInsertionKeyPoint;
 
     //iterate over possible origin/destination pairs for the given vehicle
-    while(originKeyPoint->getSuccessor() != nullptr) {
-        while(destinationKeyPoint->getSuccessor() != nullptr) {
-            score = getDetourScore(requestId, *originKeyPoint, *destinationKeyPoint);
-            bestInsertionQueue.emplace(originKeyPoint, destinationKeyPoint, score);
-            destinationKeyPoint = destinationKeyPoint->getSuccessor();
+    while(originInsertionKeyPoint->getSuccessor() != nullptr) {
+        while(destinationInsertionKeyPoint->getSuccessor() != nullptr) {
+            score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
+            bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
+            destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
         }
 
         //Iterate over possible origins and reset destination to being the same point as the origin
-        originKeyPoint = originKeyPoint->getSuccessor();
-        destinationKeyPoint = originKeyPoint;
+        originInsertionKeyPoint = originInsertionKeyPoint->getSuccessor();
+        destinationInsertionKeyPoint = originInsertionKeyPoint;
     }
 
     return bestInsertionQueue;

@@ -13,8 +13,8 @@
 
 class BestRequestInsertion {
 private:
-    const SAEVKeyPoint* _originInsertionKP;
-    const SAEVKeyPoint* _destinationInsertionKP;
+    SAEVKeyPoint* _originInsertionKP;
+    SAEVKeyPoint* _destinationInsertionKP;
     double _score{ std::numeric_limits<double>::max() };
 
 public:
@@ -28,11 +28,11 @@ public:
      * @param destinationInsertionKP Index of insertion for the destination of the request in the route
      * @param score
      */
-    BestRequestInsertion(const SAEVKeyPoint *originInsertionKP, const SAEVKeyPoint *destinationInsertionKP, double score)
+    BestRequestInsertion(SAEVKeyPoint *originInsertionKP, SAEVKeyPoint *destinationInsertionKP, double score)
             : _originInsertionKP(originInsertionKP), _destinationInsertionKP(destinationInsertionKP),
               _score(score) {};
 
-    [[nodiscard]] const SAEVKeyPoint *getOriginInsertionKp() const {
+    [[nodiscard]] SAEVKeyPoint *getOriginInsertionKp() {
         return _originInsertionKP;
     }
 
@@ -40,7 +40,7 @@ public:
         _originInsertionKP = originInsertionKp;
     }
 
-    [[nodiscard]] const SAEVKeyPoint *getDestinationInsertionKp() const {
+    [[nodiscard]] SAEVKeyPoint *getDestinationInsertionKp() {
         return _destinationInsertionKP;
     }
 
