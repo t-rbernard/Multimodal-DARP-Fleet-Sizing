@@ -18,6 +18,7 @@ private:
     size_t _nbRequest;
     const Graph* _graph;
     const std::vector<Request>* _requestList;
+    size_t _lastActiveVehicleId{0};
 public:
     SAEVRoute() = default;
     /**
@@ -122,6 +123,9 @@ public:
 
     [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2;}
     [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2 + 1;}
+
+    [[nodiscard]] size_t getLastActiveVehicleId() const { return _lastActiveVehicleId; }
+    void setLastActiveVehicleId(size_t lastActiveVehicleId) { _lastActiveVehicleId = lastActiveVehicleId; }
 
     /**
      * Verifies that time windows have been properly propagated for a given vehicle's route
