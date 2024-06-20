@@ -48,11 +48,13 @@ public:
 
     /**
      * Updates weight in-between request's Origin/Destination (both included) to account for the given request's weight
+     * ⚠️ Execute this function *after* adding the request to the route, as it assumes the request is part of the route
      * @param requestId ID of the request that serves as basis for iteration and weight to add
      */
     void addRequestWeightToRoute(size_t requestId);
     /**
      * Resets current weight to 0 on the request Origin/Destination key points and decreases weight on the nodes in-between by the request's weight
+     * ⚠️ Execute this function *before* removing the request from the route, as it assumes the request is still part of the route
      * @param requestId ID of the request that serves as basis for iteration and weight to remove
      */
     void removeRequestWeightFromRoute(size_t requestId);
