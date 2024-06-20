@@ -16,7 +16,7 @@ class BestInsertionHeuristic {
      * @param route the route structure in which the request will be inserted
      * @return ID of the vehicle in which the request has been
      */
-    static size_t doRouteBestInsertion(size_t requestId, SAEVRoute route);
+    static size_t doBestRequestInsertionForRoute(size_t requestId, SAEVRoute route);
     /**
      * Iteratively tests best insertions wrt scoring function (detour) in the given vehicle and route
      * @param requestId ID of the request to insert in the vehicle
