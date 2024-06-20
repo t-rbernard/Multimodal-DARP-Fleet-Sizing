@@ -73,7 +73,7 @@ void SAEVRoute::insertRequest(size_t requestId, SAEVKeyPoint &originRequestPrede
 
 void SAEVRoute::removeRequest(size_t requestId) {
     //Before undoing the insertion, update weights on the route
-    addRequestWeightToRoute(requestId);
+    removeRequestWeightFromRoute(requestId);
 
     SAEVKeyPoint& originKp = getOrigin(requestId);
     SAEVKeyPoint& destinationKp = getDestination(requestId);
