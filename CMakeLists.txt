@@ -113,6 +113,8 @@ add_executable(GraphGeneration
         "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         "src/utils/Instance Generation/Graph/GraphGenerator.h"
         "src/utils/Instance Generation/Graph/PTLineGenerationParameters.h"
+        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
+        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
