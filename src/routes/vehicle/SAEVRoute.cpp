@@ -358,20 +358,6 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
     return true;
 }
 
-void SAEVRoute::finalizeRequestInsertion(const size_t requestId) {
-    SAEVKeyPoint * currentKeyPoint = &getOrigin(requestId);
-    SAEVKeyPoint const * counterpartKP = currentKeyPoint->getCounterpart();
-    int requestWeight = counterpartKP->getRequest()->getWeight();
-    //Init weight value for Origin KP
-    currentKeyPoint->setCurrentOccupation(currentKeyPoint->getPredecessor()->getCurrentOccupation() + requestWeight);
-    //Iterate over KPs in-between Origin and Destination
-    currentKeyPoint = currentKeyPoint->getSuccessor();
-    while(currentKeyPoint != counterpartKP) {
-        currentKeyPoint->setCurrentOccupation(currentKeyPoint->getCurrentOccupation() + requestWeight);
-        currentKeyPoint = currentKeyPoint->getSuccessor();
-    }
-}
-
 /**
  * Initializes a BestInsertionQueue to guide the best insertion heuristic
  * @param requestId

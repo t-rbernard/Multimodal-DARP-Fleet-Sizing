@@ -72,15 +72,6 @@ public:
     SAEVRouteChangelist tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
 
     /**
-     * Call this function whenever a request insertion is considered final (Insertion success + satisfied with result)
-     * Currently only updates Key Point weights, but other post insertion processes will go here
-     * Processe(s) :
-     * 1) Update weights between the request's origin and destination in the vehicle's key points
-     * @param requestId ID of the request that was inserted
-     */
-    void finalizeRequestInsertion(const size_t requestId);
-
-    /**
      * Verifies time window constraints on our request's origin/destination's projected neighbour, aka originPredecessor/destinationPredecessor and their successor.
      * There is a special case taken into account if originPredecessor and destinationPredecessor are the same KeyPoint, since then, Origin's successor would be Destination
      * ⚠️ Weight constraints are checked separately
