@@ -40,16 +40,16 @@ add_executable(GreedyAlgorithm
         src/ShortestPath/Transit/TransitAlgorithmState.h
         src/ShortestPath/Transit/TransitShortestPathContainer.cpp
         src/ShortestPath/Transit/TransitShortestPathContainer.h
-        src/routes/RequestRoute.cpp
-        src/routes/RequestRoute.h
+        src/routes/requests/RequestRoute.cpp
+        src/routes/requests/RequestRoute.h
         src/routes/vehicle/SAEVRoute.cpp
         src/routes/vehicle/SAEVRoute.h
         src/TimeWindow.cpp
         src/TimeWindow.h
         src/routes/KeyPoint.cpp
         src/routes/KeyPoint.h
-        src/routes/RequestKeyPoint.cpp
-        src/routes/RequestKeyPoint.h
+        src/routes/requests/RequestKeyPoint.cpp
+        src/routes/requests/RequestKeyPoint.h
         src/routes/vehicle/SAEVKeyPoint.cpp
         src/routes/vehicle/SAEVKeyPoint.h
         src/instance/SAEVehicle.cpp

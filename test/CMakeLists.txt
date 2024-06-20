@@ -62,10 +62,10 @@ add_executable(Constraint_Propag_DEB
         ../src/routes/vehicle/SAEVKeyPoint.h
         ../src/routes/KeyPoint.cpp
         ../src/routes/KeyPoint.h
-        ../src/routes/RequestKeyPoint.cpp
-        ../src/routes/RequestKeyPoint.h
-        ../src/routes/RequestRoute.cpp
-        ../src/routes/RequestRoute.h
+        ../src/routes/requests/RequestKeyPoint.cpp
+        ../src/routes/requests/RequestKeyPoint.h
+        ../src/routes/requests/RequestRoute.cpp
+        ../src/routes/requests/RequestRoute.h
         "../src/utils/Instance Generation/Requests/RequestsGenerator.cpp"
         "../src/utils/Instance Generation/Requests/RequestsGenerator.h"
         "../src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
@@ -96,10 +96,10 @@ add_executable(BestInsertionHeuristic_DEB
         ../src/routes/vehicle/SAEVKeyPoint.h
         ../src/routes/KeyPoint.cpp
         ../src/routes/KeyPoint.h
-        ../src/routes/RequestKeyPoint.cpp
-        ../src/routes/RequestKeyPoint.h
-        ../src/routes/RequestRoute.cpp
-        ../src/routes/RequestRoute.h
+        ../src/routes/requests/RequestKeyPoint.cpp
+        ../src/routes/requests/RequestKeyPoint.h
+        ../src/routes/requests/RequestRoute.cpp
+        ../src/routes/requests/RequestRoute.h
         ../src/routes/vehicle/BestRequestInsertion.h
         ../src/routes/vehicle/BestInsertionQueue.h
 )

@@ -41,6 +41,6 @@ public:
     void resetKeyPoint(int routeIndex);
 };
 
-#include "../instance/requests/Request.h"
+#include "../../instance/requests/Request.h"
 
 #endif //GREEDYALGORITHM_REQUESTROUTE_H

@@ -6,9 +6,9 @@
 #define GREEDYALGORITHM_REQUESTKEYPOINT_H
 
 
-#include "KeyPoint.h"
-#include "../instance/SAEVehicle.h"
-#include "../instance/graph/LineStop.h"
+#include "../KeyPoint.h"
+#include "../../instance/SAEVehicle.h"
+#include "../../instance/graph/LineStop.h"
 
 class RequestKeyPoint : public KeyPoint {
 private:
