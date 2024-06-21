@@ -278,6 +278,7 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
         }
     }
 
+    changelist.setStatus(SAEVRouteChangelist::InsertionStatus::SUCCESS);
     changelist.setScore(getDetourScore(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP));
     return changelist;
 }
