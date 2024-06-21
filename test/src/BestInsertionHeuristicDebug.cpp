@@ -8,6 +8,7 @@
 #include "../../src/ShortestPath/Transit/TransitShortestPathPrecompute.h"
 #include "../../src/instance/Instance.h"
 #include "../../src/routes/vehicle/SAEVRoute.h"
+#include "../../src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h"
 
 TEST(BestInsertionHeuristicDebug, DebugBaseInstance) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
@@ -42,7 +43,7 @@ TEST(BestInsertionHeuristicDebug, DebugBaseInstance) {
     req0Changelist.revertChanges();
 }
 
-TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
+TEST(BestInsertionQueueDebug, DebugInstanceAlain) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "Instance_Alain_140624/";
     std::string graphDatFile = "graph2.dat";
@@ -59,22 +60,68 @@ TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
     //Vehicle 1 insertions
     BestInsertionQueue biQueue = routesContainer.getBestInsertionsQueue(0,0);
     routesContainer.tryAddRequest(0,routesContainer.getOriginDepot(0),routesContainer.getOriginDepot(0));
-    biQueue = routesContainer.getBestInsertionsQueue(1,0);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,0);
     routesContainer.tryAddRequest(1,routesContainer.getOrigin(0),routesContainer.getOrigin(0));
-    biQueue = routesContainer.getBestInsertionsQueue(2,0);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,0);
     SAEVRouteChangelist cl = routesContainer.tryAddRequest(2,routesContainer.getOrigin(1),routesContainer.getDestination(1));
-    biQueue = routesContainer.getBestInsertionsQueue(3,0);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,0);
 
     //Vehicle 2 insertions
-    biQueue = routesContainer.getBestInsertionsQueue(5,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(5,1);
     routesContainer.tryAddRequest(5,routesContainer.getOriginDepot(1),routesContainer.getOriginDepot(1));
-    biQueue = routesContainer.getBestInsertionsQueue(4,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(4,1);
     routesContainer.tryAddRequest(4,routesContainer.getOriginDepot(1),routesContainer.getDestination(5));
-    biQueue = routesContainer.getBestInsertionsQueue(3,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,1);
     routesContainer.tryAddRequest(3,routesContainer.getOriginDepot(1),routesContainer.getOrigin(4));
-    biQueue = routesContainer.getBestInsertionsQueue(0,1);
-    biQueue = routesContainer.getBestInsertionsQueue(1,1);
-    biQueue = routesContainer.getBestInsertionsQueue(2,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(0,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,1);
+    biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,1);
+}
+
+TEST(BestInsertionPerVehicleHeuristicDebug, DebugInstanceAlain) {
+    std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
+    std::string instanceFolder = "Instance_Alain_140624/";
+    std::string graphDatFile = "graph2.dat";
+    std::string requestsDatFile = "requests.dat";
+
+    //Parse graph
+    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
+    std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
+
+    //Init instance
+    Instance instance(requests,graphFromSingleFile,4);
+    SAEVRoute routesContainer(graphFromSingleFile, requests);
+
+    //Vehicle 0 insertions (0,1,2)
+    BestInsertionHeuristic::tryVehicleBestInsertion(0, 0, routesContainer);
+    BestInsertionHeuristic::tryVehicleBestInsertion(1, 0, routesContainer);
+    BestInsertionHeuristic::tryVehicleBestInsertion(2, 0, routesContainer);
+    //Vehicle 1 insertions (3,4,5)
+    BestInsertionHeuristic::tryVehicleBestInsertion(3, 1, routesContainer);
+    BestInsertionHeuristic::tryVehicleBestInsertion(4, 1, routesContainer);
+    BestInsertionHeuristic::tryVehicleBestInsertion(5, 1, routesContainer);
+}
+
+TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
+    std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
+    std::string instanceFolder = "Instance_Alain_140624/";
+    std::string graphDatFile = "graph2.dat";
+    std::string requestsDatFile = "requests.dat";
+
+    //Parse graph
+    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
+    std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
+
+    //Init instance
+    Instance instance(requests,graphFromSingleFile,4);
+    SAEVRoute routesContainer(graphFromSingleFile, requests);
+
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(0, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(1, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(2, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(3, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(4, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(5, routesContainer);
 }
 
 int main(int argc, char* argv[]) {

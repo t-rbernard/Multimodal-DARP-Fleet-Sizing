@@ -102,6 +102,8 @@ add_executable(BestInsertionHeuristic_DEB
         ../src/routes/requests/RequestRoute.h
         ../src/routes/vehicle/BestRequestInsertion.h
         ../src/routes/vehicle/BestInsertionQueue.h
+        ../src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
+        ../src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
 )
 
 target_link_libraries(Line_UT gtest gtest_main)
