@@ -10,6 +10,7 @@
 #include "../../../routes/vehicle/SAEVRoute.h"
 
 class BestInsertionHeuristic {
+public:
     /**
      * Automatically inserts the given request in a vehicle, potentially creating a new one if no active vehicle works
      * @param requestId ID of the request to insert in the route
