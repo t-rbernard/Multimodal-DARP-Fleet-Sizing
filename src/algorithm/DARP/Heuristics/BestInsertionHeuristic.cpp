@@ -37,10 +37,9 @@ size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(size_t requestId, 
     size_t vehicleId = 0;
     bool insertionSuccess{false};
     //Iteratively try inserting in every active vehicle and the first inactive vehicle
-    while(vehicleId <= route.getLastActiveVehicleId() + 1 && !insertionSuccess) {
+    do {
         insertionSuccess = tryVehicleBestInsertion(requestId, vehicleId, route);
-        ++vehicleId;
-    }
+    } while(!insertionSuccess && ++vehicleId <= route.getLastActiveVehicleId() + 1);
 
     //Update last active vehicle ID
     if(vehicleId > route.getLastActiveVehicleId()) {
