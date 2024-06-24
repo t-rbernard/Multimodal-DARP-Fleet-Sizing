@@ -410,8 +410,8 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
                                       originInsertionKeyPoint, destinationInsertionKeyPoint)) {
                 score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
                 bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
-                destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
             }
+            destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
         }
 
         //Iterate over possible origins and reset destination to being the same point as the origin
