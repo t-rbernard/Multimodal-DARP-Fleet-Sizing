@@ -84,8 +84,8 @@ public:
      * @param destinationPredecessor The destination's expected predecessor, aka the point after which we wish to insert our destination
      * @return true iff all neighbouring time window conditions are valid at our insertion points, false otherwise
      */
-    bool doNeighbouringTWChecks(const size_t requestId, const size_t originNodeIndex, const size_t destinationNodeIndex,
-                                const SAEVKeyPoint *originPredecessor, const SAEVKeyPoint *destinationPredecessor);
+    bool doNeighbouringTWChecks(const size_t requestId, const SAEVKeyPoint *originPredecessor,
+                                const SAEVKeyPoint *destinationPredecessor);
 
     /**
      * Method called after having validated conditions not requiring request insertion. \n
@@ -118,11 +118,15 @@ public:
     SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route.at(_nbRequest*2 + vehicleId*2);}
     SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route.at(_nbRequest*2 + vehicleId*2 + 1);}
 
-    [[nodiscard]] size_t getRequestOriginIdx(const size_t requestId) const { return requestId * 2;}
-    [[nodiscard]] size_t getRequestDestinationIdx(const size_t requestId) const { return requestId * 2 + 1;}
+    [[nodiscard]] size_t getRequestOriginRouteIdx(const size_t requestId) const { return requestId * 2;}
+    [[nodiscard]] size_t getRequestDestinationRouteIdx(const size_t requestId) const { return requestId * 2 + 1;}
+    [[nodiscard]] size_t getRequestOriginNodeIdx(const size_t requestId) const { return _route[getRequestOriginRouteIdx(requestId)].getNodeIndex();}
+    [[nodiscard]] size_t getRequestDestinationNodeIdx(const size_t requestId) const { return _route[getRequestDestinationRouteIdx(requestId)].getNodeIndex();}
 
-    [[nodiscard]] size_t getOriginDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2;}
-    [[nodiscard]] size_t getDestinationDepotIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2 + 1;}
+    [[nodiscard]] size_t getOriginDepotRouteIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2;}
+    [[nodiscard]] size_t getDestinationDepotRouteIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2 + 1;}
+    [[nodiscard]] size_t getOriginDepotNodeIdx(const size_t vehicleId) const { return _route[_nbRequest*2 + vehicleId*2].getNodeIndex();}
+    [[nodiscard]] size_t getDestinationDepotNodeIdx(const size_t vehicleId) const { return _route[_nbRequest*2 + vehicleId*2].getNodeIndex();}
 
     [[nodiscard]] size_t getLastActiveVehicleId() const { return _lastActiveVehicleId; }
     void setLastActiveVehicleId(size_t lastActiveVehicleId) { _lastActiveVehicleId = lastActiveVehicleId; }

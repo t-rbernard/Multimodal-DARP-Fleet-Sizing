@@ -31,7 +31,8 @@ TEST(BestInsertionHeuristicDebug, DebugBaseInstance) {
     std::cout << routesContainer.to_string(vehicleId) << std::endl;
     assert(routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
-    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepot(vehicleId), routesContainer.getDestination(0));
+    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepot(vehicleId),
+                                                                       routesContainer.getRequestDestination(0));
     std::cout << routesContainer.to_string(vehicleId) << std::endl << std::endl;
     assert(!routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
@@ -61,18 +62,19 @@ TEST(BestInsertionQueueDebug, DebugInstanceAlain) {
     BestInsertionQueue biQueue = routesContainer.getBestInsertionsQueue(0,0);
     routesContainer.tryAddRequest(0,routesContainer.getOriginDepot(0),routesContainer.getOriginDepot(0));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,0);
-    routesContainer.tryAddRequest(1,routesContainer.getOrigin(0),routesContainer.getOrigin(0));
+    routesContainer.tryAddRequest(1, routesContainer.getRequestOrigin(0), routesContainer.getRequestOrigin(0));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,0);
-    SAEVRouteChangelist cl = routesContainer.tryAddRequest(2,routesContainer.getOrigin(1),routesContainer.getDestination(1));
+    SAEVRouteChangelist cl = routesContainer.tryAddRequest(2, routesContainer.getRequestOrigin(1),
+                                                           routesContainer.getRequestDestination(1));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,0);
 
     //Vehicle 2 insertions
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(5,1);
     routesContainer.tryAddRequest(5,routesContainer.getOriginDepot(1),routesContainer.getOriginDepot(1));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(4,1);
-    routesContainer.tryAddRequest(4,routesContainer.getOriginDepot(1),routesContainer.getDestination(5));
+    routesContainer.tryAddRequest(4,routesContainer.getOriginDepot(1), routesContainer.getRequestDestination(5));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,1);
-    routesContainer.tryAddRequest(3,routesContainer.getOriginDepot(1),routesContainer.getOrigin(4));
+    routesContainer.tryAddRequest(3,routesContainer.getOriginDepot(1), routesContainer.getRequestOrigin(4));
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(0,1);
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,1);
     biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,1);
