@@ -5,13 +5,11 @@
 #ifndef GREEDYALGORITHM_SAEVEHICLE_H
 #define GREEDYALGORITHM_SAEVEHICLE_H
 
-#define VEHICLE_CAPACITY 6
-
-
+#include "../utils/Constants.h"
 
 class SAEVehicle {
 private:
-    static const int _capacity{VEHICLE_CAPACITY};
+    static const int _capacity{Constants::VEHICLE_CAPACITY};
 
 public:
     SAEVehicle() = default;

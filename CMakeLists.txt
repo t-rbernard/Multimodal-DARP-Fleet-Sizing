@@ -64,6 +64,7 @@ add_executable(GreedyAlgorithm
         "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         src/routes/vehicle/BestRequestInsertion.h
         src/routes/vehicle/BestInsertionQueue.h
+        src/utils/Constants.h
 )
 
 add_executable(RequestGenerator

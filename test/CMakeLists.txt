@@ -70,6 +70,7 @@ add_executable(Constraint_Propag_DEB
         "../src/utils/Instance Generation/Requests/RequestsGenerator.h"
         "../src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
         "../src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
+        ../src/utils/Constants.h
 )
 
 add_executable(BestInsertionHeuristic_DEB
@@ -104,6 +105,7 @@ add_executable(BestInsertionHeuristic_DEB
         ../src/routes/vehicle/BestInsertionQueue.h
         ../src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
         ../src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
+        ../src/utils/Constants.h
 )
 
 target_link_libraries(Line_UT gtest gtest_main)
