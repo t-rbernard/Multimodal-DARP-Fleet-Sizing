@@ -4,7 +4,7 @@
 
 #include "BestInsertionHeuristic.h"
 
-#ifdef DEBUG_TRANSIT_PRECOMPUTE
+#ifdef DEBUG_BEST_INSERTION_HEURISTIC
 #include <iostream>
 #define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
 #else

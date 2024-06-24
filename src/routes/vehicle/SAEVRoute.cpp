@@ -7,7 +7,7 @@
 #include "SAEVRoute.h"
 #include "BestInsertionQueue.h"
 
-#ifdef DEBUG_TRANSIT_PRECOMPUTE
+#ifdef DEBUG_CONSTRAINT_PROPAGATION
 #include <iostream>
 #define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
 #else
@@ -286,7 +286,6 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
         }
     }
 
-    DEBUG_MSG("INSERTION SUCCESS");
     changelist.setStatus(SAEVRouteChangelist::InsertionStatus::SUCCESS);
     changelist.setScore(getDetourScore(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP));
     return changelist;
