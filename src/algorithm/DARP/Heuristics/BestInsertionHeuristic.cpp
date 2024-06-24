@@ -33,7 +33,7 @@ bool BestInsertionHeuristic::tryVehicleBestInsertion(size_t requestId, size_t ve
     return bestInsertionFound;
 }
 
-size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(size_t requestId, SAEVRoute route) {
+size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(size_t requestId, SAEVRoute& route) {
     size_t vehicleId = 0;
     bool insertionSuccess{false};
     //Iteratively try inserting in every active vehicle and the first inactive vehicle
