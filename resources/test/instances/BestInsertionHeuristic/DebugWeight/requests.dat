@@ -1,0 +1,9 @@
+#Global Params (delta ratio)
+1
+#Requests (origin_idx,destination_idx,min_tw_start,max_tw_start,min_tw_end,max_tw_end,delta baseline,capacity)
+1,2,1,5,,,30,4
+1,2,1,5,,,30,3
+1,2,1,5,,,30,1
+1,2,1,5,,,30,2
+1,2,1,5,,,30,3
+1,2,1,5,,,30,2

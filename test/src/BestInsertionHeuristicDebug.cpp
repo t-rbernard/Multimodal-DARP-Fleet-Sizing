@@ -83,7 +83,7 @@ TEST(BestInsertionQueueDebug, DebugInstanceAlain) {
 TEST(BestInsertionPerVehicleHeuristicDebug, DebugInstanceAlain) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "Instance_Alain_140624/";
-    std::string graphDatFile = "graph2.dat";
+    std::string graphDatFile = "graph.dat";
     std::string requestsDatFile = "requests.dat";
 
     //Parse graph
@@ -104,10 +104,10 @@ TEST(BestInsertionPerVehicleHeuristicDebug, DebugInstanceAlain) {
     BestInsertionHeuristic::tryVehicleBestInsertion(5, 1, routesContainer);
 }
 
-TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
+TEST(BestInsertionHeuristicDebug, DebugInstanceAlain2) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
-    std::string instanceFolder = "Instance_Alain_140624/";
-    std::string graphDatFile = "graph2.dat";
+    std::string instanceFolder = "Instance_Alain_140624_2/";
+    std::string graphDatFile = "graph.dat";
     std::string requestsDatFile = "requests.dat";
 
     //Parse graph
@@ -118,12 +118,42 @@ TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
 
+    auto t0 = std::chrono::steady_clock::now();
     BestInsertionHeuristic::doBestRequestInsertionForRoute(0, routesContainer);
     BestInsertionHeuristic::doBestRequestInsertionForRoute(1, routesContainer);
     BestInsertionHeuristic::doBestRequestInsertionForRoute(2, routesContainer);
     BestInsertionHeuristic::doBestRequestInsertionForRoute(3, routesContainer);
     BestInsertionHeuristic::doBestRequestInsertionForRoute(4, routesContainer);
     BestInsertionHeuristic::doBestRequestInsertionForRoute(5, routesContainer);
+    auto t1 = std::chrono::steady_clock::now();
+    auto d = t1 - t0;
+    std::cout << d.count() << "\n";
+}
+
+TEST(BestInsertionHeuristicDebug, DebugInstanceAlain) {
+    std::string instancesPath = "../../resources/test/instances/BestInsertionHeuristic/";
+    std::string instanceFolder = "DebugWeight/";
+    std::string graphDatFile = "graph.dat";
+    std::string requestsDatFile = "requests.dat";
+
+    //Parse graph
+    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
+    std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
+
+    //Init instance
+    Instance instance(requests,graphFromSingleFile,4);
+    SAEVRoute routesContainer(graphFromSingleFile, requests);
+
+    auto t0 = std::chrono::steady_clock::now();
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(0, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(1, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(2, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(3, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(4, routesContainer);
+    BestInsertionHeuristic::doBestRequestInsertionForRoute(5, routesContainer);
+    auto t1 = std::chrono::steady_clock::now();
+    auto d = t1 - t0;
+    std::cout << d.count() << "\n";
 }
 
 int main(int argc, char* argv[]) {
