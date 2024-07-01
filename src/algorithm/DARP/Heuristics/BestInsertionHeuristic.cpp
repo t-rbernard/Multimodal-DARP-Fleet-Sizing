@@ -15,9 +15,11 @@ bool BestInsertionHeuristic::tryVehicleBestInsertion(size_t requestId, size_t ve
     BestInsertionQueue bestInsertionsQueue = route.getBestFeasibleInsertionsQueue(requestId, vehicleId); //TODO: check perfs between BestInsertionsQueue vs BestFeasibleInsertionsQueue
     bool bestInsertionFound = false;
     BestRequestInsertion currentBestInsertion;
-    DEBUG_MSG("Trying to insert request " + std::to_string(requestId) + " in vehicle " + std::to_string(vehicleId));
+
+    DEBUG_MSG("Trying to insert request " + std::to_string(requestId) + " in vehicle " + std::to_string(vehicleId) + " queue size : " + std::to_string(bestInsertionsQueue.size()));
     while(!bestInsertionsQueue.empty() && !bestInsertionFound) {
         currentBestInsertion = bestInsertionsQueue.topAndPop();
+        DEBUG_MSG("Trying insertion " + currentBestInsertion.to_string() + ", remaining : " + std::to_string(bestInsertionsQueue.size()));
         SAEVRouteChangelist lastInsertionChangelist = route.tryAddRequest(requestId,
                                                                           *currentBestInsertion.getOriginInsertionKp(),
                                                                           *currentBestInsertion.getDestinationInsertionKp());
@@ -48,4 +50,18 @@ size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(size_t requestId, 
     }
 
     return vehicleId;
+}
+
+size_t BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(size_t requestId, SAEVRoute &route) {
+    size_t vehicleId = 0;
+    bool insertionSuccess{false};
+    //Iteratively try inserting in every active vehicle and the first inactive vehicle
+    while(!insertionSuccess && ++vehicleId <= route.getLastActiveVehicleId() + 1) {
+        insertionSuccess = tryVehicleBestInsertion(requestId, vehicleId, route);
+    }
+
+    if(insertionSuccess)
+        return vehicleId;
+    else
+        return route.getLastActiveVehicleId() + 1;
 }
