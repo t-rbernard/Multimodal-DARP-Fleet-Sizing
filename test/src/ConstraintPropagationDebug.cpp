@@ -68,7 +68,7 @@ TEST(ConstraintPropagationDebug, DebugRequestGeneration) {
 TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
     std::string instanceFolder = "Instance_Alain_140624/";
-    std::string graphDatFile = "graph2.dat";
+    std::string graphDatFile = "graph.dat";
     std::string requestsDatFile = "requests.dat";
 
     //Parse graph
