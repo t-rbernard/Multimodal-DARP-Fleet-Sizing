@@ -22,11 +22,11 @@ public:
     [[nodiscard]] const std::string &getLineId() const;
     void setLineId(const std::string &lineId);
     [[nodiscard]] std::vector<int> getNodes() const { return _nodes;};
-    [[nodiscard]] int getNode(size_t index) const { return _nodes.at(index);};
+    [[nodiscard]] int getNode(size_t index) const { return _nodes[index];};
     void addNode(const int node){this->_nodes.emplace_back(node);};
     [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
-    [[nodiscard]] std::vector<int> getTimetable(size_t pos) const{ return _timetables.at(pos);};
+    [[nodiscard]] std::vector<int> getTimetable(size_t pos) const{ return _timetables[pos];};
     [[nodiscard]] std::vector<std::vector<int>> getTimetables() const{ return _timetables;};
     void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
     void setTimetable(size_t pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
@@ -38,7 +38,7 @@ public:
      * @return a vector index corresponding to the next valid passage at the given station and after or at the given instant
      */
     [[nodiscard]] size_t findNextScheduledPassage(size_t stationIdx, uint instant) const {
-        return SearchAlgorithms<int>::findNextSortedValue(_timetables.at(stationIdx), instant);
+        return SearchAlgorithms<int>::findNextSortedValue(_timetables[stationIdx], instant);
     }
     /**
      * Returns the instant for the given station at a given schedule position, O(1)
@@ -46,10 +46,10 @@ public:
      * @param scheduleIdx The expected index of our passage
      * @return The instant associated with the given station at the given schedule position
      */
-    [[nodiscard]] int getInstant(size_t stationIdx, size_t scheduleIdx) const { return _timetables.at(stationIdx).at(scheduleIdx); }
+    [[nodiscard]] int getInstant(size_t stationIdx, size_t scheduleIdx) const { return _timetables[stationIdx][scheduleIdx]; }
 
     [[nodiscard]] size_t size() const {return _nodes.size();}
-    [[nodiscard]] size_t scheduleSize() const {return _timetables.empty() ? 0 : _timetables.at(0).size();}
+    [[nodiscard]] size_t scheduleSize() const {return _timetables.empty() ? 0 : _timetables[0].size();}
 
     [[nodiscard]] bool check() const;
     [[nodiscard]] bool checkSchedules() const;

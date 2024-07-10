@@ -21,7 +21,7 @@ public:
     }
 
     void replaceKeyPoint(int keyPointIndex, KeyPoint& value) {
-        _keyPoints.at(keyPointIndex) = value;
+        _keyPoints[keyPointIndex] = value;
     }
 
     /**

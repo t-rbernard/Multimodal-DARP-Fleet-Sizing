@@ -207,11 +207,11 @@ public:
             res += ", Connections: ";
             if(_connections.size() > 1) {
                 for(int i = 0; i < _connections.size() - 1; ++i) {
-                    res += _connections.at(i).getLineRef().getLineId() + " -> ";
+                    res += _connections[i].getLineRef().getLineId() + " -> ";
                 }
             }
 
-            res += _connections.at(_connections.size() - 1).getLineRef().getLineId();
+            res += _connections[_connections.size() - 1].getLineRef().getLineId();
 
         }
 

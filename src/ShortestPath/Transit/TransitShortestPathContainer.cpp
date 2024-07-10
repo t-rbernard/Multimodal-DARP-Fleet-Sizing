@@ -7,7 +7,7 @@
 
 void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
                                                              const std::pair<int, std::vector<TransitShortestPath>>& shortestPathList) {
-    container.at(startNodeIndex).emplace_back(shortestPathList);
+    container[startNodeIndex].emplace_back(shortestPathList);
 }
 
 void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex, int startingInstant, int graphSize,
@@ -21,12 +21,12 @@ void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
     }
 
     //Add the (startingInstant, pathVector) pair at the appropriate node index
-    container.at(startNodeIndex).emplace_back(startingInstant, shortestPathList);
+    container[startNodeIndex].emplace_back(startingInstant, shortestPathList);
 }
 
 std::vector<std::pair<int, std::vector<TransitShortestPath>>>::iterator
 TransitShortestPathContainer::getShortestPathsFromTime(int startNodeIndex, int earliestStartInstant) {
-    const auto& iterator = std::lower_bound(container.at(startNodeIndex).begin(), container.at(startNodeIndex).end(),
+    const auto& iterator = std::lower_bound(container[startNodeIndex].begin(), container[startNodeIndex].end(),
                                             std::pair<int, std::vector<TransitShortestPath>>(earliestStartInstant, {}));
 
     return iterator;
@@ -35,5 +35,5 @@ TransitShortestPathContainer::getShortestPathsFromTime(int startNodeIndex, int e
 std::pair<int, TransitShortestPath>
 TransitShortestPathContainer::getShortestPathToYFromTime(int startNodeIndex, int earliestStartInstant, int goalNode) {
     const auto& shortestPathsIterator = getShortestPathsFromTime(startNodeIndex, earliestStartInstant);
-    return std::pair(shortestPathsIterator->first, shortestPathsIterator->second.at(goalNode));
+    return std::pair(shortestPathsIterator->first, shortestPathsIterator->second[goalNode]);
 }

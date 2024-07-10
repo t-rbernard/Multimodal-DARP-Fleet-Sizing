@@ -13,7 +13,7 @@ bool Line::checkSchedules() const{
     checkResult &= _nodes.size() == _timetables.size(); //check we have as many schedules as nodes in our line
 
     int precedingTimeStep = 0;
-    int expectedScheduleSize = !_timetables.empty() ? _timetables.at(0).size() : 0;
+    int expectedScheduleSize = !_timetables.empty() ? _timetables[0].size() : 0;
     for(auto& schedule : _timetables)
     {
         precedingTimeStep = 0; //reinit first timestep to 0

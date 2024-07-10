@@ -18,7 +18,7 @@ TEST(LineTests, LineGenerationScheduleOrder) {
     for(const auto& line : graphFromSingleFile.getPTLines()) {
         for(const auto& schedule : line.getTimetables()) {
             for(size_t i = 0; i < line.scheduleSize(); ++i) {
-                ASSERT_GT(schedule.at(i), schedule.at(i + 1)); //assert schedule value order
+                ASSERT_GT(schedule[i], schedule[i + 1]); //assert schedule value order
             }
         }
         ASSERT_TRUE(line.checkSchedules()); //assert line schedule check function is coherent with our preceding assertion

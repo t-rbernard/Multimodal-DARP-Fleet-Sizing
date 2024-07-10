@@ -25,8 +25,8 @@ public:
     {
         solutionVector.resize(size);
         for(size_t i = 0; i < size; ++i) {
-            solutionVector.at(i).emplace_back();
-            solutionVector.at(i).emplace_back();
+            solutionVector[i].emplace_back();
+            solutionVector[i].emplace_back();
         }
     }
     explicit TransitStateContainer(size_t size)
@@ -34,8 +34,8 @@ public:
         //Reserve space for all nodes and add empty solutions to reserve memory
         solutionVector.resize(size);
         for(size_t i = 0; i < size; ++i) {
-            solutionVector.at(i).emplace_back();
-            solutionVector.at(i).emplace_back();
+            solutionVector[i].emplace_back();
+            solutionVector[i].emplace_back();
         }
     }
     /**
@@ -44,14 +44,14 @@ public:
      * @return The first solution of potentially two saved in this array
      */
     [[nodiscard]] const TransitAlgorithmState& getBestSolution(int nodeIndex) const{
-        if(solutionVector.at(1) < solutionVector.at(0))
-            return solutionVector.at(nodeIndex).at(1);
+        if(solutionVector[1] < solutionVector[0])
+            return solutionVector[nodeIndex][1];
         else
-            return solutionVector.at(nodeIndex).at(0);
+            return solutionVector[nodeIndex][0];
     }
 
-    TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector.at(nodeIndex).at(nbConnections == 0 ? 0 : nbConnections - 1);}
-    std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector.at(nodeIndex);}
+    TransitAlgorithmState& getBestSolution(int nodeIndex, int nbConnections){ return solutionVector[nodeIndex][nbConnections == 0 ? 0 : nbConnections - 1];}
+    std::vector<TransitAlgorithmState>& getSolutions(int nodeIndex){ return solutionVector[nodeIndex];}
     std::vector<std::vector<TransitAlgorithmState>>& getSolutionsVector(){ return solutionVector;}
 
     bool strictlyDominates(const TransitAlgorithmState& state){
@@ -72,10 +72,10 @@ public:
     void replaceBestSolutionIfNecessary(int nodeIndex, const TransitAlgorithmState& newState)
     {
         if(newState.getNbConnections() > 0) {
-            TransitAlgorithmState& currentBest = solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1);
+            TransitAlgorithmState const& currentBest = solutionVector[nodeIndex][newState.getNbConnections() - 1];
             if(currentBest.getInstant() > newState.getInstant()) {
                 DEBUG_MSG("Candidate state " + newState.toString() + " is the new fastest solution");
-                solutionVector.at(nodeIndex).at(newState.getNbConnections() - 1) = newState;
+                solutionVector[nodeIndex][newState.getNbConnections() - 1] = newState;
             }
         }
     }
@@ -87,10 +87,10 @@ public:
      * @return
      */
     TransitAlgorithmState getBestSolution(int nodeIndex) {
-        TransitAlgorithmState currentBestSol = solutionVector.at(nodeIndex).at(0);
-        for(size_t i = 1; i < solutionVector.at(nodeIndex).size(); ++i) {
-            if(solutionVector.at(nodeIndex).at(i).getInstant() < currentBestSol.getInstant()) {
-                currentBestSol = solutionVector.at(nodeIndex).at(i);
+        TransitAlgorithmState currentBestSol = solutionVector[nodeIndex][0];
+        for(size_t i = 1; i < solutionVector[nodeIndex].size(); ++i) {
+            if(solutionVector[nodeIndex][i].getInstant() < currentBestSol.getInstant()) {
+                currentBestSol = solutionVector[nodeIndex][i];
             }
         }
 
@@ -100,7 +100,7 @@ public:
     void pushEmptyState(int nodeIndex)
     {
         TransitAlgorithmState newState = TransitAlgorithmState(nodeIndex);
-        solutionVector.at(nodeIndex).emplace_back(newState);
+        solutionVector[nodeIndex].emplace_back(newState);
     }
 };
 

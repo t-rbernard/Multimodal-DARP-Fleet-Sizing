@@ -20,8 +20,8 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
     //Init Request O/D and Depot start/end key points
     for(size_t i = 0; i < _nbRequest; ++i) {
         //Create key O/D points
-        getOrigin(i) = SAEVKeyPoint(graph, requestList.at(i), true); //origin
-        getDestination(i) = SAEVKeyPoint(graph, requestList.at(i), false); //destination
+        getRequestOrigin(i) = SAEVKeyPoint(graph, requestList[i], true); //origin
+        getRequestDestination(i) = SAEVKeyPoint(graph, requestList[i], false); //destination
         //Link Origins and Destinations
         getRequestOrigin(i).setCounterpart(&getRequestDestination(i));
         getRequestDestination(i).setCounterpart(&getRequestOrigin(i));
@@ -100,15 +100,15 @@ void SAEVRoute::removeRequest(size_t requestId) {
     originKp.setSuccessor(nullptr);
     destinationKp.setPredecessor(nullptr);
     destinationKp.setSuccessor(nullptr);
-    originKp.setMinTw(_requestList->at(requestId).getMinDepartureTw());
-    originKp.setMaxTw(_requestList->at(requestId).getMaxDepartureTw());
-    destinationKp.setMinTw(_requestList->at(requestId).getMinArrivalTw());
-    destinationKp.setMaxTw(_requestList->at(requestId).getMaxArrivalTw());
+    originKp.setMinTw((*_requestList)[requestId].getMinDepartureTw());
+    originKp.setMaxTw((*_requestList)[requestId].getMaxDepartureTw());
+    destinationKp.setMinTw((*_requestList)[requestId].getMinArrivalTw());
+    destinationKp.setMaxTw((*_requestList)[requestId].getMaxArrivalTw());
 }
 
 SAEVRouteChangelist
 SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP) {
-    const Request* request = &_requestList->at(requestId);
+    const Request* request = &(*_requestList)[requestId];
     SAEVKeyPoint const* destinationSuccessor = destinationRequestPredecessorKP.getSuccessor();
 
     //Check vehicle capacity

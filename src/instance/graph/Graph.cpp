@@ -20,7 +20,7 @@ std::vector<Line> Graph::addLine(Line& line) {
     //Add line stops to nodes
     for(int i = 0; i < line.size(); ++i)
     {
-        nodesVector.at(line.getNode(i)).addBusLine(line, i);
+        nodesVector[line.getNode(i)].addBusLine(line, i);
     }
     //Add transit line to transit lines vector
     transitLines.push_back(line);
@@ -210,7 +210,7 @@ bool Graph::checkLineToNodeLinks() {
         for(auto const& lineStop : node.getPTLinesSet())
         {
             nodeIndexFromLine = lineStop.getLineRef().getNode(lineStop.getStopIndex());
-            nodeFromGraph = &this->nodesVector.at(nodeIndexFromLine);
+            nodeFromGraph = &this->nodesVector[nodeIndexFromLine];
             checkResult &= *nodeFromGraph == node;
         }
     }
@@ -299,13 +299,13 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
 
 }
 
-void Graph::createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length) {
+void Graph::createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length) {
     edgesVector.emplace_back(edgeStartNodeIndex, edgeEndNodeIndex, length);
 
-    Node entryNode = nodesVector.at(edgeStartNodeIndex);
+    Node entryNode = nodesVector[edgeStartNodeIndex];
     entryNode.getOutgoingEdges().emplace_back(edgesVector.size() - 1);
 
-    Node exitNode = nodesVector.at(edgeEndNodeIndex);
+    Node exitNode = nodesVector[edgeEndNodeIndex];
     exitNode.getIncomingEdges().emplace_back(edgesVector.size() - 1);
 }
 
