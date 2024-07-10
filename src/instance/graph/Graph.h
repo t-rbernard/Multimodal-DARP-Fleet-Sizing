@@ -20,6 +20,8 @@ private:
     std::vector<Node> nodesVector; //The full list of nodes created in the graph
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
+    std::vector<std::vector<int>> shortestSAEVPaths;
+    int _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
 
     /**
      * For every LineStop on every node of the graph, verify the node returned by looking into LineStop->Line(stopIdx)
@@ -38,21 +40,24 @@ public:
         return nodesVector;
     }
 
-    [[nodiscard]] const Node &getNode(int nodeIndex) const {
-        return nodesVector.at(nodeIndex);
+    [[nodiscard]] const Node &getNode(size_t nodeIndex) const {
+        return nodesVector[nodeIndex];
     }
 
     [[nodiscard]] size_t getNbNodes() const {
         return nodesVector.size();
     }
 
-    [[nodiscard]] std::vector<LineStop> getPTLinesSet(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getPTLinesSet();
+    [[nodiscard]] std::vector<LineStop> getPTLinesSet(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getPTLinesSet();
     }
 
-    [[nodiscard]] size_t getNbPTLines(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getPTLinesSet().size();
+    [[nodiscard]] size_t getNbPTLines(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getPTLinesSet().size();
     }
+
+    [[nodiscard]] int getDepotNodeIdx() const;
+    void setDepotNodeIdx(int depotNodeIdx);
 
     /**
      * @return The graph's edge vector
@@ -61,17 +66,17 @@ public:
         return edgesVector;
     }
 
-    [[nodiscard]] size_t getNbIncomingEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getIncomingEdges().size();
+    [[nodiscard]] size_t getNbIncomingEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getIncomingEdges().size();
     }
 
-    [[nodiscard]] size_t getNbOutgoingEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getOutgoingEdges().size();
+    [[nodiscard]] size_t getNbOutgoingEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getOutgoingEdges().size();
     }
 
 
-    [[nodiscard]] size_t getNbEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getIncomingEdges().size() + nodesVector.at(nodeIndex).getOutgoingEdges().size();
+    [[nodiscard]] size_t getNbEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getIncomingEdges().size() + nodesVector[nodeIndex].getOutgoingEdges().size();
     }
 
     /**
@@ -86,7 +91,7 @@ public:
      * @param edge The edge to push in the graph's edge vector
      * @return The edge vector after having added the edge
      */
-    std::vector<Edge> addEdge(Edge& edge) {
+    std::vector<Edge> addEdge(Edge const& edge) {
         edgesVector.push_back(edge);
         return edgesVector;
     }
@@ -96,7 +101,7 @@ public:
      * @param node The node to push in the graph's node vector
      * @return The node vector after having added the node
      */
-    std::vector<Node> addNode(Node& node) {
+    std::vector<Node> addNode(Node const& node) {
         nodesVector.push_back(node);
         return nodesVector;
     }
@@ -129,7 +134,7 @@ public:
      * The function creates the folders if need be, and will overwrite existing files if data has been outputted to this folder before
      * @param exportFolderPath A path to a folder where we can export edges.txt, nodes.txt and ptlines.txt
      */
-    void exportGraphToFiles(std::filesystem::path exportFolderPath);
+    void exportGraphToFile(const std::filesystem::path& exportFolderPath);
 
     /**
      * Executes defined check functions on every node and transit line in the graph
@@ -143,7 +148,11 @@ public:
      * @param edgeEndNodeIndex Index of the node serving as an exit point for this edge
      * @param length The length of this edge (in minutes)
      */
-    void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
+    void createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length);
+
+    [[nodiscard]] int getShortestSAEVPath(size_t x, size_t y) const { return shortestSAEVPaths[x][y]; }
+
+    void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
 };
 
 

@@ -22,14 +22,14 @@ public:
     [[nodiscard]] const std::string &getLineId() const;
     void setLineId(const std::string &lineId);
     [[nodiscard]] std::vector<int> getNodes() const { return _nodes;};
-    [[nodiscard]] int getNode(int index) const { return _nodes.at(index);};
+    [[nodiscard]] int getNode(size_t index) const { return _nodes.at(index);};
     void addNode(const int node){this->_nodes.emplace_back(node);};
     [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
-    [[nodiscard]] std::vector<int> getTimetable(int pos) const{ return _timetables.at(pos);};
+    [[nodiscard]] std::vector<int> getTimetable(size_t pos) const{ return _timetables.at(pos);};
     [[nodiscard]] std::vector<std::vector<int>> getTimetables() const{ return _timetables;};
     void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
-    void setTimetable(int pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
+    void setTimetable(size_t pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
 
     /**
      * Searches for the next scheduled passage at a given station after a given instant O(log n)
@@ -37,7 +37,7 @@ public:
      * @param instant The instant of arrival at the station, hence we look for the value itself or the first greater instant
      * @return a vector index corresponding to the next valid passage at the given station and after or at the given instant
      */
-    [[nodiscard]] size_t findNextScheduledPassage(int stationIdx, int instant) const {
+    [[nodiscard]] size_t findNextScheduledPassage(size_t stationIdx, uint instant) const {
         return SearchAlgorithms<int>::findNextSortedValue(_timetables.at(stationIdx), instant);
     }
     /**
@@ -46,7 +46,7 @@ public:
      * @param scheduleIdx The expected index of our passage
      * @return The instant associated with the given station at the given schedule position
      */
-    [[nodiscard]] int getInstant(int stationIdx, int scheduleIdx) const { return _timetables.at(stationIdx).at(scheduleIdx); }
+    [[nodiscard]] int getInstant(size_t stationIdx, size_t scheduleIdx) const { return _timetables.at(stationIdx).at(scheduleIdx); }
 
     [[nodiscard]] size_t size() const {return _nodes.size();}
     [[nodiscard]] size_t scheduleSize() const {return _timetables.empty() ? 0 : _timetables.at(0).size();}

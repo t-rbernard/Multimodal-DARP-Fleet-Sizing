@@ -37,6 +37,9 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
         parseNodeRow(row);
     }
 
+    shortestSAEVPaths.reserve(nodesVector.size());
+    for(std::vector<int> yValues : shortestSAEVPaths) { yValues.reserve(nodesVector.size()); }
+
     //Edges instantiation
     std::ifstream edgesFile(edgesFilePath);
     std::cout << "Edges instantiation" << std::endl;
@@ -66,7 +69,6 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
 Graph::Graph(const std::string& datFilePath) {
     std::ifstream infile(datFilePath);
     DATRow currentRow = DATRow(',');
-    std::string currentLine;
 
     //-- Read params
     infile >> currentRow;
@@ -74,7 +76,7 @@ Graph::Graph(const std::string& datFilePath) {
     // Seeded random number generator
     infile >> currentRow;
     unsigned long rngSeed;
-    std::from_chars(currentRow[1].data(), currentRow[1].data() + currentRow[1].length(), rngSeed);
+    std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].length(), rngSeed);
     auto rng = std::mt19937(rngSeed);
     //-- End of params
 
@@ -86,12 +88,25 @@ Graph::Graph(const std::string& datFilePath) {
     }
     //-- End of nodes
 
-    //-- Read Edges
-    std::cout << currentRow.toString() << std::endl;
-    while(infile >> currentRow && !currentRow[0].starts_with('#')) {
-        this->parseEdgeRow(currentRow);
+    //Node links (edges or matrix)
+    if(currentRow[0].starts_with("#Edges")) {
+        //-- Read Edges
+        std::cout << currentRow.toString() << std::endl;
+        while (infile >> currentRow && !currentRow[0].starts_with('#')) {
+            this->parseEdgeRow(currentRow);
+        }
+        //-- End of edges
+    } else if (currentRow[0].starts_with("#Matrix")) {
+        //-- Read Distance matrix
+        std::cout << currentRow.toString() << std::endl;
+        this->parseDistanceMatrix(infile, currentRow);
+        //-- End of edges
     }
-    //-- End of edges
+
+    if(currentRow[0].starts_with("#Depot")) {
+        infile >> currentRow;
+        std::from_chars(currentRow[0].data(), currentRow[0].data() + currentRow[0].length(), _depotNodeIdx);
+    }
 
     //-- Read Public transit line
     std::cout << currentRow.toString() << std::endl;
@@ -103,71 +118,81 @@ Graph::Graph(const std::string& datFilePath) {
 }
 
 namespace fs = std::filesystem;
-void Graph::exportGraphToFiles(fs::path exportFolderPath) {
+void Graph::exportGraphToFile(const fs::path& exportFolderPath) {
     fs::create_directories(exportFolderPath);
 
     //Nodes
-    std::ofstream outfileNodes(exportFolderPath.string() + "nodes.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& node : this->nodesVector)
+    std::ofstream outfileGraph(exportFolderPath.string() + "graph.txt", std::ofstream::out | std::ofstream::trunc); //open and clear file if it already existed
+    outfileGraph << "#Nodes format : status (work, leisure, residential),x,y" << std::endl;
+    for(auto const& node : this->nodesVector)
     {
-        outfileNodes << node.getX() << " " << node.getY() << std::endl;
+        outfileGraph << node.getStatus() << "," << node.getX() << "," << node.getY() << std::endl;
     }
-    outfileNodes.close();
 
     //Edges
-    std::ofstream outfileEdges(exportFolderPath.string() + "edges.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& edge : this->edgesVector)
-    {
-        outfileEdges << edge.getNodeStart() << " " << edge.getNodeEnd() << " " << edge.getLength() << std::endl;
+    if(!edgesVector.empty()) {
+        outfileGraph << "#Edges format : node_in,node_out,length" << std::endl;
+        for (auto &edge: this->edgesVector) {
+            outfileGraph << edge.getNodeStart() << "," << edge.getNodeEnd() << "," << edge.getLength() << std::endl;
+        }
     }
-    outfileEdges.close();
+
+    //Matrix
+    if(!shortestSAEVPaths.empty()) {
+        outfileGraph << "#Matrix" << std::endl;
+        std::stringstream lineStringStream;
+        for (auto &matrixLine: this->shortestSAEVPaths) {
+            std::ranges::copy(matrixLine.begin(), matrixLine.end() - 1,
+                              std::ostream_iterator<int>(lineStringStream, ","));
+            lineStringStream << matrixLine.back();
+            outfileGraph << lineStringStream.rdbuf() << std::endl;
+        }
+    }
 
     //Transit lines
-    std::ofstream outfilePT(exportFolderPath.string() + "ptlines.txt", std::ofstream::out |  std::ofstream::trunc); //open and clear file if it already existed
-    for(auto& ptline : this->transitLines)
-    {
-        //Print nodes in order on one line
-        std::ostringstream ossNodes;
-        std::vector<int> lineNodesVector = ptline.getNodes();
-        if (!lineNodesVector.empty())
-        {
-            // Convert all but the last element to avoid a trailing ","
-            std::copy(lineNodesVector.begin(), lineNodesVector.end()-1,
-                      std::ostream_iterator<int>(ossNodes, " "));
-
-            // Now add the last element with no delimiter
-            ossNodes << lineNodesVector.back();
-        }
-        std::cout << ossNodes.view() << std::endl;
-        outfilePT << ossNodes.str() << std::endl;
-        ossNodes.clear();
-
-        //Reuse string stream to print schedules line by line
-        for(auto& schedule : ptline.getTimetables())
-        {
-            std::ostringstream ossSchedule;
-            if (!schedule.empty())
-            {
+    if(!getPTLines().empty()) {
+        outfileGraph << "#PT Lines" << std::endl;
+        for (auto const &ptline: this->transitLines) {
+            //Print nodes in order on one line
+            std::stringstream ossNodes;
+            std::vector<int> lineNodesVector = ptline.getNodes();
+            if (!lineNodesVector.empty()) {
                 // Convert all but the last element to avoid a trailing ","
-                std::copy(schedule.begin(), schedule.end()-1,
-                          std::ostream_iterator<int>(ossSchedule, " "));
+                std::copy(lineNodesVector.begin(), lineNodesVector.end() - 1,
+                          std::ostream_iterator<int>(ossNodes, ","));
 
                 // Now add the last element with no delimiter
-                ossSchedule << schedule.back();
+                ossNodes << lineNodesVector.back();
             }
-            std::cout << ossSchedule.view() << std::endl;
-            outfilePT << ossSchedule.str() << std::endl;
-            ossSchedule.clear();
+            std::cout << ossNodes.view() << std::endl;
+            outfileGraph << ossNodes.rdbuf() << std::endl;
+            ossNodes.clear();
+
+            //Reuse string stream to print schedules line by line
+            std::stringstream ossSchedule;
+            for (auto &schedule: ptline.getTimetables()) {
+                if (!schedule.empty()) {
+                    // Convert all but the last element to avoid a trailing ","
+                    std::copy(schedule.begin(), schedule.end() - 1,
+                              std::ostream_iterator<int>(ossSchedule, ","));
+
+                    // Now add the last element with no delimiter
+                    ossSchedule << schedule.back();
+                }
+                std::cout << ossSchedule.view() << std::endl;
+                outfileGraph << ossSchedule.rdbuf() << std::endl;
+                ossSchedule.str("");
+                ossSchedule.clear();
+            }
         }
-        outfilePT << "#PT line end" <<std::endl;
     }
-    outfilePT.close();
+    outfileGraph.close();
     std::cout << "results of graph validations : " << this->check() << std::endl;
 }
 
 bool Graph::check() {
     bool checkResult = true;
-    for(auto& transitLine : this->transitLines)
+    for(auto const& transitLine : this->transitLines)
     {
         checkResult &= transitLine.check();
     }
@@ -177,12 +202,12 @@ bool Graph::check() {
 
 bool Graph::checkLineToNodeLinks() {
     int nodeIndexFromLine;
-    Node* nodeFromGraph; //Forced to init here
+    Node const* nodeFromGraph; //Forced to init here
 
     bool checkResult = true;
-    for(auto& node : nodesVector)
+    for(auto const& node : nodesVector)
     {
-        for(auto& lineStop : node.getPTLinesSet())
+        for(auto const& lineStop : node.getPTLinesSet())
         {
             nodeIndexFromLine = lineStop.getLineRef().getNode(lineStop.getStopIndex());
             nodeFromGraph = &this->nodesVector.at(nodeIndexFromLine);
@@ -255,7 +280,7 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
     }
 
     //Create subsequent timetables according to preceding timetable and travel time
-    for(int i = 1; i < newLine.getNodes().size(); ++i)
+    for(size_t i = 1; i < newLine.getNodes().size(); ++i)
     {
         int travelTime = travelTimeDistribution(rng); //FIXME travel time is randomized for now, we should get edge length if it exists I guess
         std::vector<int> precedingTimeTable = newLine.getTimetable(i - 1);
@@ -282,4 +307,23 @@ void Graph::createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, doubl
 
     Node exitNode = nodesVector.at(edgeEndNodeIndex);
     exitNode.getIncomingEdges().emplace_back(edgesVector.size() - 1);
+}
+
+void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {
+    int intVal;
+    while (infile >> currentRow && !currentRow[0].starts_with('#')) {
+        auto& matrixLine = shortestSAEVPaths.emplace_back();
+        for(int i = 0; i < currentRow.size(); ++i) {
+            std::from_chars(currentRow[i].data(), currentRow[i].data() + currentRow[i].size(), intVal);
+            matrixLine.emplace_back(intVal);
+        }
+    }
+}
+
+int Graph::getDepotNodeIdx() const {
+    return _depotNodeIdx;
+}
+
+void Graph::setDepotNodeIdx(int depotNodeIdx) {
+    _depotNodeIdx = depotNodeIdx;
 }

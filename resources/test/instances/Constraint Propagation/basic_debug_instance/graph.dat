@@ -1,0 +1,16 @@
+#Params (seed)
+123456789
+#Nodes format : status (work, leisure, residential),x,y
+residential,0,0
+residential,0,1
+work,1,0
+work,1,1
+#Matrix
+0,10,10,20
+10,0,20,10
+10,20,0,10
+20,10,10,0
+#PT line format : freq (min), start_time, end_time, node_1, ..., node_n
+15,340,560,1,2
+#Depot node index
+0
