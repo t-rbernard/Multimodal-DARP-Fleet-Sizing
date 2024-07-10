@@ -6,19 +6,17 @@
 #include "Request.h"
 #include "../../services/DatFile/DATRow.h"
 
-Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
-                 const int deltaTime, const int weight) : _originNodeIndex(departureNodeIndex),
-                                                          _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
-                                                          _deltaTime(deltaTime), _weight(weight) {
-    _currentDeltaTime = deltaTime;
+Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
+                 const uint deltaTime, const uint weight) : _originNodeIndex(departureNodeIndex),
+                                                            _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
+                                                            _deltaTime(deltaTime), _currentDeltaTime(deltaTime), _weight(weight) {
     _departureTW = _arrivalTW - deltaTime;
 }
 
-Request::Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
-                 const int deltaTime, const int weight, const Graph& graph) :
+Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
+                 const uint deltaTime, const uint weight, const Graph& graph) :
         _originNodeIndex(departureNodeIndex), _destinationNodeIndex(arrivalNodeIndex),
-        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight) {
-    _currentDeltaTime = deltaTime;
+        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _currentDeltaTime(deltaTime), _weight(weight) {
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
 }
@@ -85,11 +83,11 @@ std::vector<Request> Request::getRequestsFromFile(const std::string& datFilePath
     return requests;
 }
 
-const int Request::getOriginNodeIndex() const {
+size_t Request::getOriginNodeIndex() const {
     return _originNodeIndex;
 }
 
-const int Request::getDestinationNodeIndex() const {
+size_t Request::getDestinationNodeIndex() const {
     return _destinationNodeIndex;
 }
 
@@ -97,11 +95,11 @@ const TimeWindow &Request::getArrivalTw() const {
     return _arrivalTW;
 }
 
-const int Request::getDeltaTime() const {
+int Request::getDeltaTime() const {
     return _deltaTime;
 }
 
-const int Request::getWeight() const {
+int Request::getWeight() const {
     return _weight;
 }
 
@@ -125,21 +123,21 @@ const TimeWindow &Request::getDepartureTw() const {
     return _departureTW;
 }
 
-const int &Request::getMinDepartureTw() const {
+uint Request::getMinDepartureTw() const {
     return _departureTW.min;
 }
 
 
-const int &Request::getMaxDepartureTw() const {
+uint Request::getMaxDepartureTw() const {
     return _departureTW.max;
 }
 
-const int &Request::getMinArrivalTw() const {
+uint Request::getMinArrivalTw() const {
     return _arrivalTW.min;
 }
 
 
-const int &Request::getMaxArrivalTw() const {
+uint Request::getMaxArrivalTw() const {
     return _arrivalTW.max;
 }
 

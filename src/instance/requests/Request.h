@@ -13,43 +13,43 @@
 class Request {
 private:
     //Request base members (const and initialized on _request creation)
-    int _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
-    int _destinationNodeIndex; //
+    size_t _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
+    size_t _destinationNodeIndex; //
     TimeWindow _arrivalTW; //[min,max] time window for arrival to the destination node
-    int _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
-    int _weight; //How much space the requests takes in the vehicle (defaults to 1)
+    uint _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
+    uint _weight; //How much space the requests takes in the vehicle (defaults to 1)
 
     //Request helpful members (used for constraint propagation and remember the current state of the _request)
-    int _currentDeltaTime; //deltaTime - currentRouteDuration
-    int _requestServiceStart;
-    int _requestServiceEnd;
+    uint _currentDeltaTime; //deltaTime - currentRouteDuration
+    uint _requestServiceStart;
+    uint _requestServiceEnd;
     RequestRoute _currentRoute{this};
     TimeWindow _departureTW; //For now, a virtual TW on departures, used for constraint propagation
 public:
-    Request(const int departureNodeIndex, const int arrivalNodeIndex,
-            const TimeWindow &arrivalTw, const int deltaTime, const int weight);
-    Request(const int departureNodeIndex, const int arrivalNodeIndex, const TimeWindow &arrivalTw,
-            const int deltaTime, const int weight, const Graph& graph);
+    Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex,
+            const TimeWindow &arrivalTw, const uint deltaTime, const uint weight);
+    Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
+            const uint deltaTime, const uint weight, const Graph& graph);
     Request(const DATRow& currentRow, const Graph& graph);
     Request(const DATRow& currentRow, double deltaRatio, const Graph& graph);
 
     static std::vector<Request> getRequestsFromFile(const std::string& datFilePath, const Graph& graph);
 
     //Getters
-    [[nodiscard]] const int getOriginNodeIndex() const;
-    [[nodiscard]] const int getDestinationNodeIndex() const;
+    [[nodiscard]] size_t getOriginNodeIndex() const;
+    [[nodiscard]] size_t getDestinationNodeIndex() const;
     [[nodiscard]] const TimeWindow &getArrivalTw() const;
-    [[nodiscard]] const int getDeltaTime() const;
-    [[nodiscard]] const int getWeight() const;
+    [[nodiscard]] int getDeltaTime() const;
+    [[nodiscard]] int getWeight() const;
     [[nodiscard]] int getCurrentDeltaTime() const;
     [[nodiscard]] int getRequestServiceStart() const;
     [[nodiscard]] int getRequestServiceEnd() const;
     [[nodiscard]] const RequestRoute &getCurrentRoute() const;
     [[nodiscard]] const TimeWindow &getDepartureTw() const;
-    [[nodiscard]] const int &getMinDepartureTw() const;
-    [[nodiscard]] const int &getMaxDepartureTw() const;
-    [[nodiscard]] const int &getMinArrivalTw() const;
-    [[nodiscard]] const int &getMaxArrivalTw() const;
+    [[nodiscard]] uint getMinDepartureTw() const;
+    [[nodiscard]] uint getMaxDepartureTw() const;
+    [[nodiscard]] uint getMinArrivalTw() const;
+    [[nodiscard]] uint getMaxArrivalTw() const;
 
     //Setters
     void setCurrentDeltaTime(int currentDeltaTime);

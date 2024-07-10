@@ -40,20 +40,20 @@ public:
         return nodesVector;
     }
 
-    [[nodiscard]] const Node &getNode(int nodeIndex) const {
-        return nodesVector.at(nodeIndex);
+    [[nodiscard]] const Node &getNode(size_t nodeIndex) const {
+        return nodesVector[nodeIndex];
     }
 
     [[nodiscard]] size_t getNbNodes() const {
         return nodesVector.size();
     }
 
-    [[nodiscard]] std::vector<LineStop> getPTLinesSet(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getPTLinesSet();
+    [[nodiscard]] std::vector<LineStop> getPTLinesSet(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getPTLinesSet();
     }
 
-    [[nodiscard]] size_t getNbPTLines(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getPTLinesSet().size();
+    [[nodiscard]] size_t getNbPTLines(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getPTLinesSet().size();
     }
 
     [[nodiscard]] int getDepotNodeIdx() const;
@@ -66,17 +66,17 @@ public:
         return edgesVector;
     }
 
-    [[nodiscard]] size_t getNbIncomingEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getIncomingEdges().size();
+    [[nodiscard]] size_t getNbIncomingEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getIncomingEdges().size();
     }
 
-    [[nodiscard]] size_t getNbOutgoingEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getOutgoingEdges().size();
+    [[nodiscard]] size_t getNbOutgoingEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getOutgoingEdges().size();
     }
 
 
-    [[nodiscard]] size_t getNbEdges(int nodeIndex) const {
-        return nodesVector.at(nodeIndex).getIncomingEdges().size() + nodesVector.at(nodeIndex).getOutgoingEdges().size();
+    [[nodiscard]] size_t getNbEdges(size_t nodeIndex) const {
+        return nodesVector[nodeIndex].getIncomingEdges().size() + nodesVector[nodeIndex].getOutgoingEdges().size();
     }
 
     /**
@@ -148,9 +148,9 @@ public:
      * @param edgeEndNodeIndex Index of the node serving as an exit point for this edge
      * @param length The length of this edge (in minutes)
      */
-    void createAndAddEdge(int edgeStartNodeIndex, int edgeEndNodeIndex, double length);
+    void createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length);
 
-    [[nodiscard]] int getShortestSAEVPath(int x, int y) const { return shortestSAEVPaths.at(x).at(y); }
+    [[nodiscard]] int getShortestSAEVPath(size_t x, size_t y) const { return shortestSAEVPaths[x][y]; }
 
     void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
 };

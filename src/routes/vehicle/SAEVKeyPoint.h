@@ -18,8 +18,8 @@ private:
     SAEVKeyPoint* _successor{nullptr};
     SAEVKeyPoint* _counterpart{nullptr};
     int _currentOccupation{0};
-    int _minTW{0};
-    int _maxTW{INT16_MAX};
+    uint _minTW{0};
+    uint _maxTW{INT16_MAX};
     SAEVehicle const * _vehiclePointer{};
     Request const * _requestPointer{};
 public:
@@ -48,11 +48,11 @@ public:
     [[nodiscard]] int getCurrentOccupation() const;
     void setCurrentOccupation(int currentCapacity);
 
-    [[nodiscard]] int getMinTw() const;
-    void setMinTw(int minTw);
+    [[nodiscard]] uint getMinTw() const;
+    void setMinTw(uint minTw);
 
-    [[nodiscard]] int getMaxTw() const;
-    void setMaxTw(int maxTw);
+    [[nodiscard]] uint getMaxTw() const;
+    void setMaxTw(uint maxTw);
 
     [[nodiscard]] bool isOrigin() const;
     [[nodiscard]] bool isDestination() const;
