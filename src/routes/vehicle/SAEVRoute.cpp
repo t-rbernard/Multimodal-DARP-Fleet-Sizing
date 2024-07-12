@@ -397,15 +397,25 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
     return bestInsertionQueue;
 }
 
-/** TODO: move to BestInsertionQueue class with a route parameter ?
+/**
  * Initializes a BestInsertionQueue to guide the best insertion heuristic while checking neighbouring TW checks
- * @param requestId
- * @param vehicleId
- * @return
+ * @param requestId The ID of the request for which we search best insertions
+ * @param vehicleId The ID of the vehicle in which we look for new best insertions
+ * @return The created BestInsertionQueue filled with the best insertions for the given request and vehicle IDs
  */
- BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId) {
+BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId) {
     BestInsertionQueue bestInsertionQueue(requestId, vehicleId, _nbRequest^2);
+    getBestFeasibleInsertionsQueue(bestInsertionQueue, requestId, vehicleId);
+    return bestInsertionQueue;
+}
 
+/**
+ * Search for new best insertions to add into the given best insertion queue for a given request and vehicle
+ * @param bestInsertionQueue The queue we wish to add the new feasible best insertions to
+ * @param requestId The ID of the request for which we search best insertions
+ * @param vehicleId The ID of the vehicle in which we look for new best insertions
+ */
+void SAEVRoute::getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, size_t requestId, size_t vehicleId) {
     //Init variables used during iteration
     double score;
     SAEVKeyPoint * originInsertionKeyPoint = &getOriginDepot(vehicleId);
@@ -425,8 +435,6 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
         originInsertionKeyPoint = originInsertionKeyPoint->getSuccessor();
         destinationInsertionKeyPoint = originInsertionKeyPoint;
     }
-
-    return bestInsertionQueue;
 }
 
 void SAEVRoute::addRequestWeightToRoute(size_t requestId) {

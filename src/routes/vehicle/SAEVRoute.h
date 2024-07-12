@@ -111,6 +111,7 @@ public:
 
     BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
     BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);
+    void getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, size_t requestId, size_t vehicleId);
 
     SAEVKeyPoint& getRequestOrigin(const size_t requestId) { return _route[requestId * 2];}
     SAEVKeyPoint& getRequestDestination(const size_t requestId) { return _route[requestId * 2 + 1];}
