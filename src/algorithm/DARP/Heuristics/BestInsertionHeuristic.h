@@ -27,7 +27,7 @@ public:
      * @param route the route structure in which the request will be inserted
      * @return The ID of the active vehicle in which our request was inserted, or the ID of the most favourable inactive vehicle
      */
-    static size_t tryBestRequestInsertionInActiveVehicle(size_t requestId, SAEVRoute& route);
+    static SAEVRouteChangelist tryBestRequestInsertionInActiveVehicle(size_t requestId, SAEVRoute& route);
     /**
      * Iteratively tests best insertions wrt scoring function (detour) in the given vehicle and route
      * @param requestId ID of the request to insert in the vehicle
@@ -35,7 +35,14 @@ public:
      * @param route
      * @return true iff the request was inserted in the vehicle, false if no best insertion yielded a possible insertion
      */
-    static bool tryVehicleBestInsertion(size_t requestId, size_t vehicleId, SAEVRoute& route);
+    static SAEVRouteChangelist tryVehicleBestInsertion(size_t requestId, size_t vehicleId, SAEVRoute& route);
+    /**
+     * Tries the best insertions
+     * @param bestInsertionsQueue
+     * @param route
+     * @return
+     */
+    static SAEVRouteChangelist tryVehicleBestInsertion(BestInsertionQueue& bestInsertionsQueue, SAEVRoute& route);
 
 
     /** TODO Implement those to prevent trying every single best insertion

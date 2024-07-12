@@ -39,7 +39,7 @@ public:
      * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the origin of the request we want to insert
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
      */
-    void insertRequest(size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
+    void insertRequest(size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
@@ -70,7 +70,7 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
+    SAEVRouteChangelist tryAddRequest(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Verifies time window constraints on our request's origin/destination's projected neighbour, aka originPredecessor/destinationPredecessor and their successor.
@@ -97,7 +97,7 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP);
+    SAEVRouteChangelist insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Returns a score value equivalent to the detour implied by insertion of a request after the two given key point indexes.
@@ -107,7 +107,7 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return
      */
-    double getDetourScore(const size_t requestId, const SAEVKeyPoint &originRequestPredecessorKP, const SAEVKeyPoint &destinationRequestPredecessorKP);
+    double getDetourScore(const size_t requestId, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP);
 
     BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
     BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);

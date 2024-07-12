@@ -37,34 +37,34 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
     }
 }
 
-void SAEVRoute::insertRequest(size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP) {
+void SAEVRoute::insertRequest(size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP) {
     SAEVKeyPoint& originKp = getRequestOrigin(requestId);
     SAEVKeyPoint& destinationKp = getRequestDestination(requestId);
 
-    SAEVKeyPoint *originSuccKp = originRequestPredecessorKP.getSuccessor();
-    SAEVKeyPoint *destinationSuccKp = destinationRequestPredecessorKP.getSuccessor();
+    SAEVKeyPoint *originSuccKp = originRequestPredecessorKP->getSuccessor();
+    SAEVKeyPoint *destinationSuccKp = destinationRequestPredecessorKP->getSuccessor();
 
     if(originRequestPredecessorKP != destinationRequestPredecessorKP) {
         //Set values for O/D KPs
-        originKp.setPredecessor(&originRequestPredecessorKP);
+        originKp.setPredecessor(originRequestPredecessorKP);
         originKp.setSuccessor(originSuccKp);
-        destinationKp.setPredecessor(&destinationRequestPredecessorKP);
+        destinationKp.setPredecessor(destinationRequestPredecessorKP);
         destinationKp.setSuccessor(destinationSuccKp);
 
         //Set values for predecessors/successors
-        originRequestPredecessorKP.setSuccessor(&originKp);
+        originRequestPredecessorKP->setSuccessor(&originKp);
         originSuccKp->setPredecessor(&originKp);
-        destinationRequestPredecessorKP.setSuccessor(&destinationKp);
+        destinationRequestPredecessorKP->setSuccessor(&destinationKp);
         destinationSuccKp->setPredecessor(&destinationKp);
     } else {
         //Set values for O/D KPs
-        originKp.setPredecessor(&originRequestPredecessorKP);
+        originKp.setPredecessor(originRequestPredecessorKP);
         originKp.setSuccessor(&destinationKp);
         destinationKp.setPredecessor(&originKp);
         destinationKp.setSuccessor(destinationSuccKp);
 
         //Set values for predecessors/successors
-        originRequestPredecessorKP.setSuccessor(&originKp);
+        originRequestPredecessorKP->setSuccessor(&originKp);
         originSuccKp->setPredecessor(&destinationKp);
     }
     //Once insertion is done, update weights on the route
@@ -107,12 +107,12 @@ void SAEVRoute::removeRequest(size_t requestId) {
 }
 
 SAEVRouteChangelist
-SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP, SAEVKeyPoint &destinationRequestPredecessorKP) {
+SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP) {
     const Request* request = &(*_requestList)[requestId];
-    SAEVKeyPoint const* destinationSuccessor = destinationRequestPredecessorKP.getSuccessor();
+    SAEVKeyPoint const* destinationSuccessor = destinationRequestPredecessorKP->getSuccessor();
 
     //Check vehicle capacity
-    SAEVKeyPoint const* currentKP = &originRequestPredecessorKP;
+    SAEVKeyPoint const* currentKP = originRequestPredecessorKP;
     do {
         if(currentKP->getCurrentOccupation() + request->getWeight() > SAEVehicle::getCapacity()) {
             DEBUG_MSG("WEIGHT VIOLATION : request weight = " + std::to_string(request->getWeight()) + " incompatible KP = " + currentKP->to_string());
@@ -122,7 +122,7 @@ SAEVRoute::tryAddRequest(const size_t requestId, SAEVKeyPoint &originRequestPred
     } while (currentKP != destinationSuccessor && currentKP != nullptr);
 
     //Do basic checks on neighbouring nodes from our Origin/Destination insertion points
-    bool isValid = doNeighbouringTWChecks(requestId, &originRequestPredecessorKP, &destinationRequestPredecessorKP);
+    bool isValid = doNeighbouringTWChecks(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
 
     if(isValid) {
         return insertRequestWithPropagation(requestId, originRequestPredecessorKP, destinationRequestPredecessorKP);
@@ -180,8 +180,8 @@ SAEVRoute::doNeighbouringTWChecks(const size_t requestId, const SAEVKeyPoint *or
     return true;
 }
 
-SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint &originRequestPredecessorKP,
-                                                            SAEVKeyPoint &destinationRequestPredecessorKP) {
+SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP,
+                                                            SAEVKeyPoint * destinationRequestPredecessorKP) {
     //Init changelist
     SAEVRouteChangelist changelist{this, requestId, originRequestPredecessorKP, destinationRequestPredecessorKP, SAEVRouteChangelist::InsertionStatus::FAILURE_MIN};
     //Properly insert the request to facilitate constraint propagation
@@ -291,31 +291,31 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(const size_t request
     return changelist;
 }
 
-double SAEVRoute::getDetourScore(const size_t requestId, const SAEVKeyPoint &originRequestPredecessorKP,
-                                 const SAEVKeyPoint &destinationRequestPredecessorKP) {
+double SAEVRoute::getDetourScore(const size_t requestId, const SAEVKeyPoint * originRequestPredecessorKP,
+                                 const SAEVKeyPoint * destinationRequestPredecessorKP) {
     double score;
     const SAEVKeyPoint& originKP = getRequestOrigin(requestId);
     const SAEVKeyPoint& destinationKP = getRequestDestination(requestId);
-    const SAEVKeyPoint* originSuccKP = originRequestPredecessorKP.getSuccessor();
-    const SAEVKeyPoint* destinationSuccKP = destinationRequestPredecessorKP.getSuccessor();
+    const SAEVKeyPoint* originSuccKP = originRequestPredecessorKP->getSuccessor();
+    const SAEVKeyPoint* destinationSuccKP = destinationRequestPredecessorKP->getSuccessor();
 
     if(originRequestPredecessorKP != destinationRequestPredecessorKP) {
-        const SAEVKeyPoint* destinationPredKP = &destinationRequestPredecessorKP;
+        const SAEVKeyPoint* destinationPredKP = destinationRequestPredecessorKP;
 
         //Origin Detour
-        score = _graph->getShortestSAEVPath(originRequestPredecessorKP.getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), D)
+        score = _graph->getShortestSAEVPath(originRequestPredecessorKP->getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), D)
                 + _graph->getShortestSAEVPath(originKP.getNodeIndex(), originSuccKP->getNodeIndex()) //T(O, Succ(D))
-                - _graph->getShortestSAEVPath(originRequestPredecessorKP.getNodeIndex(), originSuccKP->getNodeIndex()); //T(Pred(O), Succ(O))
+                - _graph->getShortestSAEVPath(originRequestPredecessorKP->getNodeIndex(), originSuccKP->getNodeIndex()); //T(Pred(O), Succ(O))
 
         //Destination Detour
         score += _graph->getShortestSAEVPath(destinationPredKP->getNodeIndex(), destinationKP.getNodeIndex()) //T(Pred(D), D))
                 + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccKP->getNodeIndex()) //T(D, Succ(D)))
                 - _graph->getShortestSAEVPath(destinationPredKP->getNodeIndex(), destinationSuccKP->getNodeIndex()); //T(Pred(D), Succ(D)))
     } else {
-        score = _graph->getShortestSAEVPath(originRequestPredecessorKP.getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), O)
+        score = _graph->getShortestSAEVPath(originRequestPredecessorKP->getNodeIndex(), originKP.getNodeIndex()) //T(Pred(O), O)
                 + _graph->getShortestSAEVPath(originKP.getNodeIndex(), destinationKP.getNodeIndex()) //T(O, D)
                 + _graph->getShortestSAEVPath(destinationKP.getNodeIndex(), destinationSuccKP->getNodeIndex()) //T(D, Succ(D))
-                - _graph->getShortestSAEVPath(originRequestPredecessorKP.getNodeIndex(), destinationSuccKP->getNodeIndex()); //T(Pred(O), Succ(D))
+                - _graph->getShortestSAEVPath(originRequestPredecessorKP->getNodeIndex(), destinationSuccKP->getNodeIndex()); //T(Pred(O), Succ(D))
     }
     return score;
 }
@@ -384,7 +384,7 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
     //iterate over possible origin/destination pairs for the given vehicle
     while(originInsertionKeyPoint->getSuccessor() != nullptr) {
         while(destinationInsertionKeyPoint->getSuccessor() != nullptr) {
-            score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
+            score = getDetourScore(requestId, originInsertionKeyPoint, destinationInsertionKeyPoint);
             bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
             destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();
         }
@@ -415,7 +415,7 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t ve
     while(originInsertionKeyPoint->getSuccessor() != nullptr) {
         while(destinationInsertionKeyPoint->getSuccessor() != nullptr) {
             if(doNeighbouringTWChecks(requestId,originInsertionKeyPoint, destinationInsertionKeyPoint)) {
-                score = getDetourScore(requestId, *originInsertionKeyPoint, *destinationInsertionKeyPoint);
+                score = getDetourScore(requestId, originInsertionKeyPoint, destinationInsertionKeyPoint);
                 bestInsertionQueue.emplace(originInsertionKeyPoint, destinationInsertionKeyPoint, score);
             }
             destinationInsertionKeyPoint = destinationInsertionKeyPoint->getSuccessor();

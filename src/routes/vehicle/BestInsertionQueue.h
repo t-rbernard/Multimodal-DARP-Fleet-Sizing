@@ -15,10 +15,19 @@ private:
     size_t _vehicleId{std::numeric_limits<size_t>::max()};
 
 public:
+    explicit BestInsertionQueue(size_t requestId) : _requestId(requestId) {}
     BestInsertionQueue(size_t requestId, size_t vehicleId) : _requestId(requestId), _vehicleId(vehicleId) {}
 
     BestInsertionQueue(size_t requestId, size_t vehicleId, size_t nbRequests) : BestInsertionQueue(requestId, vehicleId) {
         c.reserve(nbRequests^2);
+    }
+
+    [[nodiscard]] size_t getVehicleId() const {
+        return _vehicleId;
+    }
+
+    [[nodiscard]] size_t getRequestId() const {
+        return _requestId;
     }
 
     /**

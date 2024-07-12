@@ -27,17 +27,24 @@ public:
         CHANGELIST_REVERTED
     };
 private:
-    SAEVRoute * const _routePtr;
-    const size_t _requestId;
-    SAEVKeyPoint& _originPredecessorKP;
-    SAEVKeyPoint& _destinationPredecessorKP;
+    //Change target info
+    SAEVRoute * _routePtr{};
+    size_t _requestId{};
+    size_t _vehicleId{};
+    SAEVKeyPoint* _originPredecessorKP{};
+    SAEVKeyPoint* _destinationPredecessorKP{};
+
+    //Changelist specific info (aka, if this ever becomes a template class, *this* is what will go in the generic interface)
     std::vector<SAEVRouteChange> _changelist{};
     double _score{std::numeric_limits<double>::infinity()}; //Init score to infinity
 
-    InsertionStatus _status; //Status on changelist creation
+    InsertionStatus _status{InsertionStatus::CHANGELIST_REVERTED}; //Status on changelist creation
     InsertionStatus _currentStatus; //Updated status after applying/reverting changelist
 
 public:
+
+    SAEVRouteChangelist(SAEVRoute * routePtr, size_t requestId) : _routePtr(routePtr), _requestId(requestId) {}
+
     /**
      * Initializes a change list to memorize every iterative modification made during constraint propagation
      * @param routePtr a pointer to the route the constraint propagation was applied on. revert/apply operations will be done on this route
@@ -45,8 +52,9 @@ public:
      * @param originPredecessorKP The index of the request our origin will be inserted after
      * @param destinationPredecessorKP The index of the request our destination will be inserted after
      */
-    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, SAEVKeyPoint &originPredecessorKP, SAEVKeyPoint &destinationPredecessorKP, InsertionStatus status)
+    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, SAEVKeyPoint* originPredecessorKP, SAEVKeyPoint* destinationPredecessorKP, InsertionStatus status)
     : _routePtr(routePtr), _requestId(requestId), _originPredecessorKP(originPredecessorKP), _destinationPredecessorKP(destinationPredecessorKP), _status(status), _currentStatus(status) {};
+
 
     /**
      * @return A pointer to the route this change list applies/reverts changes to
@@ -59,12 +67,16 @@ public:
      */
     [[nodiscard]] size_t getRequestId() const;
 
-    [[nodiscard]] const SAEVKeyPoint &getOriginPredecessorKP() const;
+    [[nodiscard]] size_t getVehicleId() const;
+    void setVehicleId(size_t vehicleId);
 
-    [[nodiscard]] const SAEVKeyPoint &getDestinationPredecessorKP() const;
+    [[nodiscard]] const SAEVKeyPoint * getOriginPredecessorKP() const;
+
+    [[nodiscard]] const SAEVKeyPoint * getDestinationPredecessorKP() const;
 
     [[nodiscard]] InsertionStatus getStatus() const;
     void setStatus(InsertionStatus status);
+    [[nodiscard]] bool success();
 
     [[nodiscard]] InsertionStatus getCurrentStatus() const;
     void setCurrentStatus(InsertionStatus currentStatus);

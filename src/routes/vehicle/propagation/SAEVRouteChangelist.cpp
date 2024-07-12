@@ -44,11 +44,11 @@ size_t SAEVRouteChangelist::getRequestId() const {
     return _requestId;
 }
 
-const SAEVKeyPoint &SAEVRouteChangelist::getOriginPredecessorKP() const {
+const SAEVKeyPoint * SAEVRouteChangelist::getOriginPredecessorKP() const {
     return _originPredecessorKP;
 }
 
-const SAEVKeyPoint &SAEVRouteChangelist::getDestinationPredecessorKP() const {
+const SAEVKeyPoint * SAEVRouteChangelist::getDestinationPredecessorKP() const {
     return _destinationPredecessorKP;
 }
 
@@ -81,7 +81,7 @@ SAEVRouteChangelist::InsertionStatus SAEVRouteChangelist::getCurrentStatus() con
 }
 
 bool SAEVRouteChangelist::shouldUndoInsertion() const {
-    return _currentStatus > InsertionStatus::FAILURE_DELTA_MAX;
+    return _currentStatus < InsertionStatus::FAILURE_PRECONDITION_TW;
 }
 
 void SAEVRouteChangelist::setStatus(SAEVRouteChangelist::InsertionStatus status) {
@@ -90,4 +90,16 @@ void SAEVRouteChangelist::setStatus(SAEVRouteChangelist::InsertionStatus status)
 
 void SAEVRouteChangelist::setCurrentStatus(SAEVRouteChangelist::InsertionStatus currentStatus) {
     _currentStatus = currentStatus;
+}
+
+size_t SAEVRouteChangelist::getVehicleId() const {
+    return _vehicleId;
+}
+
+void SAEVRouteChangelist::setVehicleId(size_t vehicleId) {
+    _vehicleId = vehicleId;
+}
+
+bool SAEVRouteChangelist::success() {
+    return _status == InsertionStatus::SUCCESS;
 }
