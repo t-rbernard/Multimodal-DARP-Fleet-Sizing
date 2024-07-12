@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <algorithm>
 
 template <typename Comparable>
 class SearchAlgorithms {
@@ -18,7 +19,7 @@ public:
      * @return the size of the vector if all vector values are lower than our search, the index of the first larger or equal value otherwise
      */
     static size_t findNextSortedValue(std::vector<Comparable> sortedVector, Comparable value) {
-        auto iterator = std::lower_bound(sortedVector.begin(), sortedVector.end(), value);
+        auto iterator = std::ranges::lower_bound(sortedVector, value);
         return std::distance(sortedVector.begin(), iterator);
     }
 
@@ -29,7 +30,7 @@ public:
      * @return -1 if the exact value hasn't been found or the index of the value if it's been found
      */
     static size_t vectorBinarySearch(std::vector<Comparable> sortedVector, Comparable value) {
-        auto iterator = std::lower_bound(sortedVector.begin(), sortedVector.end(), value);
+        auto iterator = std::ranges::lower_bound(sortedVector, value);
         if (iterator == sortedVector.end() || *iterator != value) {
             return -1;
         } else {

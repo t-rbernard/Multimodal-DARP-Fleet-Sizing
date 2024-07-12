@@ -2,6 +2,7 @@
 // Created by romain on 13/03/24.
 //
 
+#include <algorithm>
 #include "TransitShortestPathContainer.h"
 #include "TransitStateContainer.h"
 
@@ -26,7 +27,7 @@ void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
 
 std::vector<std::pair<int, std::vector<TransitShortestPath>>>::iterator
 TransitShortestPathContainer::getShortestPathsFromTime(int startNodeIndex, int earliestStartInstant) {
-    const auto& iterator = std::lower_bound(container[startNodeIndex].begin(), container[startNodeIndex].end(),
+    const auto& iterator = std::ranges::lower_bound(container[startNodeIndex],
                                             std::pair<int, std::vector<TransitShortestPath>>(earliestStartInstant, {}));
 
     return iterator;
