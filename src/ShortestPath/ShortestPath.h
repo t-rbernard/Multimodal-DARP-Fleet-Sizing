@@ -20,6 +20,14 @@ public:
         return _keyPoints;
     }
 
+    virtual const KeyPoint* getDeparture() const {
+        return _keyPoints.cbegin().base();
+    }
+
+    virtual const KeyPoint* getArrival() const {
+        return (_keyPoints.cend() - 1).base();
+    }
+
     void replaceKeyPoint(int keyPointIndex, KeyPoint& value) {
         _keyPoints[keyPointIndex] = value;
     }

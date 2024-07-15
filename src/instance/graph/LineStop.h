@@ -25,6 +25,11 @@ public:
     [[nodiscard]] int getInstant(int stationIdx, int scheduleIdx) const { return _lineRef.getInstant(stationIdx, scheduleIdx); }
     [[nodiscard]] int findNextScheduledPassage(int stationIdx, int instant) const { return _lineRef.findNextScheduledPassage(stationIdx, instant); }
 
+    [[nodiscard]] size_t getNodeIndex() const
+    {
+        return _lineRef.getNode(_stopIndex);
+    }
+
     /**
      * @return -1 if there are no valid successors to this LineStop's node. Returns the node index in the graph if there is a valid successor
      */

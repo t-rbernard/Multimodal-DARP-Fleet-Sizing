@@ -11,11 +11,11 @@
 
 class TransitShortestPath : public ShortestPath<LineStop> {
 private:
-    int _arrivalTime;
+    int _arrivalTime{-1};
 public:
+    TransitShortestPath() = default;
 
-    explicit TransitShortestPath(const TransitAlgorithmState& state) {
-        _arrivalTime = state.getInstant();
+    explicit TransitShortestPath(const TransitAlgorithmState& state) : _arrivalTime(state.getInstant()) {
         std::move(state.getConnections().begin(), state.getConnections().end() - 1,_keyPoints.begin());
     }
 
@@ -39,24 +39,23 @@ public:
                (this->getArrivalTime() == rhs.getArrivalTime() && this->getKeyPoints().size() > rhs.getKeyPoints().size());
     }
 
+    [[nodiscard]] const LineStop* getDeparture() const override {
+        return _keyPoints.cbegin().base();
+    }
+
+    [[nodiscard]] const LineStop* getArrival() const override {
+        return (_keyPoints.cend() - 1).base();
+    }
+
+    [[nodiscard]] size_t getDepartureNode() const {
+        return getDeparture()->getNodeIndex();
+    }
+
+    [[nodiscard]] size_t getArrivalNode() const {
+        return getArrival()->getNodeIndex();
+    }
+
     [[nodiscard]] int getArrivalTime() const { return _arrivalTime; }
-
-
-//    FIXME: check if I can properly remove this or if shortest path comparisons may be useful
-//    [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
-//        return this->getKeyPoints().size() <= rhs.getConnections().size()
-//               && this->getDuration() <= rhs.getInstant();
-//    }
-//
-//    bool operator<(const TransitAlgorithmState& rhs) const {
-//        return this->getDuration() < rhs.getInstant() ||
-//               (this->getDuration() == rhs.getInstant() && this->getKeyPoints().size() < rhs.getConnections().size());
-//    }
-//
-//    bool operator>(const TransitAlgorithmState& rhs) const {
-//        return this->getDuration() > rhs.getInstant() ||
-//               (this->getDuration() == rhs.getInstant() && this->getKeyPoints().size() > rhs.getConnections().size());
-//    }
 };
 
 
