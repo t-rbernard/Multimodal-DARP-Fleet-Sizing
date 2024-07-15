@@ -27,12 +27,12 @@ TEST(ConstraintPropagationDebug, DebugBaseInstance) {
     std::cout << "------------------Fin parsing instance et route-------------------" << std::endl << std::endl;
     int vehicleId = 1;
     assert(routesContainer.checkRouteTimeWindows(vehicleId));
-    SAEVRouteChangelist req0Changelist = routesContainer.tryAddRequest(0, routesContainer.getOriginDepot(vehicleId), routesContainer.getOriginDepot(1));
+    SAEVRouteChangelist req0Changelist = routesContainer.tryAddRequest(0, &routesContainer.getOriginDepot(vehicleId), &routesContainer.getOriginDepot(1));
     std::cout << routesContainer.to_string(vehicleId) << std::endl;
     assert(routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
-    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, routesContainer.getOriginDepot(vehicleId),
-                                                                       routesContainer.getRequestDestination(0));
+    SAEVRouteChangelist req1Changelist = routesContainer.tryAddRequest(1, &routesContainer.getOriginDepot(vehicleId),
+                                                                       &routesContainer.getRequestDestination(0));
     std::cout << routesContainer.to_string(vehicleId) << std::endl << std::endl;
     assert(!routesContainer.checkRouteTimeWindows(vehicleId));
     std::cout << "------------------------------------------------------------------" << std::endl;
@@ -80,15 +80,15 @@ TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     SAEVRoute routesContainer(graphFromSingleFile, requests);
 
     //Vehicle 1 insertions
-    routesContainer.tryAddRequest(0,routesContainer.getOriginDepot(0),routesContainer.getOriginDepot(0));
-    routesContainer.tryAddRequest(1, routesContainer.getRequestOrigin(0), routesContainer.getRequestOrigin(0));
-    SAEVRouteChangelist cl = routesContainer.tryAddRequest(2, routesContainer.getRequestOrigin(1),
-                                                           routesContainer.getRequestDestination(1));
+    routesContainer.tryAddRequest(0,&routesContainer.getOriginDepot(0),&routesContainer.getOriginDepot(0));
+    routesContainer.tryAddRequest(1, &routesContainer.getRequestOrigin(0), &routesContainer.getRequestOrigin(0));
+    SAEVRouteChangelist cl = routesContainer.tryAddRequest(2, &routesContainer.getRequestOrigin(1),
+                                                           &routesContainer.getRequestDestination(1));
 
     //Vehicle 2 insertions
-    routesContainer.tryAddRequest(5,routesContainer.getOriginDepot(1),routesContainer.getOriginDepot(1));
-    routesContainer.tryAddRequest(4,routesContainer.getOriginDepot(1), routesContainer.getRequestDestination(5));
-    routesContainer.tryAddRequest(3,routesContainer.getOriginDepot(1), routesContainer.getRequestOrigin(4));
+    routesContainer.tryAddRequest(5,&routesContainer.getOriginDepot(1),&routesContainer.getOriginDepot(1));
+    routesContainer.tryAddRequest(4,&routesContainer.getOriginDepot(1), &routesContainer.getRequestDestination(5));
+    routesContainer.tryAddRequest(3,&routesContainer.getOriginDepot(1), &routesContainer.getRequestOrigin(4));
 }
 
 }
