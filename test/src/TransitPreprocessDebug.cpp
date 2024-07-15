@@ -20,7 +20,7 @@ TEST(Transit_Preprocess_DEB, DebugFunction) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 contiguousContainer.addShortestPathCollection(i, startingTime, graphFromSingleFile.getNbNodes(),
                         TransitShortestPathPrecompute::executeAlgorithm(graphFromSingleFile, ptLine.getNode(i),startingTime));
-                contiguousContainer.getShortestPathsFromTime(i, startingTime - 1);
+                contiguousContainer.getShortestPathsFrom(i, startingTime - 1);
             }
         }
     }
@@ -32,7 +32,7 @@ TEST(Transit_Preprocess_DEB, DebugFunction) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 crossingContainer.addShortestPathCollection(i, startingTime, crossingLinesGraph.getNbNodes(),
                         TransitShortestPathPrecompute::executeAlgorithm(crossingLinesGraph, ptLine.getNode(i),startingTime));
-                crossingContainer.getShortestPathsFromTime(i, startingTime - 1);
+                crossingContainer.getShortestPathsFrom(i, startingTime - 1);
             }
         }
     }
@@ -44,7 +44,7 @@ TEST(Transit_Preprocess_DEB, DebugFunction) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 cycleContainer.addShortestPathCollection(i, startingTime, cyclingLineGraph.getNbNodes(),
                         TransitShortestPathPrecompute::executeAlgorithm(cyclingLineGraph, ptLine.getNode(i),startingTime));
-                cycleContainer.getShortestPathsFromTime(i, startingTime - 1);
+                cycleContainer.getShortestPathsFrom(i, startingTime - 1);
             }
         }
     }
@@ -57,7 +57,7 @@ TEST(Transit_Preprocess_DEB, DebugFunction) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 multiCycleContainer.addShortestPathCollection(i, startingTime, multipleCyclingLinesGraph.getNbNodes(),
                         TransitShortestPathPrecompute::executeAlgorithm(multipleCyclingLinesGraph, ptLine.getNode(i),startingTime));
-                multiCycleContainer.getShortestPathsFromTime(i, startingTime - 1);
+                multiCycleContainer.getShortestPathsFrom(i, startingTime - 1);
             }
         }
     }

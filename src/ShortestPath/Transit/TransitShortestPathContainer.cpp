@@ -25,16 +25,21 @@ void TransitShortestPathContainer::addShortestPathCollection(int startNodeIndex,
     container[startNodeIndex].emplace_back(startingInstant, shortestPathList);
 }
 
-std::vector<std::pair<int, std::vector<TransitShortestPath>>>::iterator
-TransitShortestPathContainer::getShortestPathsFromTime(int startNodeIndex, int earliestStartInstant) {
+std::pair<int, std::vector<TransitShortestPath>> *
+TransitShortestPathContainer::getShortestPathsFrom(int startNodeIndex, int earliestStartInstant) {
     const auto& iterator = std::ranges::lower_bound(container[startNodeIndex],
                                             std::pair<int, std::vector<TransitShortestPath>>(earliestStartInstant, {}));
 
-    return iterator;
+    return iterator.base();
 }
 
-std::pair<int, TransitShortestPath>
+TransitShortestPath
 TransitShortestPathContainer::getShortestPathToYFromTime(int startNodeIndex, int earliestStartInstant, int goalNode) {
-    const auto& shortestPathsIterator = getShortestPathsFromTime(startNodeIndex, earliestStartInstant);
-    return std::pair(shortestPathsIterator->first, shortestPathsIterator->second[goalNode]);
+    auto [startNode, shortestPathsVector] = *getShortestPathsFrom(startNodeIndex, earliestStartInstant);
+    for(const auto& shortestPath : shortestPathsVector) {
+        if(shortestPath.getArrivalNode() == goalNode) {
+            return shortestPath;
+        }
+    }
+    return  TransitShortestPath{};
 }
