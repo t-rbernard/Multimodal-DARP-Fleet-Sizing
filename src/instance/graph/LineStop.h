@@ -16,6 +16,7 @@ private:
     int _stopIndex{}; //index for the stop relative to this node in the Line object
 
 public:
+    LineStop() = default;
     LineStop(const Line& lineRef, int stopIndex) : _lineRef(lineRef), _stopIndex(stopIndex) {}
 
     [[nodiscard]] Line getLineRef() const {
