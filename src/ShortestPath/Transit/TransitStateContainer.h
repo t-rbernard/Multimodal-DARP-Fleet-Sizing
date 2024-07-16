@@ -21,14 +21,6 @@ private:
     std::vector<std::vector<TransitAlgorithmState>>  solutionVector;
 
 public:
-    explicit TransitStateContainer(int size)
-    {
-        solutionVector.resize(size);
-        for(size_t i = 0; i < size; ++i) {
-            solutionVector[i].emplace_back();
-            solutionVector[i].emplace_back();
-        }
-    }
     explicit TransitStateContainer(size_t size)
     {
         //Reserve space for all nodes and add empty solutions to reserve memory
