@@ -23,7 +23,7 @@ public:
     TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex, int precedingNodeIndex) :
             _nodeIndex(currentNode), _instant(currentInstant),
             _passageIndex(currentPassageIndex), _precedingNodeIndex(precedingNodeIndex) {
-        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS); //TODO : replace constant max amount of connexions with a global parameter
+        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     TransitAlgorithmState(TransitAlgorithmState const& baseState) :
@@ -31,7 +31,7 @@ public:
     _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -44,7 +44,7 @@ public:
     _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -53,11 +53,11 @@ public:
     }
 
     explicit TransitAlgorithmState(int nodeIndex) : _nodeIndex(nodeIndex) {
-        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     explicit TransitAlgorithmState() : _nodeIndex(-1) {
-        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     [[nodiscard]] int getNodeIndex() const {
