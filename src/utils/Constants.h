@@ -9,6 +9,7 @@
 class Constants {
 public:
     static constexpr int VEHICLE_CAPACITY = 4;
+    static constexpr int MAX_TRANSIT_CONNECTIONS = 2;
 };
 
 

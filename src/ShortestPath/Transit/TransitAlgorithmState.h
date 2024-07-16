@@ -9,33 +9,29 @@
 #include <array>
 #include <cstdint>
 #include "../../instance/graph/LineStop.h"
+#include "../../utils/Constants.h"
 
 class TransitAlgorithmState {
 private:
     int _nodeIndex;
-    int _instant;
-    int _passageIndex;
-    std::vector<LineStop> _connections;
-    int _precedingNodeIndex;
+    int _instant{INT16_MAX};
+    int _passageIndex{-1};
+    std::vector<LineStop> _connections{Constants::MAX_TRANSIT_CONNECTIONS};
+    int _precedingNodeIndex{-1};
 
 public:
-    TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex, int precedingNodeIndex) {
-        _nodeIndex = currentNode;
-        _instant = currentInstant;
-        _passageIndex = currentPassageIndex;
-        _precedingNodeIndex = precedingNodeIndex;
-        _connections.reserve(2); //TODO : replace constant max amount of connexions with a global parameter
+    TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex, int precedingNodeIndex) :
+            _nodeIndex(currentNode), _instant(currentInstant),
+            _passageIndex(currentPassageIndex), _precedingNodeIndex(precedingNodeIndex) {
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS); //TODO : replace constant max amount of connexions with a global parameter
     }
 
-    TransitAlgorithmState(TransitAlgorithmState& baseState) {
-        _nodeIndex = baseState.getNodeIndex();
-        _instant = baseState.getInstant();
-        _passageIndex = baseState.getPassageIndex();
-        _precedingNodeIndex = baseState.getPrecedingNodeIndex();
-
+    TransitAlgorithmState(TransitAlgorithmState const& baseState) :
+    _nodeIndex(baseState.getNodeIndex()), _instant(baseState.getInstant()),
+    _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.reserve(2);
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -43,15 +39,12 @@ public:
 
     TransitAlgorithmState(TransitAlgorithmState&& baseStatePointer) = default;
 
-    TransitAlgorithmState(TransitAlgorithmState& baseState, const LineStop& newConnection) {
-        _nodeIndex = baseState.getNodeIndex();
-        _instant = baseState.getInstant();
-        _passageIndex = baseState.getPassageIndex();
-        _precedingNodeIndex = baseState.getPrecedingNodeIndex();
-
+    TransitAlgorithmState(TransitAlgorithmState const& baseState, const LineStop& newConnection) :
+    _nodeIndex(baseState.getNodeIndex()), _instant(baseState.getInstant()),
+    _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.reserve(2);
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
         for(auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
@@ -59,20 +52,12 @@ public:
         addNewConnection(newConnection);
     }
 
-    explicit TransitAlgorithmState(int nodeIndex) {
-        _nodeIndex = nodeIndex;
-        _instant = INT16_MAX;
-        _passageIndex = -1;
-        _precedingNodeIndex = -1;
-        _connections.reserve(2);
+    explicit TransitAlgorithmState(int nodeIndex) : _nodeIndex(nodeIndex) {
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
-    explicit TransitAlgorithmState() {
-        _nodeIndex = -1;
-        _instant = INT16_MAX;
-        _passageIndex = -1;
-        _precedingNodeIndex = -1;
-        _connections.reserve(2);
+    explicit TransitAlgorithmState() : _nodeIndex(-1) {
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     [[nodiscard]] int getNodeIndex() const {
@@ -96,7 +81,7 @@ public:
     }
 
     [[nodiscard]] bool canAddConnection() const {
-        return _connections.size() < 2;
+        return _connections.size() < Constants::MAX_TRANSIT_CONNECTIONS;
     }
 
     [[nodiscard]] size_t getNbConnections() const {
@@ -150,7 +135,7 @@ public:
         }
     }
 
-    bool canAddNewConnection() {return _connections.size() < _connections.max_size(); }
+    bool canAddNewConnection() const {return _connections.size() < _connections.max_size(); }
 
     /**
      * Strict dominance between two transit shortest path states happens if state *this* has :
@@ -161,7 +146,7 @@ public:
     [[nodiscard]] bool strictlyDominates(const TransitAlgorithmState& rhs) const {
         return this->getNodeIndex() == rhs.getNodeIndex()
         && this->getLastConnectionLine().getLineId() == rhs.getLastConnectionLine().getLineId()
-//        /*TODO : check */ && (this->getLastConnectionLine() == rhs.getLastConnectionLine() || this->getNbConnections() == 2) /***/
+//        TODO : check  && (this->getLastConnectionLine() == rhs.getLastConnectionLine() || this->getNbConnections() == Constants::MAX_TRANSIT_CONNECTIONS)
         && ((this->getInstant() < rhs.getInstant() && this->getConnections().size() <= rhs.getConnections().size())
         || (this->getInstant() == rhs.getInstant() && this->getConnections().size() < rhs.getConnections().size()));
     }
