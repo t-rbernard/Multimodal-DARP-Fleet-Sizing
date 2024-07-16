@@ -29,9 +29,6 @@ add_executable(GreedyAlgorithm
         src/instance/graph/LineStop.h
         src/services/DatFile/DATRow.h
         src/utils/SearchAlgorithms.h
-        src/ShortestPath/ShortestPathContainer.h
-        src/ShortestPath/TimeDependentShortestPathContainer.h
-        src/ShortestPath/TimeDependentShortestPathContainer.h
         src/ShortestPath/ShortestPath.h
         src/ShortestPath/Transit/TransitShortestPath.h
         src/ShortestPath/Transit/TransitShortestPathPrecompute.cpp
