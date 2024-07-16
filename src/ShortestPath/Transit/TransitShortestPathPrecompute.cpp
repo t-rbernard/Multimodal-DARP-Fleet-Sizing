@@ -31,7 +31,7 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
         statePriorityQueue.pop();
         if(!solutionsContainer.strictlyDominates(currentState)) {
             DEBUG_MSG("\n\nComparing state " + currentState.toString() + " and " + solutionsContainer.getBestSolution(currentState.getNodeIndex(), currentState.getNbConnections()).toString());
-            for (auto& lineStop : graph.getPTLinesSet(currentState.getNodeIndex()))
+            for (auto const& lineStop : graph.getPTLinesSet(currentState.getNodeIndex()))
             {
                 int nextNode = lineStop.getNextNodeIndex();
                 //If there is a proper next node and if it's not the same as our last used line stop predecessor
