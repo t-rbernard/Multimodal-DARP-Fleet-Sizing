@@ -17,8 +17,6 @@ private:
 public:
     VehiclePathState() = default;
     VehiclePathState(size_t nodeIndex, uint instant) : _nodeIndex(nodeIndex), _instant(instant) {}
-    VehiclePathState(const VehiclePathState& base) = default;
-    VehiclePathState(VehiclePathState&& base) = default;
 
     [[nodiscard]] size_t getNodeIndex() const {
         return _nodeIndex;
