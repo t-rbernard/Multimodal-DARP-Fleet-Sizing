@@ -120,7 +120,6 @@ add_executable(GraphGeneration
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
-        src/ShortestPath/Vehicle/VehicleShortestPathContainer.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathContainer.h
 )
 
