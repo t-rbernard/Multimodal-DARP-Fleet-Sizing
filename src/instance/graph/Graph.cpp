@@ -38,7 +38,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
     }
 
     shortestSAEVPaths.reserve(nodesVector.size());
-    for(std::vector<int> yValues : shortestSAEVPaths) { yValues.reserve(nodesVector.size()); }
+    for(std::vector<uint> yValues : shortestSAEVPaths) { yValues.reserve(nodesVector.size()); }
 
     //Edges instantiation
     std::ifstream edgesFile(edgesFilePath);
@@ -320,10 +320,18 @@ void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {
     }
 }
 
-int Graph::getDepotNodeIdx() const {
+size_t Graph::getDepotNodeIdx() const {
     return _depotNodeIdx;
 }
 
-void Graph::setDepotNodeIdx(int depotNodeIdx) {
+void Graph::setDepotNodeIdx(size_t depotNodeIdx) {
     _depotNodeIdx = depotNodeIdx;
+}
+
+const std::vector<std::vector<uint>> &Graph::getShortestSaevPaths() const {
+    return shortestSAEVPaths;
+}
+
+void Graph::setShortestSaevPaths(const std::vector<std::vector<uint>> &shortestSaevPaths) {
+    shortestSAEVPaths = shortestSaevPaths;
 }
