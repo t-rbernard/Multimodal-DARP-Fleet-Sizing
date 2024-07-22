@@ -115,12 +115,12 @@ add_executable(GraphGeneration
         src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
         src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
         src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
-        src/ShortestPath/Vehicle/VehicleShortestPath.cpp
         src/ShortestPath/Vehicle/VehicleShortestPath.h
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
         src/ShortestPath/Vehicle/VehicleShortestPathContainer.h
+        src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})

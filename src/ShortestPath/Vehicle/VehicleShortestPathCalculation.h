@@ -6,13 +6,13 @@
 #define GREEDYALGORITHM_VEHICLESHORTESTPATHCALCULATION_H
 
 
-#include "VehicleShortestPathContainer.h"
+#include "MatrixShortestPathContainer.h"
 #include "../../instance/graph/Graph.h"
 
 class VehicleShortestPathCalculation {
 public:
     static void computeAndUpdateShortestPathsForGraph(Graph& graph);
-    static VehicleShortestPathContainer computeShortestPathsForGraph(const Graph& graph);
+    static MatrixShortestPathContainer computeShortestPathsForGraph(const Graph& graph);
     static std::vector<uint> computeShortestPathsFromNode(const Graph& graph, size_t startingNodeIdx);
 
 };

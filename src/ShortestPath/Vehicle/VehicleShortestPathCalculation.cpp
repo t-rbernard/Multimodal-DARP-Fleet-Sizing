@@ -29,7 +29,7 @@ std::vector<uint> VehicleShortestPathCalculation::computeShortestPathsFromNode(c
     return results;
 }
 
-VehicleShortestPathContainer VehicleShortestPathCalculation::computeShortestPathsForGraph(const Graph &graph) {
+MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPathsForGraph(const Graph &graph) {
     std::vector<std::vector<uint>> results;
     results.resize(graph.getNbNodes());
     for(size_t i = 0; i < graph.getNbNodes(); ++i) {
@@ -37,10 +37,11 @@ VehicleShortestPathContainer VehicleShortestPathCalculation::computeShortestPath
         std::ranges::move(computeShortestPathsFromNode(graph, i), results[i].begin());
     }
 
-    return VehicleShortestPathContainer(results);
+    return MatrixShortestPathContainer(results);
 }
 
+
 void VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(Graph &graph) {
-    VehicleShortestPathContainer results = computeShortestPathsForGraph(graph);
+    MatrixShortestPathContainer results = computeShortestPathsForGraph(graph);
     graph.setShortestSaevPaths(results.getDistanceMatrix());
 }

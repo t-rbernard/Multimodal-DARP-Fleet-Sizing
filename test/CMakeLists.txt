@@ -71,6 +71,7 @@ add_executable(Constraint_Propag_DEB
         "../src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
         "../src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         ../src/utils/Constants.h
+        ../src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
 )
 
 add_executable(BestInsertionHeuristic_DEB

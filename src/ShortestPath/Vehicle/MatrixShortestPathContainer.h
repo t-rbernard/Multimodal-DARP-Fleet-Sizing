@@ -2,29 +2,29 @@
 // Created by romain on 16/07/24.
 //
 
-#ifndef GREEDYALGORITHM_VEHICLESHORTESTPATHCONTAINER_H
-#define GREEDYALGORITHM_VEHICLESHORTESTPATHCONTAINER_H
+#ifndef GREEDYALGORITHM_MATRIXSHORTESTPATHCONTAINER_H
+#define GREEDYALGORITHM_MATRIXSHORTESTPATHCONTAINER_H
 
 
 #include <vector>
 #include <cstdint>
 #include <algorithm>
 
-class VehicleShortestPathContainer {
+class MatrixShortestPathContainer {
 private:
     std::vector<std::vector<uint>> _distanceMatrix{};
 public:
-    VehicleShortestPathContainer() = default;
+    MatrixShortestPathContainer() = default;
 
     /**
      * Moves the given shortestPathsMatrix to initialize the container with the given distances.
      * @param shortestPathsMatrix
      */
-    explicit VehicleShortestPathContainer(std::vector<std::vector<uint>> shortestPathsMatrix) : _distanceMatrix(std::move(shortestPathsMatrix)) {}
+    explicit MatrixShortestPathContainer(std::vector<std::vector<uint>> shortestPathsMatrix) : _distanceMatrix(std::move(shortestPathsMatrix)) {}
 
-    explicit VehicleShortestPathContainer(size_t matrixSize) {
+    explicit MatrixShortestPathContainer(size_t matrixSize) {
         _distanceMatrix.resize(matrixSize);
-        for(int i = 0; i < _distanceMatrix.capacity(); ++i)
+        for(size_t i = 0; i < _distanceMatrix.capacity(); ++i)
             _distanceMatrix[i].resize(matrixSize, INT16_MAX);
     }
 
@@ -60,4 +60,4 @@ public:
 };
 
 
-#endif //GREEDYALGORITHM_VEHICLESHORTESTPATHCONTAINER_H
+#endif //GREEDYALGORITHM_MATRIXSHORTESTPATHCONTAINER_H
