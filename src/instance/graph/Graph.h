@@ -154,7 +154,7 @@ public:
 
     void setShortestSaevPaths(const std::vector<std::vector<uint>> &shortestSaevPaths);
 
-    [[nodiscard]] uint getShortestSAEVPath(size_t x, size_t y) const { return shortestSAEVPaths[x][y]; }
+    [[nodiscard]] uint getShortestSAEVPath(size_t startingNodeIdx, size_t destinationNodeIdx) const { return shortestSAEVPaths[startingNodeIdx][destinationNodeIdx]; }
 
     void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
 };
