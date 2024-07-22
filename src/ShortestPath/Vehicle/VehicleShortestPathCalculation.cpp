@@ -40,8 +40,19 @@ MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPaths
     return MatrixShortestPathContainer(results);
 }
 
-
 void VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(Graph &graph) {
     MatrixShortestPathContainer results = computeShortestPathsForGraph(graph);
     graph.setShortestSaevPaths(results.getDistanceMatrix());
+}
+
+ClosestDestinationsContainer
+VehicleShortestPathCalculation::getClosestPTNodesFromX(const Graph &graph, size_t startingNodeIdx) {
+    ClosestDestinationsContainer closestDestinationsContainer(startingNodeIdx);
+    for(size_t destinationIdx=0; destinationIdx < graph.getNbNodes(); ++destinationIdx) {
+        if(graph.getNbPTLines(destinationIdx) > 0) {
+            closestDestinationsContainer.addDestination(destinationIdx,
+                                                        graph.getShortestSAEVPath(startingNodeIdx, destinationIdx));
+        }
+    }
+    return closestDestinationsContainer;
 }
