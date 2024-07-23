@@ -335,3 +335,11 @@ const std::vector<std::vector<uint>> &Graph::getShortestSaevPaths() const {
 void Graph::setShortestSaevPaths(const std::vector<std::vector<uint>> &shortestSaevPaths) {
     shortestSAEVPaths = shortestSaevPaths;
 }
+
+void Graph::emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx) {
+    nodesVector[nodeIdx].emplaceBackClosestStation(stationNodeIdx);
+}
+
+const size_t Graph::getNbClosestStations(size_t nodeIdx) {
+    return nodesVector[nodeIdx].getClosestStationsNodeIdxVector().size();
+}

@@ -47,3 +47,11 @@ Status  Node::statusFromString(std::string from) {
         return Status::work;
     }
 }
+
+void Node::emplaceBackClosestStation(size_t closestStationIdx) {
+    _closestStationsNodeIdxVector.emplace_back(closestStationIdx);
+}
+
+const std::vector<size_t> Node::getClosestStationsNodeIdxVector() {
+    return _closestStationsNodeIdxVector;
+}

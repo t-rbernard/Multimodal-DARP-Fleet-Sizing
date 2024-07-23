@@ -157,6 +157,10 @@ public:
     [[nodiscard]] uint getShortestSAEVPath(size_t startingNodeIdx, size_t destinationNodeIdx) const { return shortestSAEVPaths[startingNodeIdx][destinationNodeIdx]; }
 
     void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
+
+    void emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx);
+
+    const size_t getNbClosestStations(size_t nodeIdx);
 };
 
 

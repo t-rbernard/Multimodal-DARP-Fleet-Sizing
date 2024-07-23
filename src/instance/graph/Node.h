@@ -35,6 +35,7 @@ private:
     std::vector<LineStop> _ptLines;
     std::vector<int> _incomingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
     std::vector<int> _outgoingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
+    std::vector<size_t> _closestStationsNodeIdxVector;
     //TODO : Should these vectors be considered complete over the whole set of nodes ? Probably ? Considering we will probably pre-process shortest paths between all SAEV stations
 
 public:
@@ -88,6 +89,10 @@ public:
      * @return True if any of _x, _y and _status is not equal between both sides of the operator, false otherwise
      */
     bool operator!=(const Node& rhs) const;
+
+    void emplaceBackClosestStation(size_t closestStationIdx);
+
+    const std::vector<size_t> getClosestStationsNodeIdxVector();
 };
 #include "Line.h"
 #include "LineStop.h"
