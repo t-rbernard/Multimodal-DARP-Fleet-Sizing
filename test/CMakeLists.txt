@@ -71,6 +71,10 @@ add_executable(Constraint_Propag_DEB
         "../src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
         "../src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         ../src/utils/Constants.h
+        ../src/ShortestPath/Vehicle/VehiclePathState.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPath.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         ../src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
 )
 

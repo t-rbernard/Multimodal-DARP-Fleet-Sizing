@@ -35,11 +35,7 @@ public:
     }
 
     auto operator<=>(const VehiclePathState &rhs) const {
-        if (this->_nodeIndex != rhs.getNodeIndex()) {
-            return std::partial_ordering::unordered;
-        }
-
-        return std::partial_order(_instant, rhs.getInstant());
+        return _instant <=> rhs.getInstant();
     }
 };
 

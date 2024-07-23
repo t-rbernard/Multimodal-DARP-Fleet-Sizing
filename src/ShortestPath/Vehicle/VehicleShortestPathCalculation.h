@@ -22,7 +22,7 @@ public:
      * @param graph
      * @return A matrix distances container
      */
-    static MatrixShortestPathContainer computeShortestPathsForGraph(const Graph& graph);
+    static MatrixShortestPathContainer computeShortestPathsForGraph(Graph& graph);
     /**
      * Computes the shortest paths to all the nodes in the graph from the given starting node.
      * If a node is unreachable its default distance is INT32_MAX. Distance from the starting node to itself is 0
@@ -30,7 +30,7 @@ public:
      * @param startingNodeIdx
      * @return a vector indexed by all the nodes with the sortest path's duration from the starting node to the destination node index
      */
-    static std::vector<uint> computeShortestPathsFromNode(const Graph& graph, size_t startingNodeIdx);
+    static std::vector<uint> computeShortestPathsFromNode(Graph& graph, size_t startingNodeIdx);
     /**
      * Returns an ordered set of closest PT SAV-compatible nodes from a given starting node index.
      * Standard use case expects that the starting node index is a request origin

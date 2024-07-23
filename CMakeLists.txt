@@ -119,8 +119,9 @@ add_executable(GraphGeneration
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
-        src/ShortestPath/Vehicle/VehicleShortestPathContainer.h
         src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
+        src/ShortestPath/Vehicle/ClosestDestinationsContainer.h
+        src/ShortestPath/Vehicle/VehicleDestination.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
