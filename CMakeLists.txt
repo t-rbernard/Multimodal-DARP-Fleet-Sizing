@@ -92,8 +92,8 @@ add_executable(RequestGenerator
         "src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
         "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         src/utils/Globals.h
-        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
-        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
+#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
+#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
         src/ShortestPath/Vehicle/VehicleShortestPath.h
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
@@ -103,36 +103,35 @@ add_executable(RequestGenerator
         src/ShortestPath/Vehicle/VehicleDestination.h
 )
 
-#add_executable(GraphGeneration
-#        src/instance/graph/Node.cpp
-#        src/instance/graph/Node.h
-#        src/instance/graph/Edge.cpp
-#        src/instance/graph/Edge.h
-#        src/instance/graph/Graph.cpp
-#        src/instance/graph/Graph.h
-#        src/instance/Instance.cpp
-#        src/instance/Instance.h
-#        src/instance/graph/Line.cpp
-#        src/instance/graph/Line.h
-#        src/services/CSV/CSVRange.h
-#        src/services/CSV/CSVIterator.h
-#        src/instance/graph/LineStop.cpp
-#        src/instance/graph/LineStop.h
-#        src/services/DatFile/DATRow.h
-#        "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
-#        "src/utils/Instance Generation/Graph/GraphGenerator.h"
-#        "src/utils/Instance Generation/Graph/PTLineGenerationParameters.h"
-#        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
-#        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
+add_executable(GraphGeneration
+        src/instance/graph/Node.cpp
+        src/instance/graph/Node.h
+        src/instance/graph/Edge.cpp
+        src/instance/graph/Edge.h
+        src/instance/graph/Graph.cpp
+        src/instance/graph/Graph.h
+        src/instance/Instance.cpp
+        src/instance/Instance.h
+        src/instance/graph/Line.cpp
+        src/instance/graph/Line.h
+        src/services/CSV/CSVRange.h
+        src/services/CSV/CSVIterator.h
+        src/instance/graph/LineStop.cpp
+        src/instance/graph/LineStop.h
+        src/services/DatFile/DATRow.h
+        "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
+        "src/utils/Instance Generation/Graph/GraphGenerator.h"
+        "src/utils/Instance Generation/Graph/PTLineGenerationParameters.h"
+        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
+        src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
 #        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
 #        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
-#        src/ShortestPath/Vehicle/VehicleShortestPath.cpp
-#        src/ShortestPath/Vehicle/VehicleShortestPath.h
-#        src/ShortestPath/Vehicle/VehiclePathState.h
-#        src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
-#        src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
-#        src/ShortestPath/Vehicle/VehicleShortestPathContainer.h
-#)
+        src/ShortestPath/Vehicle/VehicleShortestPath.h
+        src/ShortestPath/Vehicle/VehiclePathState.h
+        src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
+        src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
+        src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
+)
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
 target_link_libraries(GreedyAlgorithm ${PYTHON_LIBRARIES})
