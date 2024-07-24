@@ -6,6 +6,7 @@
 #define GREEDYALGORITHM_TIMEWINDOW_H
 
 #include <cstdlib>
+#include "utils/Globals.h"
 
 /**
  * Represents [min, max] time windows with appropriate operators for TW operations (+,-,isInTimeWindow).

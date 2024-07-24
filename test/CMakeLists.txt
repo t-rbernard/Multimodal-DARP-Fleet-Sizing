@@ -17,6 +17,7 @@ add_executable(Line_UT
         ../src/instance/graph/Graph.h
         ../src/instance/graph/Line.cpp
         ../src/instance/graph/Line.h
+        ../src/utils/Globals.h
 )
 
 add_executable(Transit_Preprocess_DEB
@@ -35,6 +36,7 @@ add_executable(Transit_Preprocess_DEB
         ../src/ShortestPath/Transit/TransitShortestPathContainer.h
         ../src/ShortestPath/Transit/TransitShortestPathPrecompute.cpp
         ../src/ShortestPath/Transit/TransitShortestPathPrecompute.h
+        ../src/utils/Globals.h
 )
 
 

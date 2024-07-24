@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include "../../utils/SearchAlgorithms.h"
+#include "../../utils/Globals.h"
 
 class Line {
 private:
