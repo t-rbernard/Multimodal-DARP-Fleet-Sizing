@@ -74,6 +74,7 @@ public:
         return nodesVector[nodeIndex].getOutgoingEdges().size();
     }
 
+    //TODO: try and define an Edge iterator over a given node's incoming/outgoing
 
     [[nodiscard]] size_t getNbEdges(size_t nodeIndex) const {
         return nodesVector[nodeIndex].getIncomingEdges().size() + nodesVector[nodeIndex].getOutgoingEdges().size();

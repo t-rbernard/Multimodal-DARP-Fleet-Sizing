@@ -10,24 +10,21 @@
 
 class Edge {
 private:
-    int _start;
-    int _end;
-    double _length;
+    size_t _startNodeIdx;
+    size_t _endNodeIdx;
+    uint _length;
 
 public:
-    int getNodeStart() const;
+    [[nodiscard]] size_t getStartNodeIdx() const;
+    void setStartNodeIdx(size_t startNodeIdx);
 
-    void setNodeStart(int start);
+    [[nodiscard]] size_t getEndNodeIdx() const;
+    void setEndNodeIdx(size_t endNodeIdx);
 
-    int getNodeEnd() const;
+    [[nodiscard]] uint getLength() const;
+    void setLength(uint length);
 
-    void setNodeEnd(int end);
-
-    double getLength() const;
-
-    void setLength(double d);
-
-    Edge(int start, int end, double length);
+    Edge(size_t startNodeIdx, size_t endNodeIdx, uint length) : _startNodeIdx(startNodeIdx), _endNodeIdx(endNodeIdx), _length(length) {}
 };
 
 

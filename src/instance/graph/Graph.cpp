@@ -133,7 +133,7 @@ void Graph::exportGraphToFile(const fs::path& exportFolderPath) {
     if(!edgesVector.empty()) {
         outfileGraph << "#Edges format : node_in,node_out,length" << std::endl;
         for (auto &edge: this->edgesVector) {
-            outfileGraph << edge.getNodeStart() << "," << edge.getNodeEnd() << "," << edge.getLength() << std::endl;
+            outfileGraph << edge.getStartNodeIdx() << "," << edge.getEndNodeIdx() << "," << edge.getLength() << std::endl;
         }
     }
 
