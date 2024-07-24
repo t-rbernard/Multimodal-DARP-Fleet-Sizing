@@ -94,13 +94,13 @@ add_executable(RequestGenerator
         src/utils/Globals.h
         src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
         src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
-        src/ShortestPath/Vehicle/VehicleShortestPath.cpp
         src/ShortestPath/Vehicle/VehicleShortestPath.h
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
-        src/ShortestPath/Vehicle/VehicleShortestPathContainer.cpp
-        src/ShortestPath/Vehicle/VehicleShortestPathContainer.h
+        src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
+        src/ShortestPath/Vehicle/ClosestDestinationsContainer.h
+        src/ShortestPath/Vehicle/VehicleDestination.h
 )
 
 #add_executable(GraphGeneration

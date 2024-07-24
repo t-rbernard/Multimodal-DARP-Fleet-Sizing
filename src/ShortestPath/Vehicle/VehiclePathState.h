@@ -17,8 +17,6 @@ private:
 public:
     VehiclePathState() = default;
     VehiclePathState(size_t nodeIndex, uint instant) : _nodeIndex(nodeIndex), _instant(instant) {}
-    VehiclePathState(const VehiclePathState& base) = default;
-    VehiclePathState(VehiclePathState&& base) = default;
 
     [[nodiscard]] size_t getNodeIndex() const {
         return _nodeIndex;
@@ -37,11 +35,7 @@ public:
     }
 
     auto operator<=>(const VehiclePathState &rhs) const {
-        if (this->_nodeIndex != rhs.getNodeIndex()) {
-            return std::partial_ordering::unordered;
-        }
-
-        return std::partial_order(_instant, rhs.getInstant());
+        return _instant <=> rhs.getInstant();
     }
 };
 

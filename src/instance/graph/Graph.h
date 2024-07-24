@@ -20,8 +20,8 @@ private:
     std::vector<Node> nodesVector; //The full list of nodes created in the graph
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
-    std::vector<std::vector<int>> shortestSAEVPaths;
-    int _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
+    std::vector<std::vector<uint>> shortestSAEVPaths;
+    size_t _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
 
     /**
      * For every LineStop on every node of the graph, verify the node returned by looking into LineStop->Line(stopIdx)
@@ -56,8 +56,8 @@ public:
         return nodesVector[nodeIndex].getPTLinesSet().size();
     }
 
-    [[nodiscard]] int getDepotNodeIdx() const;
-    void setDepotNodeIdx(int depotNodeIdx);
+    [[nodiscard]] size_t getDepotNodeIdx() const;
+    void setDepotNodeIdx(size_t depotNodeIdx);
 
     /**
      * @return The graph's edge vector
@@ -150,9 +150,17 @@ public:
      */
     void createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length);
 
-    [[nodiscard]] int getShortestSAEVPath(size_t x, size_t y) const { return shortestSAEVPaths[x][y]; }
+    [[nodiscard]] const std::vector<std::vector<uint>> &getShortestSaevPaths() const;
+
+    void setShortestSaevPaths(const std::vector<std::vector<uint>> &shortestSaevPaths);
+
+    [[nodiscard]] uint getShortestSAEVPath(size_t startingNodeIdx, size_t destinationNodeIdx) const { return shortestSAEVPaths[startingNodeIdx][destinationNodeIdx]; }
 
     void parseDistanceMatrix(std::ifstream &infile, DATRow currentRow);
+
+    void emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx);
+
+    const size_t getNbClosestStations(size_t nodeIdx);
 };
 
 
