@@ -115,7 +115,41 @@ add_executable(BestInsertionHeuristic_DEB
         ../src/utils/Constants.h
 )
 
+add_executable(GraphPreprocess_DEB
+        src/GraphPreprocessDebug.cpp
+        ../src/TimeWindow.cpp
+        ../src/TimeWindow.h
+        ../src/instance/graph/Node.cpp
+        ../src/instance/graph/Node.h
+        ../src/instance/graph/Edge.cpp
+        ../src/instance/graph/Edge.h
+        ../src/instance/graph/Graph.cpp
+        ../src/instance/graph/Graph.h
+        ../src/instance/graph/Line.cpp
+        ../src/instance/graph/Line.h
+        ../src/instance/requests/Request.cpp
+        ../src/instance/requests/Request.h
+        ../src/routes/vehicle/SAEVRoute.cpp
+        ../src/routes/vehicle/SAEVRoute.h
+        ../src/routes/vehicle/propagation/SAEVRouteChange.cpp
+        ../src/routes/vehicle/propagation/SAEVRouteChange.h
+        ../src/routes/vehicle/propagation/SAEVRouteChangelist.cpp
+        ../src/routes/vehicle/propagation/SAEVRouteChangelist.h
+        ../src/routes/vehicle/SAEVKeyPoint.cpp
+        ../src/routes/vehicle/SAEVKeyPoint.h
+        ../src/routes/KeyPoint.cpp
+        ../src/routes/KeyPoint.h
+        ../src/routes/requests/RequestKeyPoint.cpp
+        ../src/routes/requests/RequestKeyPoint.h
+        ../src/routes/requests/RequestRoute.cpp
+        ../src/routes/requests/RequestRoute.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
+        ../src/utils/Constants.h
+)
+
 target_link_libraries(Line_UT gtest gtest_main)
 target_link_libraries(Transit_Preprocess_DEB gtest gtest_main)
 target_link_libraries(Constraint_Propag_DEB gtest gtest_main)
 target_link_libraries(BestInsertionHeuristic_DEB gtest gtest_main)
+target_link_libraries(GraphPreprocess_DEB gtest gtest_main)
