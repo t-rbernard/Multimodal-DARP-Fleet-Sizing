@@ -10,9 +10,9 @@
 
 class Edge {
 private:
-    size_t _startNodeIdx;
-    size_t _endNodeIdx;
-    uint _length;
+    size_t _startNodeIdx{};
+    size_t _endNodeIdx{};
+    uint _length{};
 
 public:
     [[nodiscard]] size_t getStartNodeIdx() const;
@@ -24,6 +24,7 @@ public:
     [[nodiscard]] uint getLength() const;
     void setLength(uint length);
 
+    Edge() = default; //only used to reserve memory space for a variable in some instances
     Edge(size_t startNodeIdx, size_t endNodeIdx, uint length) : _startNodeIdx(startNodeIdx), _endNodeIdx(endNodeIdx), _length(length) {}
 };
 

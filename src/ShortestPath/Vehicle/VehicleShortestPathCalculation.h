@@ -9,6 +9,7 @@
 #include "MatrixShortestPathContainer.h"
 #include "../../instance/graph/Graph.h"
 #include "ClosestDestinationsContainer.h"
+#include "VehiclePathState.h"
 
 class VehicleShortestPathCalculation {
 public:
@@ -30,7 +31,7 @@ public:
      * @param startingNodeIdx
      * @return a vector indexed by all the nodes with the sortest path's duration from the starting node to the destination node index
      */
-    static std::vector<uint> computeShortestPathsFromNode(Graph& graph, size_t startingNodeIdx);
+    static std::vector<uint> computeShortestPathsFromNode(Graph &graph, size_t startingNodeIdx, bool useEdges);
     /**
      * Returns an ordered set of closest PT SAV-compatible nodes from a given starting node index.
      * Standard use case expects that the starting node index is a request origin
@@ -39,6 +40,11 @@ public:
      * @return An ordered set containing PT nodes accessible via SAV from the given starting node index
      */
     static ClosestDestinationsContainer getClosestPTNodesFromX(const Graph& graph, size_t startingNodeIdx);
+private:
+    static void expandStatesViaEdges(const VehiclePathState& currentState, std::vector<uint> &results,
+                                     std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue, const Graph& graph);
+    static void expandStatesViaMatrix(const VehiclePathState& currentState, std::vector<uint> &results,
+                                      std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue, const Graph& graph);
 };
 
 
