@@ -315,7 +315,7 @@ void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {
         auto& matrixLine = shortestSAEVPaths.emplace_back();
         for(int i = 0; i < currentRow.size(); ++i) {
             std::from_chars(currentRow[i].data(), currentRow[i].data() + currentRow[i].size(), intVal);
-            matrixLine.emplace_back(intVal);
+            matrixLine.emplace_back(intVal < 0 ? INT16_MAX : intVal);
         }
     }
 }
