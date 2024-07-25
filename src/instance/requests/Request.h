@@ -9,6 +9,7 @@
 #include "../../TimeWindow.h"
 #include "../../routes/requests/RequestRoute.h"
 #include "../graph/Graph.h"
+#include "../../algorithm/Multimodal/Heuristics/TransitAccess.h"
 
 class Request {
 private:
@@ -32,6 +33,7 @@ public:
             const uint deltaTime, const uint weight, const Graph& graph);
     Request(const DATRow& currentRow, const Graph& graph);
     Request(const DATRow& currentRow, double deltaRatio, const Graph& graph);
+    Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry)
 
     static std::vector<Request> getRequestsFromFile(const std::string& datFilePath, const Graph& graph);
 
@@ -82,7 +84,7 @@ public:
      * Format : origin_idx,destination_idx,min,max,delta,capacity
      * @return A properly formatted string to import back again
      */
-    std::string to_string_export();
+    std::string to_string_export() const;
 };
 
 

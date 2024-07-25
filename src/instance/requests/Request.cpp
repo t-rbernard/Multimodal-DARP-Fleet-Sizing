@@ -197,9 +197,33 @@ void Request::resetKeyPoint(int routeIndex) {
     _currentRoute.resetKeyPoint(routeIndex);
 }
 
-std::string Request::to_string_export() {
+std::string Request::to_string_export() const {
     std::string res = std::to_string(_originNodeIndex) + "," + std::to_string(_destinationNodeIndex) //FIXME:replace with std::format whenever possible
             + "," + std::to_string(_arrivalTW.min) + "," + std::to_string(_arrivalTW.max)
             + "," + std::to_string(_deltaTime) + "," + std::to_string(_weight);
     return res;
+}
+
+Request::Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry) {
+    if(isEntry) {
+        _originNodeIndex = baseRequest.getOriginNodeIndex();
+        _destinationNodeIndex = access.getAccessNodeIdx();
+
+        _departureTW = baseRequest.getDepartureTw();
+
+        _arrivalTW.min = baseRequest.getDepartureTw().min + graph.getShortestSAEVPath(_originNodeIndex, access.getAccessNodeIdx());
+        _arrivalTW.max = access.getAccessTimestamp();
+    } else {
+        _originNodeIndex = access.getAccessNodeIdx();
+        _destinationNodeIndex = baseRequest.getDestinationNodeIndex();
+
+        _departureTW.min = access.getAccessTimestamp();
+        _departureTW.max =baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(access.getAccessNodeIdx(), _destinationNodeIndex);
+
+        _arrivalTW.min = baseRequest.getArrivalTw().min;
+        _arrivalTW.max = _departureTW.min + _deltaTime; //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
+    }
+
+    _deltaTime = std::numeric_limits<uint>::max();
+    _weight = baseRequest.getWeight();
 }
