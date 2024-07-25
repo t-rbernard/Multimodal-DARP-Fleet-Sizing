@@ -64,7 +64,7 @@ public:
      * @param from String serving as basis for conversion (trailing spaces and capitalization don't matter)
      * @return A status depending on the given string. If no status corresponds to the given String, will default to Work
      */
-    static Status statusFromString(std::string from) ;
+    static Status statusFromString(const std::string& from) ;
     /**
      * Formats x and y data in a Coordinate object and returns it
      * @return A new Coordinate object with x and y data
@@ -92,7 +92,7 @@ public:
 
     void emplaceBackClosestStation(size_t closestStationIdx);
 
-    const std::vector<size_t> getClosestStationsNodeIdxVector();
+    [[nodiscard]] const std::vector<size_t>& getClosestStationsNodeIdxVector() const;
 };
 #include "Line.h"
 #include "LineStop.h"

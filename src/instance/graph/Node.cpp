@@ -39,7 +39,7 @@ bool Node::operator!=(const Node &rhs) const {
            || _status != rhs.getStatus();
 }
 
-Status  Node::statusFromString(std::string from) {
+Status  Node::statusFromString(const std::string& from) {
     auto pair = stringToStatusMap.find(from);
     if (pair != stringToStatusMap.end()) {
         return pair->second;
@@ -52,6 +52,6 @@ void Node::emplaceBackClosestStation(size_t closestStationIdx) {
     _closestStationsNodeIdxVector.emplace_back(closestStationIdx);
 }
 
-const std::vector<size_t> Node::getClosestStationsNodeIdxVector() {
+const std::vector<size_t> & Node::getClosestStationsNodeIdxVector() const {
     return _closestStationsNodeIdxVector;
 }
