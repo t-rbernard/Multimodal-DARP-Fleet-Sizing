@@ -63,6 +63,7 @@ add_executable(GreedyAlgorithm
         src/routes/vehicle/BestInsertionQueue.h
         src/utils/Constants.h
         src/utils/Globals.h
+        src/algorithm/Multimodal/Heuristics/TransitAccess.h
 )
 
 add_executable(RequestGenerator
