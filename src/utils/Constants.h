@@ -8,10 +8,10 @@
 
 class Constants {
 public:
-    static constexpr int VEHICLE_CAPACITY = 4;
-    static constexpr int MAX_TRANSIT_CONNECTIONS = 2;
-    static constexpr int MAX_TRANSIT_ENTRY_CANDIDATES = 10;
-    static constexpr int MAX_TRANSIT_EXIT_CANDIDATES = 10;
+    static constexpr uint VEHICLE_CAPACITY = 4;
+    static constexpr uint MAX_TRANSIT_CONNECTIONS = 2;
+    static constexpr size_t MAX_TRANSIT_ENTRY_CANDIDATES = 10;
+    static constexpr size_t MAX_TRANSIT_EXIT_CANDIDATES = 10;
 };
 
 
