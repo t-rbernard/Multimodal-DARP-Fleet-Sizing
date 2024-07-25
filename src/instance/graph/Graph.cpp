@@ -341,5 +341,5 @@ void Graph::emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx) {
 }
 
 const size_t Graph::getNbClosestStations(size_t nodeIdx) {
-    return nodesVector[nodeIdx].getClosestStationsNodeIdxVector().size();
+    return nodesVector[nodeIdx].getBestStationsNodeIdxVector().size();
 }

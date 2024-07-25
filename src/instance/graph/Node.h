@@ -35,7 +35,7 @@ private:
     std::vector<LineStop> _ptLines;
     std::vector<int> _incomingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
     std::vector<int> _outgoingEdgesIndex; //List of edge index in the graph structure for all edges leading to this node
-    std::vector<size_t> _closestStationsNodeIdxVector;
+    std::vector<size_t> _bestStationsNodeIdxVector;
     //TODO : Should these vectors be considered complete over the whole set of nodes ? Probably ? Considering we will probably pre-process shortest paths between all SAEV stations
 
 public:
@@ -52,7 +52,7 @@ public:
     /**
      * @return True if this node contains one or more LineStop
      */
-    bool isPTNode();
+    bool isPTNode() const;
     /**
      * Adds a new LineStop to the LineStop set
      * @param line the line referenced by the LineStop
@@ -92,7 +92,7 @@ public:
 
     void emplaceBackClosestStation(size_t closestStationIdx);
 
-    [[nodiscard]] const std::vector<size_t>& getClosestStationsNodeIdxVector() const;
+    [[nodiscard]] const std::vector<size_t>& getBestStationsNodeIdxVector() const;
 };
 #include "Line.h"
 #include "LineStop.h"

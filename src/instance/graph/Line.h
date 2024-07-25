@@ -27,7 +27,7 @@ public:
     void addNode(const int node){this->_nodes.emplace_back(node);};
     [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
-    [[nodiscard]] std::vector<int> getTimetable(size_t pos) const{ return _timetables[pos];};
+    [[nodiscard]] const std::vector<int>& getTimetable(size_t pos) const{ return _timetables[pos];};
     [[nodiscard]] std::vector<std::vector<int>> getTimetables() const{ return _timetables;};
     void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
     void setTimetable(size_t pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};

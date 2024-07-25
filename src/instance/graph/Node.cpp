@@ -13,7 +13,7 @@ Node::Node() {
     _y = -1;
 }
 
-bool Node::isPTNode() {
+bool Node::isPTNode() const {
     return &_ptLines == nullptr || _ptLines.empty();
 }
 
@@ -49,9 +49,9 @@ Status  Node::statusFromString(const std::string& from) {
 }
 
 void Node::emplaceBackClosestStation(size_t closestStationIdx) {
-    _closestStationsNodeIdxVector.emplace_back(closestStationIdx);
+    _bestStationsNodeIdxVector.emplace_back(closestStationIdx);
 }
 
-const std::vector<size_t> & Node::getClosestStationsNodeIdxVector() const {
-    return _closestStationsNodeIdxVector;
+const std::vector<size_t> & Node::getBestStationsNodeIdxVector() const {
+    return _bestStationsNodeIdxVector;
 }
