@@ -38,8 +38,17 @@ public:
      * @param instant The instant of arrival at the station, hence we look for the value itself or the first greater instant
      * @return a vector index corresponding to the next valid passage at the given station and after or at the given instant
      */
-    [[nodiscard]] size_t findNextScheduledPassage(size_t stationIdx, uint instant) const {
+    [[nodiscard]] auto findNextScheduledPassage(size_t stationIdx, uint instant) const {
         return SearchAlgorithms<int>::findNextSortedValue(_timetables[stationIdx], instant);
+    }
+    /**
+     * Searches for the next scheduled passage at a given station after a given instant O(log n)
+     * @param stationIdx The station number for which we want to search the schedule
+     * @param instant The instant of arrival at the station, hence we look for the value itself or the first greater instant
+     * @return a vector index corresponding to the next valid passage at the given station and after or at the given instant
+     */
+    [[nodiscard]] size_t findNextScheduledPassageIdx(size_t stationIdx, uint instant) const {
+        return SearchAlgorithms<int>::findNextSortedValueIdx(_timetables[stationIdx], instant);
     }
     /**
      * Returns the instant for the given station at a given schedule position, O(1)

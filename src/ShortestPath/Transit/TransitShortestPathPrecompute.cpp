@@ -42,7 +42,8 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
                     if(currentState.isEmpty() || currentState.getLastConnectionLine() != lineStop.getLineRef()) // if new line is different than current line
                     {
                         if(currentState.canAddConnection()) {
-                            nextPassageIndex = lineStop.findNextScheduledPassage(lineStop.getStopIndex(), currentState.getInstant());
+                            nextPassageIndex = lineStop.findNextScheduledPassageIdx(lineStop.getStopIndex(),
+                                                                                    currentState.getInstant());
                             if (nextPassageIndex == lineStop.getLineRef().scheduleSize()) {
                                 newState.setNodeIndex(-1);
                             } else {

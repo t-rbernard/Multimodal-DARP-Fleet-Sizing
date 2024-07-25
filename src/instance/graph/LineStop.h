@@ -24,7 +24,18 @@ public:
     }
 
     [[nodiscard]] int getInstant(int stationIdx, int scheduleIdx) const { return _lineRef.getInstant(stationIdx, scheduleIdx); }
-    [[nodiscard]] int findNextScheduledPassage(int stationIdx, int instant) const { return _lineRef.findNextScheduledPassage(stationIdx, instant); }
+    [[nodiscard]] size_t findNextScheduledPassageIdx(uint instant) const {
+        return _lineRef.findNextScheduledPassageIdx(_stopIndex, instant);
+    }
+    [[nodiscard]] size_t findNextScheduledPassageIdx(size_t stationIdx, uint instant) const {
+        return _lineRef.findNextScheduledPassageIdx(stationIdx, instant);
+    }
+    [[nodiscard]] auto findNextScheduledPassage(uint instant) const {
+        return _lineRef.findNextScheduledPassage(_stopIndex, instant);
+    }
+    [[nodiscard]] auto findNextScheduledPassage(size_t stationIdx, uint instant) const {
+        return _lineRef.findNextScheduledPassage(stationIdx, instant);
+    }
 
     [[nodiscard]] size_t getNodeIndex() const
     {
