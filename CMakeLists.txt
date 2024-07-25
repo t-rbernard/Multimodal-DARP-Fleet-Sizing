@@ -63,6 +63,8 @@ add_executable(GreedyAlgorithm
         src/routes/vehicle/BestInsertionQueue.h
         src/utils/Constants.h
         src/utils/Globals.h
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
         src/algorithm/Multimodal/Heuristics/TransitAccess.h
 )
 
@@ -93,8 +95,8 @@ add_executable(RequestGenerator
         "src/utils/Instance Generation/Requests/RequestGenerationParameters.h"
         "src/utils/Instance Generation/Graph/OSRMGraphGenerator.h"
         src/utils/Globals.h
-#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
-#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
         src/ShortestPath/Vehicle/VehicleShortestPath.h
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
@@ -125,15 +127,19 @@ add_executable(GraphGeneration
         "src/utils/Instance Generation/Graph/PTLineGenerationParameters.h"
         src/algorithm/DARP/Heuristics/BestInsertionHeuristic.cpp
         src/algorithm/DARP/Heuristics/BestInsertionHeuristic.h
-#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
-#        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
         src/ShortestPath/Vehicle/VehicleShortestPath.h
         src/ShortestPath/Vehicle/VehiclePathState.h
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
         src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
         src/ShortestPath/Vehicle/MatrixShortestPathContainer.h
+        src/algorithm/Multimodal/Heuristics/TransitAccess.h
 )
 
 target_include_directories(GreedyAlgorithm PRIVATE ${PYTHON_INCLUDE_DIRS})
 target_link_libraries(GreedyAlgorithm ${PYTHON_LIBRARIES})
 
+add_executable(ModularHeuristic_DEB
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h
+        src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.cpp)
