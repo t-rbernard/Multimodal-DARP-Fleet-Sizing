@@ -83,6 +83,10 @@ public:
         _stopIndex = rhs.getStopIndex();
         return *this;
     }
+
+    [[nodiscard]] const std::vector<int>& getSchedule() const {
+        return _lineRef.getTimetable(_stopIndex);
+    }
 };
 
 
