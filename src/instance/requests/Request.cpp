@@ -218,10 +218,10 @@ Request::Request(const Graph& graph, const Request &baseRequest, const TransitAc
         _destinationNodeIndex = baseRequest.getDestinationNodeIndex();
 
         _departureTW.min = access.getAccessTimestamp();
-        _departureTW.max =baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(access.getAccessNodeIdx(), _destinationNodeIndex);
+        _departureTW.max = baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(access.getAccessNodeIdx(), _destinationNodeIndex);
 
         _arrivalTW.min = baseRequest.getArrivalTw().min;
-        _arrivalTW.max = _departureTW.min + _deltaTime; //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
+        _arrivalTW.max = _departureTW.min + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
     }
 
     _deltaTime = std::numeric_limits<uint>::max();
