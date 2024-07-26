@@ -16,6 +16,7 @@ private:
     //Request base members (const and initialized on _request creation)
     size_t _originNodeIndex; //Starting point of the user _request //TODO (?) change this to a Node pointer eventually
     size_t _destinationNodeIndex; //
+    TimeWindow _departureTW;
     TimeWindow _arrivalTW; //[min,max] time window for arrival to the destination node
     uint _deltaTime; //Base delta time, aka the maximum total duration of the path to serve this _request
     uint _weight; //How much space the requests takes in the vehicle (defaults to 1)
@@ -41,11 +42,11 @@ public:
     [[nodiscard]] size_t getOriginNodeIndex() const;
     [[nodiscard]] size_t getDestinationNodeIndex() const;
     [[nodiscard]] const TimeWindow &getArrivalTw() const;
-    [[nodiscard]] int getDeltaTime() const;
-    [[nodiscard]] int getWeight() const;
-    [[nodiscard]] int getCurrentDeltaTime() const;
-    [[nodiscard]] int getRequestServiceStart() const;
-    [[nodiscard]] int getRequestServiceEnd() const;
+    [[nodiscard]] uint getDeltaTime() const;
+    [[nodiscard]] uint getWeight() const;
+    [[nodiscard]] uint getCurrentDeltaTime() const;
+    [[nodiscard]] uint getRequestServiceStart() const;
+    [[nodiscard]] uint getRequestServiceEnd() const;
     [[nodiscard]] const RequestRoute &getCurrentRoute() const;
     [[nodiscard]] const TimeWindow &getDepartureTw() const;
     [[nodiscard]] uint getMinDepartureTw() const;
@@ -84,7 +85,7 @@ public:
      * Format : origin_idx,destination_idx,min,max,delta,capacity
      * @return A properly formatted string to import back again
      */
-    std::string to_string_export() const;
+    [[nodiscard]] std::string to_string_export() const;
 };
 
 

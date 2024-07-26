@@ -9,14 +9,14 @@
 Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const uint deltaTime, const uint weight) : _originNodeIndex(departureNodeIndex),
                                                             _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
-                                                            _deltaTime(deltaTime), _currentDeltaTime(deltaTime), _weight(weight) {
+                                                            _deltaTime(deltaTime), _weight(weight), _currentDeltaTime(deltaTime) {
     _departureTW = _arrivalTW - deltaTime;
 }
 
 Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const uint deltaTime, const uint weight, const Graph& graph) :
         _originNodeIndex(departureNodeIndex), _destinationNodeIndex(arrivalNodeIndex),
-        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _currentDeltaTime(deltaTime), _weight(weight) {
+        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight), _currentDeltaTime(deltaTime) {
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
 }
@@ -95,23 +95,23 @@ const TimeWindow &Request::getArrivalTw() const {
     return _arrivalTW;
 }
 
-int Request::getDeltaTime() const {
+uint Request::getDeltaTime() const {
     return _deltaTime;
 }
 
-int Request::getWeight() const {
+uint Request::getWeight() const {
     return _weight;
 }
 
-int Request::getCurrentDeltaTime() const {
+uint Request::getCurrentDeltaTime() const {
     return _currentDeltaTime;
 }
 
-int Request::getRequestServiceStart() const {
+uint Request::getRequestServiceStart() const {
     return _requestServiceStart;
 }
 
-int Request::getRequestServiceEnd() const {
+uint Request::getRequestServiceEnd() const {
     return _requestServiceEnd;
 }
 
