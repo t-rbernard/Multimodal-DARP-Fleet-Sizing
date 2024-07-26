@@ -23,8 +23,19 @@ private:
 
     //Request helpful members (used for constraint propagation and remember the current state of the _request)
     uint _currentDeltaTime; //deltaTime - currentRouteDuration
+    /**
+     * Store the timestamp when this request effectively starts its route here once we planified its route in detail
+     */
     uint _requestServiceStart;
+    /**
+     * Store the timestamp when this request effectively ends its route here once we planified its route in detail
+     */
     uint _requestServiceEnd;
+    /**
+     * This object divides our request's route in four key points for each step in the user's path:<br>
+     * SAEV departure -> Transit entrance -> Transit exit -> SAEV end <br>
+     * Through this object, we'll save the request's path during resolution
+     */
     RequestRoute _currentRoute{this};
     TimeWindow _departureTW; //For now, a virtual TW on departures, used for constraint propagation
 public:
