@@ -33,7 +33,7 @@ public:
             const uint deltaTime, const uint weight, const Graph& graph);
     Request(const DATRow& currentRow, const Graph& graph);
     Request(const DATRow& currentRow, double deltaRatio, const Graph& graph);
-    Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry)
+    Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry);
 
     static std::vector<Request> getRequestsFromFile(const std::string& datFilePath, const Graph& graph);
 
