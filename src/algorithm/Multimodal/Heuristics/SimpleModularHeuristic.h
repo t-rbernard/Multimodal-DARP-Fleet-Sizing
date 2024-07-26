@@ -13,8 +13,11 @@
 #include "TransitAccess.h"
 
 class SimpleModularHeuristic {
+private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
+public:
+    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route) : _graph(graph), _route(route) {}
 
     //Best candidates function
     /**
@@ -49,11 +52,17 @@ class SimpleModularHeuristic {
      std::vector<TransitAccess> getBestTransitExitsList(Request transitEntryRequest);
 
     //Entry filter
-    uint getMinEntryConstraint(Request request, size_t node);
-    uint getMaxEntryConstraint(Request request, size_t node);
+    uint getMinEntryConstraint(const Request &request, size_t entryNodeIndex);
+    uint getMaxEntryConstraint(const Request &request, size_t entryNodeIndex);
     //Exit filter
-    uint getMinExitConstraint(Request request, size_t node);
-    uint getMaxExitConstraint(Request request, size_t node);
+    uint getMinExitConstraint(const Request &request, size_t exitNodeIndex);
+    uint getMaxExitConstraint(const Request &request, size_t exitNodeIndex);
+
+    const Graph *getGraph() const;
+    void setGraph(const Graph *graph);
+
+    SAEVRoute *getRoute() const;
+    void setRoute(SAEVRoute *route);
 };
 
 
