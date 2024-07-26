@@ -223,7 +223,30 @@ Request::Request(const Graph& graph, const Request &baseRequest, const TransitAc
         _arrivalTW.min = baseRequest.getArrivalTw().min;
         _arrivalTW.max = _departureTW.min + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
     }
-
+    _transitTravelTimeRatio = baseRequest.getTransitTravelTimeRatio();
     _deltaTime = std::numeric_limits<uint>::max();
     _weight = baseRequest.getWeight();
+}
+
+double Request::getTransitTravelTimeRatio() const {
+    return _transitTravelTimeRatio;
+}
+
+void Request::setTransitTravelTimeRatio(double transitTravelTimeRatio) {
+    _transitTravelTimeRatio = transitTravelTimeRatio;
+}
+
+double Request::computeTransitTravelTimeRatio(double deltaRatio, double travelTimeRatio) {
+    double computedRatio = (1.0 + (travelTimeRatio * (1.0 - deltaRatio)));
+    if(computedRatio < 1)
+        return 1;
+    else if(computedRatio > deltaRatio)
+        return deltaRatio;
+    else
+        return computedRatio;
+}
+
+double Request::computeTransitTravelTimeRatio(const Graph &graph, double travelTimeRatio) const {
+    double deltaRatio = (graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex))/(double)_deltaTime;
+    return computeTransitTravelTimeRatio(deltaRatio, travelTimeRatio);
 }

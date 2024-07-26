@@ -10,6 +10,7 @@
 #include "../../routes/requests/RequestRoute.h"
 #include "../graph/Graph.h"
 #include "../../algorithm/Multimodal/Heuristics/TransitAccess.h"
+#include "../../utils/Constants.h"
 
 class Request {
 private:
@@ -37,7 +38,10 @@ private:
      * Through this object, we'll save the request's path during resolution
      */
     RequestRoute _currentRoute{this};
-    TimeWindow _departureTW; //For now, a virtual TW on departures, used for constraint propagation
+    /**
+     * A ratio by which to multiply the direct vehicle path to guesstimate an upper bound on transit travel time
+     */
+    double _transitTravelTimeRatio{Constants::BASE_TRANSIT_TRAVEL_TIME_RATIO};
 public:
     Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex,
             const TimeWindow &arrivalTw, const uint deltaTime, const uint weight);
@@ -89,6 +93,13 @@ public:
     void setLineStop(int routeIndex, LineStop *lineStop);
 
     void resetKeyPoint(int routeIndex);
+
+    [[nodiscard]] double getTransitTravelTimeRatio() const;
+
+    void setTransitTravelTimeRatio(double transitTravelTimeRatio);
+
+    [[nodiscard]] static double computeTransitTravelTimeRatio(double deltaRatio, double travelTimeRatio);
+    [[nodiscard]] double computeTransitTravelTimeRatio(const Graph &graph, double travelTimeRatio) const;
 
     /**
      * Creates a string in an appropriate format for the request to be exported to a file that can be imported again
