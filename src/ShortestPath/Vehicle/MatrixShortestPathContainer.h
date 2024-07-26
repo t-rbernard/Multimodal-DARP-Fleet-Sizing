@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdint>
 #include <algorithm>
+#include "../../utils/Globals.h"
 
 class MatrixShortestPathContainer {
 private:
