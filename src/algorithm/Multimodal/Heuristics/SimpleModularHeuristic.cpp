@@ -31,12 +31,12 @@ std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(con
     return results;
 }
 
-uint SimpleModularHeuristic::getMinEntryConstraint(const Request &request, size_t entryNodeIndex) {
-    return request.getMinDepartureTw() + _graph->getShortestSAEVPath(request.getOriginNodeIndex(), entryNodeIndex);
+uint SimpleModularHeuristic::getMinEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const {
+    return request.getMinDepartureTw() + _graph->getShortestSAEVPath(request.getOriginNodeIndex(), ptEntryNodeIdx);
 }
 
-uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_t entryNodeIndex) {
-    return request.getMinDepartureTw() + _graph->getShortestSAEVPath(entryNodeIndex, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio();
+uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const {
+    return (uint) std::floor(request.getMaxArrivalTw() - _graph->getShortestSAEVPath(ptEntryNodeIdx, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio());
 }
 
 const Graph *SimpleModularHeuristic::getGraph() const {

@@ -51,9 +51,11 @@ public:
      */
      std::vector<TransitAccess> getBestTransitExitsList(Request transitEntryRequest);
 
+//Protected member function for overriding as we make this more modular
+protected:
     //Entry filter
-    uint getMinEntryConstraint(const Request &request, size_t entryNodeIndex);
-    uint getMaxEntryConstraint(const Request &request, size_t entryNodeIndex);
+    [[nodiscard]] uint getMinEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const;
+    [[nodiscard]] uint getMaxEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const;
     //Exit filter
     uint getMinExitConstraint(const Request &request, size_t exitNodeIndex);
     uint getMaxExitConstraint(const Request &request, size_t exitNodeIndex);
