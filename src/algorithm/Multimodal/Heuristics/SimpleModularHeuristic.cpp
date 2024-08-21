@@ -26,6 +26,9 @@ std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(con
         //If we've found a valid max departure time for this station, add it to the list
         if(maxDepartureTime > -1) {
             results.emplace_back(bestStationNodeIdx, maxDepartureTime);
+            if(results.size() == Constants::MAX_TRANSIT_ENTRY_CANDIDATES) {
+                break;
+            }
         }
     }
     return results;

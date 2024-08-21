@@ -11,6 +11,10 @@ public:
     static constexpr uint VEHICLE_CAPACITY = 4;
     static constexpr uint MAX_TRANSIT_CONNECTIONS = 2;
     /**
+     * The max amount of closest stations we preprocess for a given node (namely request origin nodes)
+     */
+    static constexpr size_t CLOSEST_STATIONS_LIST_SIZE = 30;
+    /**
      * The maximum amount of transit entry stations checked during our heuristic algorithm
      */
     static constexpr size_t MAX_TRANSIT_ENTRY_CANDIDATES = 10;

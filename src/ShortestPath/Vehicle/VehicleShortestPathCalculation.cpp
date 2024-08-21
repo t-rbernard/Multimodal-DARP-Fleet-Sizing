@@ -27,7 +27,7 @@ VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_
             mark[currentState.getNodeIndex()] = true;
 
             //Considering order of iteration is by shortest path to starting node, it's fair to add the current state node as a closest station
-            if(graph.getNbPTLines(currentState.getNodeIndex()) > 0 && graph.getNbClosestStations(startingNodeIdx) < Constants::MAX_TRANSIT_ENTRY_CANDIDATES) {
+            if(graph.getNbPTLines(currentState.getNodeIndex()) > 0 && graph.getNbClosestStations(startingNodeIdx) < Constants::CLOSEST_STATIONS_LIST_SIZE) {
                 graph.emplaceBackClosestStation(startingNodeIdx, currentState.getNodeIndex());
             }
 
