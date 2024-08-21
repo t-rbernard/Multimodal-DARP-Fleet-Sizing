@@ -19,6 +19,15 @@ private:
 public:
     SimpleModularHeuristic(const Graph *graph, SAEVRoute *route) : _graph(graph), _route(route) {}
 
+//Public interface to interact with the modular heuristic
+public:
+    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route) : _graph(graph), _route(route) {}
+
+    void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
+
+//Private members for heuristic internal functions we don't wish to see overriden
+private:
+
     //Best candidates function
     /**
      * Creates and returns a vector of TransitAccess objects representing possible
