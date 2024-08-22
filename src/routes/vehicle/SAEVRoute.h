@@ -113,11 +113,11 @@ public:
     BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);
     void getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, size_t requestId, size_t vehicleId);
 
-    SAEVKeyPoint& getRequestOrigin(const size_t requestId) { return _route[requestId * 2];}
-    SAEVKeyPoint& getRequestDestination(const size_t requestId) { return _route[requestId * 2 + 1];}
+    SAEVKeyPoint& getRequestOrigin(const size_t requestId) { return _route[getRequestOriginRouteIdx(requestId)];}
+    SAEVKeyPoint& getRequestDestination(const size_t requestId) { return _route[getRequestDestinationRouteIdx(requestId)];}
 
-    SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route[_nbRequest*2 + vehicleId*2];}
-    SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route[_nbRequest*2 + vehicleId*2 + 1];}
+    SAEVKeyPoint& getOriginDepot(const size_t vehicleId) { return _route[getOriginDepotRouteIdx(vehicleId)];}
+    SAEVKeyPoint& getDestinationDepot(const size_t vehicleId) { return _route[getDestinationDepotRouteIdx(vehicleId)];}
 
     [[nodiscard]] size_t getRequestOriginRouteIdx(const size_t requestId) const { return requestId * 2;}
     [[nodiscard]] size_t getRequestDestinationRouteIdx(const size_t requestId) const { return requestId * 2 + 1;}
@@ -126,8 +126,8 @@ public:
 
     [[nodiscard]] size_t getOriginDepotRouteIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2;}
     [[nodiscard]] size_t getDestinationDepotRouteIdx(const size_t vehicleId) const { return _nbRequest*2 + vehicleId*2 + 1;}
-    [[nodiscard]] size_t getOriginDepotNodeIdx(const size_t vehicleId) const { return _route[_nbRequest*2 + vehicleId*2].getNodeIndex();}
-    [[nodiscard]] size_t getDestinationDepotNodeIdx(const size_t vehicleId) const { return _route[_nbRequest*2 + vehicleId*2].getNodeIndex();}
+    [[nodiscard]] size_t getOriginDepotNodeIdx(const size_t vehicleId) const { return _route[getOriginDepotRouteIdx(vehicleId)].getNodeIndex();}
+    [[nodiscard]] size_t getDestinationDepotNodeIdx(const size_t vehicleId) const { return _route[getDestinationDepotRouteIdx(vehicleId)].getNodeIndex();}
 
     [[nodiscard]] size_t getLastActiveVehicleId() const { return _lastActiveVehicleId; }
     void setLastActiveVehicleId(size_t lastActiveVehicleId) { _lastActiveVehicleId = lastActiveVehicleId; }
