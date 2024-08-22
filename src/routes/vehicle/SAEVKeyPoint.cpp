@@ -86,6 +86,15 @@ int SAEVKeyPoint::getDeltaTime() const {
 
 void SAEVKeyPoint::setRequest(const Request *requestPointer) {
     _requestPointer = requestPointer;
+    if(_isOrigin) {
+        setNodeIndex(_requestPointer->getOriginNodeIndex());
+        _minTW = _requestPointer->getDepartureTw().min;
+        _maxTW = _requestPointer->getDepartureTw().max;
+    } else {
+        setNodeIndex(_requestPointer->getDestinationNodeIndex());
+        _minTW = _requestPointer->getArrivalTw().min;
+        _maxTW = _requestPointer->getArrivalTw().max;
+    }
 }
 
 SAEVKeyPoint *SAEVKeyPoint::getCounterpart() const {
