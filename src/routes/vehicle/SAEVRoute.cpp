@@ -376,7 +376,17 @@ bool SAEVRoute::checkRouteTimeWindows(size_t vehicleId) {
  * @param vehicleId The ID of the vehicle in which we look for new best insertions
  * @return The created BestInsertionQueue filled with the best insertions for the given request and vehicle IDs
  */
-BestInsertionQueue SAEVRoute::getBestInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId) {
+BestInsertionQueue SAEVRoute::getBestInsertionsQueue(size_t requestId, size_t vehicleId) {
+    return getBestInsertionsQueue(getRequestOrigin(requestId), vehicleId);
+}
+
+/** TODO: move to BestInsertionQueue class with a route parameter ?
+ * Initializes a BestInsertionQueue to guide the best insertion heuristic
+ * @param requestOriginKeyPoint Reference to the origin key point
+ * @param vehicleId The ID of the vehicle in which we look for new best insertions
+ * @return The created BestInsertionQueue filled with the best insertions for the given request and vehicle IDs
+ */
+BestInsertionQueue SAEVRoute::getBestInsertionsQueue(SAEVKeyPoint &originKP, size_t vehicleId) {
     BestInsertionQueue bestInsertionQueue(originKP, vehicleId, _nbRequest ^ 2);
 
     //Init variables used during iteration
@@ -402,11 +412,21 @@ BestInsertionQueue SAEVRoute::getBestInsertionsQueue(const SAEVKeyPoint &originK
 
 /**
  * Initializes a BestInsertionQueue to guide the best insertion heuristic while checking neighbouring TW checks
+ * @param requestId The ID of the base request for which we search best insertions
+ * @param vehicleId The ID of the vehicle in which we look for new best insertions
+ * @return The created BestInsertionQueue filled with the best insertions for the given request and vehicle IDs
+ */
+BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId) {
+    return getBestFeasibleInsertionsQueue(getRequestOrigin(requestId), vehicleId);
+}
+
+/**
+ * Initializes a BestInsertionQueue to guide the best insertion heuristic while checking neighbouring TW checks
  * @param requestOriginKeyPoint Reference to the origin key point of the request for which we search best insertions
  * @param vehicleId The ID of the vehicle in which we look for new best insertions
  * @return The created BestInsertionQueue filled with the best insertions for the given request and vehicle IDs
  */
-BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId) {
+BestInsertionQueue SAEVRoute::getBestFeasibleInsertionsQueue(SAEVKeyPoint &originKP, size_t vehicleId) {
     BestInsertionQueue bestInsertionQueue(originKP, vehicleId, _nbRequest ^ 2);
     getBestFeasibleInsertionsQueue(bestInsertionQueue, originKP, vehicleId);
     return bestInsertionQueue;

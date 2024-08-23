@@ -11,15 +11,15 @@
 
 class BestInsertionQueue : public std::priority_queue<BestRequestInsertion, std::vector<BestRequestInsertion>, std::greater<>> {
 private:
-    const SAEVKeyPoint &_originKP;
+    SAEVKeyPoint &_originKP;
     size_t _vehicleId{std::numeric_limits<size_t>::max()};
 
 public:
-    explicit BestInsertionQueue(const SAEVKeyPoint &originKP) : _originKP(originKP) {}
+    explicit BestInsertionQueue(SAEVKeyPoint &originKP) : _originKP(originKP) {}
 
-    BestInsertionQueue(const SAEVKeyPoint &originKP, size_t vehicleId) : _originKP(originKP), _vehicleId(vehicleId) {}
+    BestInsertionQueue(SAEVKeyPoint &originKP, size_t vehicleId) : _originKP(originKP), _vehicleId(vehicleId) {}
 
-    BestInsertionQueue(const SAEVKeyPoint &originKP, size_t vehicleId, size_t nbRequests) : BestInsertionQueue(originKP, vehicleId) {
+    BestInsertionQueue(SAEVKeyPoint &originKP, size_t vehicleId, size_t nbRequests) : BestInsertionQueue(originKP, vehicleId) {
         c.reserve(nbRequests^2);
     }
 
@@ -27,7 +27,7 @@ public:
         return _vehicleId;
     }
 
-    [[nodiscard]] const SAEVKeyPoint &getOriginKp() const {
+    [[nodiscard]] SAEVKeyPoint &getOriginKp() const {
         return _originKP;
     }
 

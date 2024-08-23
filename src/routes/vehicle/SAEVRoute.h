@@ -122,8 +122,10 @@ public:
      */
     double getDetourScore(const SAEVKeyPoint &originKP, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP);
 
-    BestInsertionQueue getBestInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId);
-    BestInsertionQueue getBestFeasibleInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId);
+    BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
+    BestInsertionQueue getBestInsertionsQueue(SAEVKeyPoint &originKP, size_t vehicleId);
+    BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);
+    BestInsertionQueue getBestFeasibleInsertionsQueue(SAEVKeyPoint &originKP, size_t vehicleId);
     void getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, const SAEVKeyPoint &requestOriginKeyPoint, size_t vehicleId);
 
     SAEVKeyPoint& getRequestOrigin(const size_t requestId) { return _route[getRequestOriginRouteIdx(requestId)];}

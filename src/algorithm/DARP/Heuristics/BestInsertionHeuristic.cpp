@@ -36,7 +36,7 @@ SAEVRouteChangelist BestInsertionHeuristic::tryVehicleBestInsertion(BestInsertio
             lastInsertionChangelist.revertChanges();
         }
     }
-    //FIXME : use a pointer and return it via dereferencing ? Create a dummy constructor ? (I think I'll go with the latter)
+
     return lastInsertionChangelist;
 }
 
