@@ -51,6 +51,7 @@ size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(SAEVKeyPoint &requ
     //Update last active vehicle ID
     if(vehicleId > route.getLastActiveVehicleId()) {
         route.setLastActiveVehicleId(vehicleId);
+        tryVehicleBestInsertion(requestKp, vehicleId, route);
         DEBUG_MSG("NEW VEHICLE CREATED, ID :" + std::to_string(vehicleId));
     }
 
