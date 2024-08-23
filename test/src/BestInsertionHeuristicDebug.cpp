@@ -61,23 +61,23 @@ TEST(BestInsertionQueueDebug, DebugInstanceAlain) {
     //Vehicle 1 insertions
     BestInsertionQueue biQueue = routesContainer.getBestInsertionsQueue(0,0);
     routesContainer.tryAddRequest(0,&routesContainer.getOriginDepot(0),&routesContainer.getOriginDepot(0));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,0);
+    routesContainer.getBestFeasibleInsertionsQueue(1,0);
     routesContainer.tryAddRequest(1, &routesContainer.getRequestOrigin(0), &routesContainer.getRequestOrigin(0));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,0);
+    routesContainer.getBestFeasibleInsertionsQueue(2,0);
     SAEVRouteChangelist cl = routesContainer.tryAddRequest(2, &routesContainer.getRequestOrigin(1),
                                                            &routesContainer.getRequestDestination(1));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,0);
+    routesContainer.getBestFeasibleInsertionsQueue(3,0);
 
     //Vehicle 2 insertions
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(5,1);
+    routesContainer.getBestFeasibleInsertionsQueue(5,1);
     routesContainer.tryAddRequest(5,&routesContainer.getOriginDepot(1),&routesContainer.getOriginDepot(1));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(4,1);
+    routesContainer.getBestFeasibleInsertionsQueue(4,1);
     routesContainer.tryAddRequest(4,&routesContainer.getOriginDepot(1), &routesContainer.getRequestDestination(5));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(3,1);
+    routesContainer.getBestFeasibleInsertionsQueue(3,1);
     routesContainer.tryAddRequest(3,&routesContainer.getOriginDepot(1), &routesContainer.getRequestOrigin(4));
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(0,1);
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(1,1);
-    biQueue = routesContainer.getBestFeasibleInsertionsQueue(2,1);
+    routesContainer.getBestFeasibleInsertionsQueue(0,1);
+    routesContainer.getBestFeasibleInsertionsQueue(1,1);
+    routesContainer.getBestFeasibleInsertionsQueue(2,1);
 }
 
 TEST(BestInsertionPerVehicleHeuristicDebug, DebugInstanceAlain) {
