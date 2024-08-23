@@ -40,6 +40,11 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
      */
     void insertRequest(SAEVKeyPoint &originKp, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
+    /**
+     * Inserts a request with propagation in a new vehicle while updating last active vehicle ID (since the vehicle is new, no need to tell where to insert)
+     * @param originKp Reference to the origin key point of the request we want to insert in the route
+     */
+    void insertRequestInNewVehicle(SAEVKeyPoint &originKp);
 
     /**
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
