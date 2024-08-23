@@ -24,11 +24,11 @@ void SAEVKeyPoint::setSuccessor(SAEVKeyPoint *successor) {
     _successor = successor;
 }
 
-int SAEVKeyPoint::getCurrentOccupation() const {
+uint SAEVKeyPoint::getCurrentOccupation() const {
     return _currentOccupation;
 }
 
-void SAEVKeyPoint::setCurrentOccupation(int currentCapacity) {
+void SAEVKeyPoint::setCurrentOccupation(uint currentCapacity) {
     _currentOccupation = currentCapacity;
 }
 
@@ -105,7 +105,7 @@ void SAEVKeyPoint::setCounterpart(SAEVKeyPoint *counterpart) {
     _counterpart = counterpart;
 }
 
-SAEVKeyPoint::SAEVKeyPoint(int depotNodeIdx) : KeyPoint(depotNodeIdx) {
+SAEVKeyPoint::SAEVKeyPoint(size_t depotNodeIdx) : KeyPoint(depotNodeIdx) {
     _isDepot = true;
     setNodeIndex(depotNodeIdx);
 }

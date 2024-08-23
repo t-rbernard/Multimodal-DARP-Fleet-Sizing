@@ -21,7 +21,7 @@ public:
     /**
      * Default constructor to allow pre-sizing containers
      */
-    BestRequestInsertion() {};
+    BestRequestInsertion() = default;
     /**
      * Constructs a BestRequestInsertion object, containing Origin/Destination insertion indexes and the score associated
      * @param originInsertionKP Index of insertion for the origin of the request in the route

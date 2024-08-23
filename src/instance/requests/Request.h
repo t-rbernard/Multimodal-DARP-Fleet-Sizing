@@ -43,6 +43,7 @@ private:
      */
     double _transitTravelTimeRatio{Constants::BASE_TRANSIT_TRAVEL_TIME_RATIO};
 public:
+    Request() = default;
     Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex,
             const TimeWindow &arrivalTw, const uint deltaTime, const uint weight);
     Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,

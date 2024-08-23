@@ -30,7 +30,7 @@ public:
     /**
      * Depot KP initialization with [0;max] time windows and a depot node index
      */
-    explicit SAEVKeyPoint(int depotNodeIdx);
+    explicit SAEVKeyPoint(size_t depotNodeIdx);
     /**
      * SAEV KP initialization
      * @param graph the instance's graph, used to get shortest path and estimate start time windows relative to distances
@@ -45,8 +45,8 @@ public:
     [[nodiscard]] SAEVKeyPoint *getSuccessor() const;
     void setSuccessor(SAEVKeyPoint *successor);
 
-    [[nodiscard]] int getCurrentOccupation() const;
-    void setCurrentOccupation(int currentCapacity);
+    [[nodiscard]] uint getCurrentOccupation() const;
+    void setCurrentOccupation(uint currentCapacity);
 
     [[nodiscard]] uint getMinTw() const;
     void setMinTw(uint minTw);
