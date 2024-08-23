@@ -29,7 +29,7 @@ public:
 private:
     //Change target info
     SAEVRoute * _routePtr{};
-    size_t _requestId{};
+    SAEVKeyPoint* _requestOriginKeyPoint{};
     size_t _vehicleId{};
     SAEVKeyPoint* _originPredecessorKP{};
     SAEVKeyPoint* _destinationPredecessorKP{};
@@ -43,17 +43,17 @@ private:
 
 public:
 
-    SAEVRouteChangelist(SAEVRoute * routePtr, size_t requestId) : _routePtr(routePtr), _requestId(requestId) {}
+    SAEVRouteChangelist(SAEVRoute * routePtr, SAEVKeyPoint *requestOriginKeyPoint) : _routePtr(routePtr), _requestOriginKeyPoint(requestOriginKeyPoint) {}
 
     /**
      * Initializes a change list to memorize every iterative modification made during constraint propagation
      * @param routePtr a pointer to the route the constraint propagation was applied on. revert/apply operations will be done on this route
-     * @param requestId The index of the request in the global request list
-     * @param originPredecessorKP The index of the request our origin will be inserted after
-     * @param destinationPredecessorKP The index of the request our destination will be inserted after
+     * @param requestOriginKeyPoint Reference to the request origin key point in the route
+     * @param originPredecessorKP Reference to the request KP our origin will be inserted after
+     * @param destinationPredecessorKP Reference to the request KP our destination will be inserted after
      */
-    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, const size_t requestId, SAEVKeyPoint* originPredecessorKP, SAEVKeyPoint* destinationPredecessorKP, InsertionStatus status)
-    : _routePtr(routePtr), _requestId(requestId), _originPredecessorKP(originPredecessorKP), _destinationPredecessorKP(destinationPredecessorKP), _status(status), _currentStatus(status) {};
+    explicit SAEVRouteChangelist(SAEVRoute * const routePtr, SAEVKeyPoint *requestOriginKeyPoint, SAEVKeyPoint* originPredecessorKP, SAEVKeyPoint* destinationPredecessorKP, InsertionStatus status)
+    : _routePtr(routePtr), _requestOriginKeyPoint(requestOriginKeyPoint), _originPredecessorKP(originPredecessorKP), _destinationPredecessorKP(destinationPredecessorKP), _status(status), _currentStatus(status) {};
 
 
     /**
@@ -62,10 +62,8 @@ public:
     [[nodiscard]] SAEVRoute * getRoutePtr() const;
 
     [[nodiscard]] const std::vector<SAEVRouteChange> &getChangelist() const;
-    /**
-     * @return The index of the request that we want to insert to a route
-     */
-    [[nodiscard]] size_t getRequestId() const;
+
+    SAEVKeyPoint *getRequestOriginKeyPoint() const;
 
     [[nodiscard]] size_t getVehicleId() const;
     void setVehicleId(size_t vehicleId);
@@ -99,7 +97,7 @@ public:
 
     void push_back(SAEVRouteChange change);
     void emplace_back(SAEVRouteChange change);
-    void emplace_back(SAEVKeyPoint& kp, Bound bound, int value);
+    void emplace_back(SAEVKeyPoint& kp, Bound bound, uint value);
 
     /**
      * Inserts the request associated to this changelist to the given route and iteratively applies every change memorized in this changelist.

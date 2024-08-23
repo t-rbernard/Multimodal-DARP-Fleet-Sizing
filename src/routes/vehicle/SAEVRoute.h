@@ -35,30 +35,30 @@ public:
 
     /**
      * Raw request route insertion method. Public for debug purposes, but should effectively never be called by an outside member
-     * @param requestId index of the request we want to insert in the route
+     * @param originKp Reference to the origin key point of the request we want to insert in the route
      * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the origin of the request we want to insert
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede the destination of the request we want to insert
      */
-    void insertRequest(size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
+    void insertRequest(SAEVKeyPoint &originKp, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Raw request removal method. Public for debug purposes, but should effectively never be called by an outside member
-     * @param requestId index of the request we want to remove from the route
+     * @param originKp Reference to the origin key point of the request we want to remove from the route
      */
-    void removeRequest(size_t requestId);
+    void removeRequest(SAEVKeyPoint &originKp);
 
     /**
      * Updates weight in-between request's Origin/Destination (both included) to account for the given request's weight
      * ⚠️ Execute this function *after* adding the request to the route, as it assumes the request is part of the route
-     * @param requestId ID of the request that serves as basis for iteration and weight to add
+     * @param requestOriginKeyPoint reference to the origin keypoint of the request for which we wish to remove the weight to the route
      */
-    void addRequestWeightToRoute(size_t requestId);
+    void addRequestWeightToRoute(SAEVKeyPoint &requestOriginKeyPoint);
     /**
      * Resets current weight to 0 on the request Origin/Destination key points and decreases weight on the nodes in-between by the request's weight
      * ⚠️ Execute this function *before* removing the request from the route, as it assumes the request is still part of the route
-     * @param requestId ID of the request that serves as basis for iteration and weight to remove
+     * @param requestOriginKeyPoint reference to the origin keypoint of the request for which we wish to remove the weight to the route
      */
-    void removeRequestWeightFromRoute(size_t requestId);
+    void removeRequestWeightFromRoute(SAEVKeyPoint& requestOriginKeyPoint);
 
     /**
      * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
@@ -70,48 +70,61 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist tryAddRequest(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
+    SAEVRouteChangelist tryAddRequest(size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
+
+    /**
+     * Tries to insert the request origin and destination next to the given origin/destination predecessors. \n \n
+     * First we verify multiple constraints that don't require actually inserting the request or doing constraint propagation. \n
+     * Then we propagate our min/max bounds, iteratively rippling through every modification induced by min/max neighbour constraints or delta constraints. \n
+     * ⚠️ In case of infeasibility, tryAdd automatically reverts changes and the change list will be effectively empty, but otherwise it's the caller's responsibility to revert changes if necessary
+     * @param requestOriginKeyPoint KeyPoint reference pointing to the origin KP of the request we wish to insert
+     * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
+     * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
+     * @return A change list with every min/max bound change made during the tryAdd procedure and a score estimating insertion quality (lower is better)
+     */
+    SAEVRouteChangelist tryAddRequest(SAEVKeyPoint &requestOriginKeyPoint, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Verifies time window constraints on our request's origin/destination's projected neighbour, aka originPredecessor/destinationPredecessor and their successor.
      * There is a special case taken into account if originPredecessor and destinationPredecessor are the same KeyPoint, since then, Origin's successor would be Destination
      * ⚠️ Weight constraints are checked separately
      * ⚠️ Those checks don't modify the route => no rollback is needed at this point
-     * @param requestId Index of our request, necessary to retrieve the appropriate key points
+     * @param originKP Reference to the origin key point of our request, necessary to retrieve the appropriate key points
      * @param originNodeIndex The request's origin node index, necessary to compute travel times
      * @param destinationNodeIndex The request's destination node index, necessary to compute travel times
      * @param originPredecessor The origin's expected predecessor, aka the point after which we wish to insert our origin
      * @param destinationPredecessor The destination's expected predecessor, aka the point after which we wish to insert our destination
      * @return true iff all neighbouring time window conditions are valid at our insertion points, false otherwise
      */
-    bool doNeighbouringTWChecks(const size_t requestId, const SAEVKeyPoint *originPredecessor,
-                                const SAEVKeyPoint *destinationPredecessor);
+    bool doNeighbouringTWChecks(const SAEVKeyPoint &originKP, const SAEVKeyPoint *originPredecessor,
+                                const SAEVKeyPoint *destinationPredecessor) const;
 
     /**
      * Method called after having validated conditions not requiring request insertion. \n
      * This will effectively insert our procedure and ripple through bound changes. \n
      * If the bounds become infeasible (min > max), then the propagation stops with a changelist with score= +Infinity and changes will be immediately reverted.
      * Otherwise, it's the responsibility of this method's callers to revert changes if wanted (or to defer this responsibility to its caller)
-     * @param requestId Identifier/index in the instance's request vector for the request we wish to insert
+     * @param originKP Reference to the origin key point for the request we wish to insert
      * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
      */
-    SAEVRouteChangelist insertRequestWithPropagation(const size_t requestId, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
+    SAEVRouteChangelist insertRequestWithPropagation(SAEVKeyPoint &originKP, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
      * Returns a score value equivalent to the detour implied by insertion of a request after the two given key point indexes.
      * The specific case of origin/destination being inserted one after another is taken into account
-     * @param requestId Identifier/index in the instance's request vector for the request we wish to insert
+     * ⚠️ This method assumes the insertion hasn't been done yet, so compute detour scores before inserting your request ⚠️
+     * @param originKP Reference to the origin key point for the request we wish to insert
      * @param originRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's origin in the route
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return
      */
-    double getDetourScore(const size_t requestId, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP);
+    double getDetourScore(const SAEVKeyPoint &originKP, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP);
 
-    BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
-    BestInsertionQueue getBestFeasibleInsertionsQueue(size_t requestId, size_t vehicleId);
-    void getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, size_t requestId, size_t vehicleId);
+    BestInsertionQueue getBestInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId);
+    BestInsertionQueue getBestFeasibleInsertionsQueue(const SAEVKeyPoint &originKP, size_t vehicleId);
+    void getBestFeasibleInsertionsQueue(BestInsertionQueue& bestInsertionQueue, const SAEVKeyPoint &requestOriginKeyPoint, size_t vehicleId);
 
     SAEVKeyPoint& getRequestOrigin(const size_t requestId) { return _route[getRequestOriginRouteIdx(requestId)];}
     SAEVKeyPoint& getRequestDestination(const size_t requestId) { return _route[getRequestDestinationRouteIdx(requestId)];}
@@ -141,6 +154,11 @@ public:
 
     std::string to_string(size_t vehicleId);
     void exportToFile();
+
+    /**
+     * Extends the existing route to add 4*NbRequests keypoints to represent entry/exit sub-requests Origin/Destination
+     */
+    void initMultimodalKeyPoints();
 };
 
 #include "propagation/SAEVRouteChangelist.h"

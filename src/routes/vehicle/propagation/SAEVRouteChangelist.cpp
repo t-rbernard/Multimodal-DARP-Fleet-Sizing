@@ -16,13 +16,13 @@ void SAEVRouteChangelist::emplace_back(SAEVRouteChange change) {
     _changelist.emplace_back(change);
 }
 
-void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, int value) {
+void SAEVRouteChangelist::emplace_back(SAEVKeyPoint &kp, Bound bound, uint value) {
     _changelist.emplace_back(kp, bound, value);
 }
 
 void SAEVRouteChangelist::applyChanges() {
     if(_status < InsertionStatus::FAILURE_PRECONDITION_TW) {
-        _routePtr->insertRequest(_requestId, _originPredecessorKP, _destinationPredecessorKP);
+        _routePtr->insertRequest(*_requestOriginKeyPoint, _originPredecessorKP, _destinationPredecessorKP);
     }
     for(SAEVRouteChange change : _changelist) {
         change.applyChange();
@@ -32,7 +32,7 @@ void SAEVRouteChangelist::applyChanges() {
 
 void SAEVRouteChangelist::revertChanges() {
     if(_status < InsertionStatus::FAILURE_PRECONDITION_TW) {
-        _routePtr->removeRequest(_requestId);
+        _routePtr->removeRequest(*_requestOriginKeyPoint);
     }
     for(SAEVRouteChange change : _changelist) {
         change.revertChange();
@@ -40,8 +40,8 @@ void SAEVRouteChangelist::revertChanges() {
     _currentStatus = InsertionStatus::CHANGELIST_REVERTED;
 }
 
-size_t SAEVRouteChangelist::getRequestId() const {
-    return _requestId;
+SAEVKeyPoint *SAEVRouteChangelist::getRequestOriginKeyPoint() const {
+    return _requestOriginKeyPoint;
 }
 
 const SAEVKeyPoint * SAEVRouteChangelist::getOriginPredecessorKP() const {
