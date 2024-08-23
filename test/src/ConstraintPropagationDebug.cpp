@@ -9,6 +9,7 @@
 #include "../../src/instance/Instance.h"
 #include "../../src/routes/vehicle/SAEVRoute.h"
 #include "../../src/utils/Instance Generation/Requests/RequestsGenerator.h"
+#include "../../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h"
 
 TEST(ConstraintPropagationDebug, DebugBaseInstance) {
     std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
@@ -74,7 +75,7 @@ TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     //Parse graph
     Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
     std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
-
+    VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(graphFromSingleFile);
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
@@ -82,8 +83,10 @@ TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     //Vehicle 1 insertions
     routesContainer.tryAddRequest(0,&routesContainer.getOriginDepot(0),&routesContainer.getOriginDepot(0));
     routesContainer.tryAddRequest(1, &routesContainer.getRequestOrigin(0), &routesContainer.getRequestOrigin(0));
-    SAEVRouteChangelist cl = routesContainer.tryAddRequest(2, &routesContainer.getRequestOrigin(1),
+    SAEVRouteChangelist clFailPrecondition = routesContainer.tryAddRequest(2, &routesContainer.getRequestOrigin(1),
                                                            &routesContainer.getRequestDestination(1));
+    SAEVRouteChangelist clSuccess = routesContainer.tryAddRequest(2, &routesContainer.getRequestOrigin(1),
+                                                           &routesContainer.getRequestDestination(0));
 
     //Vehicle 2 insertions
     routesContainer.tryAddRequest(5,&routesContainer.getOriginDepot(1),&routesContainer.getOriginDepot(1));
