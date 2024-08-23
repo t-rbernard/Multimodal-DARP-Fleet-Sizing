@@ -42,6 +42,40 @@ uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_
     return (uint) std::floor(request.getMaxArrivalTw() - _graph->getShortestSAEVPath(ptEntryNodeIdx, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio());
 }
 
+std::vector<Request>
+SimpleModularHeuristic::generateAndInsertBestEntries(const std::vector<Request> &baseRequestsList) {
+    std::vector<Request> entrySubRequestsList{baseRequestsList.size()}; //Init entry subrequests list
+    for(size_t i = 0; i < baseRequestsList.size(); ++i) {
+        const Request& baseRequest = baseRequestsList[i];
+        entrySubRequestsList.push_back(insertBestTransitEntryInRoute(baseRequest, i));
+    }
+
+    return entrySubRequestsList;
+}
+
+Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, size_t requestId) {
+    std::vector<Request> entrySubRequestsList{Constants::MAX_TRANSIT_ENTRY_CANDIDATES}; //Init entry subrequests list
+    std::vector<TransitAccess> entriesAccessList = getBestTransitEntriesList(baseRequest);
+    for(auto const& access : entriesAccessList) {
+        entrySubRequestsList.emplace_back(*_graph, baseRequest, access, true);
+    }
+
+    for(const auto& subreq : entrySubRequestsList) {
+        _route->getEntrySubRequestOrigin(requestId).setRequest(&subreq);
+        _route->getEntrySubRequestDestination(requestId).setRequest(&subreq);
+        SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(requestId), *_route);
+        if(changeList.success()) {
+            //TODO: add subreq to the global requests list here ?
+            return subreq;
+        }
+
+    }
+
+    //If no active vehicle insertion worked, do best insertion on a new vehicle
+    _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(requestId));
+    return entrySubRequestsList[0];
+}
+
 const Graph *SimpleModularHeuristic::getGraph() const {
     return _graph;
 }

@@ -11,6 +11,7 @@
 #include "../../../instance/requests/Request.h"
 #include "../../../routes/vehicle/SAEVRoute.h"
 #include "TransitAccess.h"
+#include "../../DARP/Heuristics/BestInsertionHeuristic.h"
 
 class SimpleModularHeuristic {
 private:
@@ -25,6 +26,10 @@ public:
 
 //Private members for heuristic internal functions we don't wish to see overriden
 private:
+
+    Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t requestId);
+    std::vector<Request> generateAndInsertBestEntries(const std::vector<Request> &baseRequestsList);
+    void insertBestTransitExitsInRoute(const std::vector<Request>& baseRequestsList, const std::vector<TransitAccess>& transitEntriesList);
 
     //Best candidates function
     /**
