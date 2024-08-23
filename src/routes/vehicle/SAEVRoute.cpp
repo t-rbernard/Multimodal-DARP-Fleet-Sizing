@@ -37,6 +37,19 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
     }
 }
 
+void SAEVRoute::initMultimodalKeyPoints() {
+    _route.resize(_nbRequest * 8); // 2*NbRequests O/D Keypoints, 2*NbRequests O/D vehicle depot Keypoints
+                                            // 2*NbRequests O/D Bus entry Keypoints, 2*NbRequests O/D Bus exit Keypoints
+
+    for (size_t i = 0; i < _nbRequest; ++i) {
+        //Link Origins and Destinations for entry/exit subrequests
+        getEntrySubRequestOrigin(i).setCounterpart(&getEntrySubRequestDestination(i));
+        getEntrySubRequestDestination(i).setCounterpart(&getEntrySubRequestOrigin(i));
+        getExitSubRequestOrigin(i).setCounterpart(&getExitSubRequestDestination(i));
+        getExitSubRequestDestination(i).setCounterpart(&getExitSubRequestOrigin(i));
+    }
+}
+
 void SAEVRoute::insertRequest(SAEVKeyPoint &originKp, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP) {
     SAEVKeyPoint* destinationKp = originKp.getCounterpart();
 

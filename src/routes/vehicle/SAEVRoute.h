@@ -142,6 +142,20 @@ public:
     [[nodiscard]] size_t getOriginDepotNodeIdx(const size_t vehicleId) const { return _route[getOriginDepotRouteIdx(vehicleId)].getNodeIndex();}
     [[nodiscard]] size_t getDestinationDepotNodeIdx(const size_t vehicleId) const { return _route[getDestinationDepotRouteIdx(vehicleId)].getNodeIndex();}
 
+    [[nodiscard]] size_t getEntrySubRequestOriginRouteIdx(const size_t requestId) const { return _nbRequest * 3 + requestId * 2;}
+    [[nodiscard]] size_t getEntrySubRequestDestinationRouteIdx(const size_t requestId) const { return _nbRequest * 3 + requestId * 2 + 1;}
+    [[nodiscard]] SAEVKeyPoint& getEntrySubRequestOrigin(const size_t requestId) { return _route[getEntrySubRequestOriginRouteIdx(requestId)];}
+    [[nodiscard]] SAEVKeyPoint& getEntrySubRequestDestination(const size_t requestId) { return _route[getEntrySubRequestDestinationRouteIdx(requestId)];}
+    [[nodiscard]] size_t getEntrySubRequestOriginNodeIdx(const size_t requestId) const { return _route[getEntrySubRequestOriginRouteIdx(requestId)].getNodeIndex();}
+    [[nodiscard]] size_t getEntrySubRequestDestinationNodeIdx(const size_t requestId) const { return _route[getEntrySubRequestDestinationRouteIdx(requestId)].getNodeIndex();}
+
+    [[nodiscard]] size_t getExitSubRequestOriginRouteIdx(const size_t requestId) const { return _nbRequest * 4 + requestId * 2;}
+    [[nodiscard]] size_t getExitSubRequestDestinationRouteIdx(const size_t requestId) const { return _nbRequest * 4 + requestId * 2 + 1;}
+    [[nodiscard]] SAEVKeyPoint& getExitSubRequestOrigin(const size_t requestId) { return _route[getExitSubRequestOriginRouteIdx(requestId)];}
+    [[nodiscard]] SAEVKeyPoint& getExitSubRequestDestination(const size_t requestId) { return _route[getExitSubRequestDestinationRouteIdx(requestId)];}
+    [[nodiscard]] size_t getExitSubRequestOriginNodeIdx(const size_t requestId) const { return _route[getExitSubRequestOriginRouteIdx(requestId)].getNodeIndex();}
+    [[nodiscard]] size_t getExitSubRequestDestinationNodeIdx(const size_t requestId) const { return _route[getExitSubRequestDestinationRouteIdx(requestId)].getNodeIndex();}
+
     [[nodiscard]] size_t getLastActiveVehicleId() const { return _lastActiveVehicleId; }
     void setLastActiveVehicleId(size_t lastActiveVehicleId) { _lastActiveVehicleId = lastActiveVehicleId; }
 
