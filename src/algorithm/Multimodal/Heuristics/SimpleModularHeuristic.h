@@ -49,7 +49,7 @@ private:
      * @return A vector consisting of all valid TransitAccess objects wrt the base request
      * and the min/max exit constraints. If no valid access is found, we return an empty vector.
      */
-    std::vector<TransitAccess> getBestTransitEntriesList(const Request &baseRequest);
+    [[nodiscard]] std::vector<TransitAccess> getBestTransitEntriesList(const Request &baseRequest) const;
 
     /**
      * Creates and returns a vector of TransitAccess objects representing possible
@@ -76,10 +76,10 @@ protected:
     uint getMinExitConstraint(const Request &request, size_t exitNodeIndex);
     uint getMaxExitConstraint(const Request &request, size_t exitNodeIndex);
 
-    const Graph *getGraph() const;
+    [[nodiscard]] const Graph *getGraph() const;
     void setGraph(const Graph *graph);
 
-    SAEVRoute *getRoute() const;
+    [[nodiscard]] SAEVRoute *getRoute() const;
     void setRoute(SAEVRoute *route);
 };
 

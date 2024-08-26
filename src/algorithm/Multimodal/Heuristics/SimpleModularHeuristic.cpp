@@ -4,7 +4,7 @@
 
 #include "SimpleModularHeuristic.h"
 
-std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(const Request &baseRequest) {
+std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(const Request &baseRequest) const {
     const auto& bestStationsIndexVector = _graph->getNode(
             baseRequest.getOriginNodeIndex()).getBestStationsNodeIdxVector();
     std::vector<TransitAccess> results{bestStationsIndexVector.size()}; //init results vector to the appropriate size

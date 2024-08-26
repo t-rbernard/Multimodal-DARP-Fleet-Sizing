@@ -5,7 +5,7 @@
 #ifndef GREEDYALGORITHM_GLOBALS_H
 #define GREEDYALGORITHM_GLOBALS_H
 
-typedef unsigned int uint;
-typedef unsigned long ulong;
+using uint = unsigned int;
+using ulong = unsigned long;
 
 #endif //GREEDYALGORITHM_GLOBALS_H
