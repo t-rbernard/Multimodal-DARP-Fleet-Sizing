@@ -10,6 +10,7 @@
 #include <set>
 #include <unordered_map>
 #include <vector>
+#include "../../ShortestPath/Vehicle/ClosestDestinationsContainer.h"
 
 /**
  * Status used to qualify nodes as places with different goals (work, leisure, residential)
@@ -93,6 +94,7 @@ public:
     void emplaceBackClosestStation(size_t closestStationIdx);
 
     [[nodiscard]] const std::vector<size_t>& getBestStationsNodeIdxVector() const;
+    void setBestStationsNodeIdxVector(const std::vector<size_t> &bestStationsOrderedVector);
 };
 #include "Line.h"
 #include "LineStop.h"

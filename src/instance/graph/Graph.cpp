@@ -343,3 +343,31 @@ void Graph::emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx) {
 const size_t Graph::getNbClosestStations(size_t nodeIdx) {
     return nodesVector[nodeIdx].getBestStationsNodeIdxVector().size();
 }
+
+void Graph::computeAndUpdateClosestStationsForNode(size_t nodeIdx) {
+    ClosestDestinationsContainer closestPTNodes = VehicleShortestPathCalculation::getClosestPTNodesFromX(*this, nodeIdx);
+    for(const VehicleDestination& closestDestination : closestPTNodes.getOrderedDestinations()) {
+        nodesVector[nodeIdx].emplaceBackClosestStation(closestDestination.getDestinationNodeIdx());
+        if(nodesVector[nodeIdx].getBestStationsNodeIdxVector().size() == Constants::MAX_CLOSEST_STATIONS_CANDIDATES) {
+            break;
+        }
+    }
+}
+
+void Graph::computeAndUpdateClosestStations() {
+    for(size_t i = 0; i < nodesVector.size(); ++i)
+        computeAndUpdateClosestStationsForNode(i);
+}
+
+void Graph::computeAndUpdateShortestTransitPaths() {
+    TransitShortestPathContainer shortestPathsContainer(getNbNodes());
+    for(auto& ptLine : getPTLines()) {
+        for(size_t i = 0; i < ptLine.size(); ++i) {
+            for (auto& startingTime: ptLine.getTimetable(i)) {
+                const TransitStateContainer &results = TransitShortestPathPrecompute::executeAlgorithm(*this,ptLine.getNode(i),startingTime);
+                shortestPathsContainer.addShortestPathCollection(i, startingTime, getNbNodes(), results);
+            }
+        }
+    }
+    transitShortestPaths = shortestPathsContainer;
+}

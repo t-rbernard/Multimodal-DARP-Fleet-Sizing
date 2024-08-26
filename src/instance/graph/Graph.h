@@ -13,6 +13,10 @@
 
 #include "Node.h"
 #include "Edge.h"
+#include "../../ShortestPath/Vehicle/VehicleShortestPathCalculation.h"
+#include "../../utils/Constants.h"
+#include "../../ShortestPath/Transit/TransitShortestPathContainer.h"
+#include "../../ShortestPath/Transit/TransitShortestPathPrecompute.h"
 
 class DATRow;
 class Graph {
@@ -21,6 +25,7 @@ private:
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
     std::vector<std::vector<uint>> shortestSAEVPaths;
+    TransitShortestPathContainer transitShortestPaths;
     size_t _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
 
     /**
@@ -162,6 +167,15 @@ public:
     void emplaceBackClosestStation(size_t nodeIdx, size_t stationNodeIdx);
 
     const size_t getNbClosestStations(size_t nodeIdx);
+
+    void computeAndUpdateShortestPathsMatrix() {
+        VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(*this);
+    }
+
+    void computeAndUpdateClosestStationsForNode(size_t nodeIdx);
+    void computeAndUpdateClosestStations();
+    void computeAndUpdateShortestTransitPaths();
+
 };
 
 

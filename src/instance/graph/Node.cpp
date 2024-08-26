@@ -55,3 +55,7 @@ void Node::emplaceBackClosestStation(size_t closestStationIdx) {
 const std::vector<size_t> & Node::getBestStationsNodeIdxVector() const {
     return _bestStationsNodeIdxVector;
 }
+
+void Node::setBestStationsNodeIdxVector(const std::vector<size_t> &bestStationsOrderedVector) {
+    _bestStationsNodeIdxVector = bestStationsOrderedVector;
+}
