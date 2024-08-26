@@ -25,7 +25,7 @@ private:
     std::vector<Edge> edgesVector;
     std::vector<Line> transitLines;
     std::vector<std::vector<uint>> shortestSAEVPaths;
-    TransitShortestPathContainer transitShortestPaths;
+    TransitShortestPathContainer transitShortestPaths = TransitShortestPathContainer(0);
     size_t _depotNodeIdx{0}; //Index of the depot node, defaults to 0, the first node created in the graph
 
     /**
