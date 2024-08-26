@@ -47,7 +47,9 @@ SimpleModularHeuristic::generateAndInsertBestEntries(const std::vector<Request> 
     std::vector<Request> entrySubRequestsList{baseRequestsList.size()}; //Init entry subrequests list
     for(size_t i = 0; i < baseRequestsList.size(); ++i) {
         const Request& baseRequest = baseRequestsList[i];
-        entrySubRequestsList.push_back(insertBestTransitEntryInRoute(baseRequest, i));
+        const Request subreq = insertBestTransitEntryInRoute(baseRequest, i);
+        _requestsVect->push_back(subreq);
+        entrySubRequestsList.push_back(subreq);
     }
 
     return entrySubRequestsList;

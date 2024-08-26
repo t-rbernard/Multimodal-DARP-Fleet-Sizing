@@ -17,10 +17,11 @@ class SimpleModularHeuristic {
 private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
+    std::vector<Request>* _requestsVect{nullptr};
 
 //Public interface to interact with the modular heuristic
 public:
-    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route) : _graph(graph), _route(route) {}
+    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request>* requestsVect) : _graph(graph), _route(route), _requestsVect(requestsVect) {}
 
     void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
 
