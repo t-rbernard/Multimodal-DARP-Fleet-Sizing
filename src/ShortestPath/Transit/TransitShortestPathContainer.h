@@ -12,15 +12,15 @@
 
 class TransitShortestPathContainer {
 private:
-    std::vector<std::vector<std::pair<int, std::vector<TransitShortestPath>>>> container; //NodeVector< PairVector<Pair<Instant, NodeVector<ShortestPath> >> >
+    std::vector<std::vector<std::pair<size_t, std::vector<TransitShortestPath>>>> container; //NodeVector< PairVector<Pair<Instant, NodeVector<ShortestPath> >> >
 
 public:
     explicit TransitShortestPathContainer(int size) { container.resize(size); }
     explicit TransitShortestPathContainer(size_t size) { container.resize(size); }
-    void addShortestPathCollection(int startNodeIndex, const std::pair<int, std::vector<TransitShortestPath>>& shortestPathList);
-    void addShortestPathCollection(int startNodeIndex, int startingInstant, int graphSize, const TransitStateContainer& algorithmResultStates);
-    std::pair<int, std::vector<TransitShortestPath>> * getShortestPathsFrom(int startNodeIndex, int earliestStartInstant);
-    TransitShortestPath getShortestPathToYFromTime(int startNodeIndex, int earliestStartInstant, int goalNode);
+    void addShortestPathCollection(size_t startNodeIndex, const std::pair<size_t , std::vector<TransitShortestPath>>& shortestPathList);
+    void addShortestPathCollection(size_t startNodeIndex, uint startingInstant, size_t graphSize, const TransitStateContainer& algorithmResultStates);
+    std::pair<size_t, std::vector<TransitShortestPath>> * getShortestPathsFrom(size_t startNodeIndex, uint earliestStartInstant);
+    TransitShortestPath getShortestPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode);
 };
 
 
