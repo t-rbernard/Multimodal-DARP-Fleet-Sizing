@@ -12,12 +12,16 @@
 #include "../../../routes/vehicle/SAEVRoute.h"
 #include "TransitAccess.h"
 #include "../../DARP/Heuristics/BestInsertionHeuristic.h"
+#include "../../../../test/lib/googletest/googletest/include/gtest/gtest_prod.h"
 
 class SimpleModularHeuristic {
 private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
     std::vector<Request>* _requestsVect{nullptr};
+
+    //Add friend test classes to test inner workings without making the whole API public
+    FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance);
 
 //Public interface to interact with the modular heuristic
 public:
