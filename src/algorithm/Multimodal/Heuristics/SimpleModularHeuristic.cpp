@@ -64,14 +64,15 @@ Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &bas
         _route->getEntrySubRequestOrigin(requestId).setRequest(&subreq);
         _route->getEntrySubRequestDestination(requestId).setRequest(&subreq);
         SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(requestId), *_route);
+        //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
-            //TODO: add subreq to the global requests list here ?
             return subreq;
         }
-
     }
 
-    //If no active vehicle insertion worked, do best insertion on a new vehicle
+    //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
+    _route->getEntrySubRequestOrigin(requestId).setRequest(&entrySubRequestsList[0]);
+    _route->getEntrySubRequestDestination(requestId).setRequest(&entrySubRequestsList[0]);
     _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(requestId));
     return entrySubRequestsList[0];
 }
