@@ -7,10 +7,10 @@
 
 
 #include "MatrixShortestPathContainer.h"
-#include "../../instance/graph/Graph.h"
 #include "ClosestDestinationsContainer.h"
 #include "VehiclePathState.h"
 
+class Graph;
 class VehicleShortestPathCalculation {
 public:
     /**
@@ -46,6 +46,7 @@ private:
     static void expandStatesViaMatrix(const VehiclePathState& currentState, std::vector<uint> &results,
                                       std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue, const Graph& graph);
 };
+#include "../../instance/graph/Graph.h"
 
 
 #endif //GREEDYALGORITHM_VEHICLESHORTESTPATHCALCULATION_H
