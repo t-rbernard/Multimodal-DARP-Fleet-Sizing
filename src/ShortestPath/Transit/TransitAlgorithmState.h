@@ -16,14 +16,14 @@ private:
     int _nodeIndex;
     int _instant{INT16_MAX};
     int _passageIndex{-1};
-    std::vector<LineStop> _connections{Constants::MAX_TRANSIT_CONNECTIONS};
+    std::vector<std::reference_wrapper<const LineStop>> _connections;//{Constants::MAX_TRANSIT_CONNECTIONS};
     int _precedingNodeIndex{-1};
 
 public:
     TransitAlgorithmState(int currentNode, int currentInstant, int currentPassageIndex, int precedingNodeIndex) :
             _nodeIndex(currentNode), _instant(currentInstant),
             _passageIndex(currentPassageIndex), _precedingNodeIndex(precedingNodeIndex) {
-        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     TransitAlgorithmState(TransitAlgorithmState const& baseState) :
@@ -31,8 +31,8 @@ public:
     _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
-        for(auto& lineStop : baseState.getConnections()) {
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        for(const auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
     }
@@ -44,8 +44,8 @@ public:
     _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
         //Copy old connections
         _connections.clear();
-        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
-        for(auto& lineStop : baseState.getConnections()) {
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
+        for(const auto& lineStop : baseState.getConnections()) {
             _connections.emplace_back(lineStop);
         }
 
@@ -53,11 +53,11 @@ public:
     }
 
     explicit TransitAlgorithmState(int nodeIndex) : _nodeIndex(nodeIndex) {
-        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     explicit TransitAlgorithmState() : _nodeIndex(-1) {
-        _connections.resize(Constants::MAX_TRANSIT_CONNECTIONS);
+        _connections.reserve(Constants::MAX_TRANSIT_CONNECTIONS);
     }
 
     [[nodiscard]] int getNodeIndex() const {
@@ -72,7 +72,7 @@ public:
         return _passageIndex;
     }
 
-    [[nodiscard]] const std::vector<LineStop> &getConnections() const {
+    [[nodiscard]] const std::vector<std::reference_wrapper<const LineStop>> &getConnections() const {
         return _connections;
     }
 
@@ -88,7 +88,7 @@ public:
         return _connections.size();
     }
 
-    [[nodiscard]] LineStop getLastConnectionLineStop() const {
+    [[nodiscard]] const LineStop& getLastConnectionLineStop() const {
         return _connections.back();
     }
 
@@ -105,7 +105,7 @@ public:
     }
 
     [[nodiscard]] int getNextNodeIndex() const {
-        return _connections.back().getNextNodeIndex();
+        return _connections.back().get().getNextNodeIndex();
     }
 
     void setNodeIndex(int nodeIndex) {
@@ -192,11 +192,11 @@ public:
             res += ", Connections: ";
             if(_connections.size() > 1) {
                 for(int i = 0; i < _connections.size() - 1; ++i) {
-                    res += _connections[i].getLineRef().getLineId() + " -> ";
+                    res += _connections[i].get().getLineRef().getLineId() + " -> ";
                 }
             }
 
-            res += _connections[_connections.size() - 1].getLineRef().getLineId();
+            res += _connections[_connections.size() - 1].get().getLineRef().getLineId();
 
         }
 

@@ -20,12 +20,12 @@ public:
         return _keyPoints;
     }
 
-    virtual const KeyPoint* getDeparture() const {
-        return _keyPoints.cbegin().base();
+    virtual KeyPoint getDeparture() const {
+        return *_keyPoints.cbegin();
     }
 
-    virtual const KeyPoint* getArrival() const {
-        return (_keyPoints.cend() - 1).base();
+    virtual KeyPoint getArrival() const {
+        return *(_keyPoints.cend() - 1);
     }
 
     void replaceKeyPoint(int keyPointIndex, KeyPoint& value) {

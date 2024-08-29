@@ -24,12 +24,12 @@ public:
         _duration = duration;
     }
 
-    [[nodiscard]] const size_t* getDeparture() const override {
-        return _keyPoints.cbegin().base();
+    [[nodiscard]] size_t getDeparture() const override {
+        return *_keyPoints.cbegin();
     }
 
-    [[nodiscard]] const size_t* getArrival() const override {
-        return (_keyPoints.cend() - 1).base();
+    [[nodiscard]] size_t getArrival() const override {
+        return *(_keyPoints.cend() - 1);
     }
 
     auto operator<=>(const VehicleShortestPath &rhs) const {
