@@ -19,7 +19,7 @@ public:
     explicit TransitShortestPathContainer(size_t size) { container.resize(size); }
     void addShortestPathCollection(size_t startNodeIndex, const std::pair<size_t , std::vector<TransitShortestPath>>& shortestPathList);
     void addShortestPathCollection(size_t startNodeIndex, uint startingInstant, size_t graphSize, const TransitStateContainer& algorithmResultStates);
-    std::pair<size_t, std::vector<TransitShortestPath>> * getShortestPathsFrom(size_t startNodeIndex, uint earliestStartInstant);
+    std::pair<size_t, std::vector<TransitShortestPath>>& getShortestPathsFrom(size_t startNodeIndex, uint earliestStartInstant);
     TransitShortestPath getShortestPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode);
 };
 
