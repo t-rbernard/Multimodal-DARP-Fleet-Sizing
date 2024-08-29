@@ -5,6 +5,10 @@
 #ifndef GREEDYALGORITHM_SIMPLEMODULARHEURISTIC_H
 #define GREEDYALGORITHM_SIMPLEMODULARHEURISTIC_H
 
+// uncomment to disable assert()
+// #define NDEBUG
+#include <cassert>
+#define assertm(exp, msg) assert(((void)msg, exp))
 
 #include <cstddef>
 #include <vector>
@@ -19,13 +23,15 @@ private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
     std::vector<Request>* _requestsVect{nullptr};
+    size_t _nbBaseRquests;
 
     //Add friend test classes to test inner workings without making the whole API public
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance);
 
 //Public interface to interact with the modular heuristic
 public:
-    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request>* requestsVect) : _graph(graph), _route(route), _requestsVect(requestsVect) {}
+    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request>* requestsVect) : _graph(graph), _route(route),
+    _requestsVect(requestsVect), _nbBaseRquests(requestsVect->size()) {}
 
     void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
 
@@ -34,7 +40,7 @@ private:
 
     Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t requestId);
     Request insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t requestId);
-    Request insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId);
+    const Request & insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId);
 
     std::vector<Request> generateAndInsertBestEntries(const std::vector<Request> &baseRequestsList);
     void insertBestTransitExitsInRoute(const std::vector<Request>& baseRequestsList, const std::vector<TransitAccess>& transitEntriesList);
@@ -85,6 +91,12 @@ protected:
 
     [[nodiscard]] SAEVRoute *getRoute() const;
     void setRoute(SAEVRoute *route);
+
+    void updateSubRequest(size_t requestId, const Request &request, bool isEntry);
+
+    size_t getSubrequestIndex(size_t requestId, bool isEntry) const;
+
+    const Request &getSubrequest(size_t requestId, bool isEntry);
 };
 
 

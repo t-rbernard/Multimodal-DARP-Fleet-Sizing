@@ -96,22 +96,23 @@ Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &bas
  * @param requestId ID/index in the request vector for our base request
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
-Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId) {
+const Request &
+SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId) {
     for(const auto& subreq : entrySubRequestsList) {
-        _route->getEntrySubRequestOrigin(requestId).setRequest(&subreq);
-        _route->getEntrySubRequestDestination(requestId).setRequest(&subreq);
+        updateSubRequest(requestId, subreq, true);
         SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(requestId), *_route);
         //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
-            return subreq;
+            return getSubrequest(requestId, true);
+        } else {
+            changeList.revertChanges();
         }
     }
 
     //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
-    _route->getEntrySubRequestOrigin(requestId).setRequest(&entrySubRequestsList[0]);
-    _route->getEntrySubRequestDestination(requestId).setRequest(&entrySubRequestsList[0]);
+    updateSubRequest(requestId, entrySubRequestsList[0], true);
     _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(requestId));
-    return entrySubRequestsList[0];
+    return getSubrequest(requestId, true);
 }
 
 const Graph *SimpleModularHeuristic::getGraph() const {
@@ -128,4 +129,29 @@ SAEVRoute *SimpleModularHeuristic::getRoute() const {
 
 void SimpleModularHeuristic::setRoute(SAEVRoute *route) {
     _route = route;
+}
+
+void SimpleModularHeuristic::updateSubRequest(size_t requestId, const Request &request, bool isEntry) {
+    size_t subRequestIndex = getSubrequestIndex(requestId, isEntry);
+    if(_requestsVect->size() < subRequestIndex) {
+        _requestsVect->emplace_back(request);
+        assertm(_requestsVect->size() == subRequestIndex,"A request seems to have been missed or doesn't have any subrequest defined");
+    } else {
+        _requestsVect->assign(subRequestIndex, request);
+    }
+
+    std::vector<Request>& requestVectRef = *_requestsVect;
+    _route->getEntrySubRequestOrigin(requestId).setRequest(&requestVectRef[subRequestIndex]);
+    _route->getEntrySubRequestDestination(requestId).setRequest(&requestVectRef[subRequestIndex]);
+}
+
+size_t SimpleModularHeuristic::getSubrequestIndex(size_t requestId, bool isEntry) const {
+    if(isEntry)
+        return _nbBaseRquests + requestId;
+    else
+        return _nbBaseRquests*2 + requestId;
+}
+
+const Request& SimpleModularHeuristic::getSubrequest(size_t requestId, bool isEntry) {
+    return (*_requestsVect)[getSubrequestIndex(requestId, isEntry)];
 }
