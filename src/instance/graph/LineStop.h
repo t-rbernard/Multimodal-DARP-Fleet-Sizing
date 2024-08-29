@@ -12,14 +12,13 @@
 
 class LineStop {
 private:
-    Line _lineRef; //reference to the line
+    const Line& _lineRef; //reference to the line
     int _stopIndex{}; //index for the stop relative to this node in the Line object
 
 public:
-    LineStop() = default;
     LineStop(const Line& lineRef, int stopIndex) : _lineRef(lineRef), _stopIndex(stopIndex) {}
 
-    [[nodiscard]] Line getLineRef() const {
+    [[nodiscard]] const Line& getLineRef() const {
         return _lineRef;
     }
 
@@ -77,12 +76,6 @@ public:
     }
 
     bool operator<(LineStop const& rhs) const {return &this->_lineRef < &rhs._lineRef;} //just check line addresses. Basically we just don't want the exact same line twice
-
-    LineStop& operator=(LineStop const& rhs) {
-        _lineRef = rhs.getLineRef();
-        _stopIndex = rhs.getStopIndex();
-        return *this;
-    }
 
     [[nodiscard]] const std::vector<int>& getSchedule() const {
         return _lineRef.getTimetable(_stopIndex);

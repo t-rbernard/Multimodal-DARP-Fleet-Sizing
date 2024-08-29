@@ -90,8 +90,8 @@ public:
         return _connections.back();
     }
 
-    [[nodiscard]] Line getLastConnectionLine() const {
-        return _connections.back().getLineRef();
+    [[nodiscard]] const Line& getLastConnectionLine() const {
+        return _connections.back().get().getLineRef();
     }
 
     [[nodiscard]] int getPrecedingNodeIndex() const {
