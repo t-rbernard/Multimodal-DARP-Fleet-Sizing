@@ -363,7 +363,7 @@ void Graph::computeAndUpdateShortestTransitPaths() {
         for(size_t i = 0; i < ptLine.size(); ++i) {
             for (auto& startingTime: ptLine.getTimetable(i)) {
                 const TransitStateContainer &results = TransitShortestPathPrecompute::executeAlgorithm(*this,ptLine.getNode(i),startingTime);
-                shortestPathsContainer.addShortestPathCollection(i, startingTime, getNbNodes(), results);
+                shortestPathsContainer.addShortestPathCollection(ptLine.getNode(i), startingTime, getNbNodes(), results);
             }
         }
     }
