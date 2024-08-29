@@ -8,35 +8,41 @@
 #include "../../src/routes/vehicle/SAEVRoute.h"
 #include "../../src/utils/Timing.h"
 #include "../../src/algorithm/Multimodal/Heuristics/SimpleModularHeuristic.h"
+#include "../../src/utils/Instance Generation/Requests/RequestsGenerator.h"
 
 TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance) {
-    std::string instancesPath = "../../resources/test/instances/Constraint Propagation/";
-    std::string instanceFolder = "basic_debug_instance/";
-    std::string graphDatFile = "graph.dat";
-    std::string requestsDatFile = "requests.dat";
+    std::string instancesPath = "../../resources/test/instances/PT Shortest Path/";
+    std::string instanceFolder = "contiguous_lines_debug_instance/";
+    std::string datFile = "graph.dat";
+
 
     //Parse graph
     INIT_TIMER
-    Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
-    std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
+    Graph graphFromSingleFile(instancesPath + instanceFolder + datFile);
+    graphFromSingleFile.computeAndUpdateShortestPathsMatrix(true);
+    RequestGenerationParameters genParams(1, 1.5, 15,30,240,600,290820241032L);
+    std::vector<Request> requests = RequestsGenerator::generateRequests(graphFromSingleFile, genParams);
 
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);
     SimpleModularHeuristic multimodalHeuristic(&graphFromSingleFile, &routesContainer, &requests);
-    STOP_TIMER("Parsing and init")
+    STOP_TIMER("Instance parsing and init")
     std::cout << "------------------Fin parsing instance et route-------------------" << std::endl << std::endl;
 
     std::cout << "------------------Start preprocessings-------------------" << std::endl << std::endl;
     START_TIMER
     routesContainer.initMultimodalKeyPoints();
-    graphFromSingleFile.computeAndUpdateShortestPathsMatrix();
     graphFromSingleFile.computeAndUpdateShortestTransitPaths();
     STOP_TIMER("Preprocess")
     std::cout << "------------------End preprocessings-------------------" << std::endl << std::endl;
+    std::cout << "------------------Start multimodal insertion (entry)-------------------" << std::endl << std::endl;
+    START_TIMER
     for(size_t i = 0; i < requests.size(); ++i) {
         multimodalHeuristic.insertBestTransitEntryInRoute(requests[i], i);
     }
+    STOP_TIMER("Multimodal insertion (entry)")
+    std::cout << "------------------End multimodal insertion (entry)-------------------" << std::endl << std::endl;
 }
 
 int main(int argc, char* argv[]) {

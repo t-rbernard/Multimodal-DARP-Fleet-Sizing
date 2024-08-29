@@ -191,6 +191,8 @@ add_executable(MultimodalInsertionHeuristic_DEB
         ../src/utils/Constants.h
         src/MultimodalInsertionHeuristicDebug.cpp
         ../src/utils/Timing.h
+        "../src/utils/Instance Generation/Requests/RequestsGenerator.cpp"
+        "../src/utils/Instance Generation/Requests/RequestsGenerator.h"
 )
 
 target_link_libraries(Line_UT gtest gtest_main)
