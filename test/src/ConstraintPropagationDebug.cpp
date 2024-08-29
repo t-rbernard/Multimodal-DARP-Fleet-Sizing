@@ -75,7 +75,7 @@ TEST(ConstraintPropagationDebug, DebugInstanceAlain) {
     //Parse graph
     Graph graphFromSingleFile(instancesPath + instanceFolder + graphDatFile);
     std::vector<Request> requests = Request::getRequestsFromFile(instancesPath + instanceFolder + requestsDatFile, graphFromSingleFile);
-    VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(graphFromSingleFile);
+    VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(graphFromSingleFile, false);
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
     SAEVRoute routesContainer(graphFromSingleFile, requests);

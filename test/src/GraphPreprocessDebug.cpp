@@ -13,7 +13,7 @@ TEST(GraphPreprocessDebug, DebugBookInstance) {
 
     //Parse graph
     Graph graph(instancesPath + instanceFolder + graphDatFile);
-    VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(graph);
+    VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(graph, false);
 
     std::string exportFolder = "../../resources/test/outputs/preprocess_debug/";
     graph.exportGraphToFile(exportFolder + instanceFolder);

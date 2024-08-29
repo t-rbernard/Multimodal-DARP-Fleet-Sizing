@@ -37,6 +37,8 @@ add_executable(Transit_Preprocess_DEB
         ../src/ShortestPath/Transit/TransitShortestPathPrecompute.cpp
         ../src/ShortestPath/Transit/TransitShortestPathPrecompute.h
         ../src/utils/Globals.h
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.cpp
+        ../src/ShortestPath/Vehicle/VehicleShortestPathCalculation.h
 )
 
 
