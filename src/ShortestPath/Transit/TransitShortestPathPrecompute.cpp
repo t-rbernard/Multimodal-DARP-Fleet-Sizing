@@ -23,15 +23,14 @@ TransitStateContainer TransitShortestPathPrecompute::executeAlgorithm(const Grap
     std::priority_queue<TransitAlgorithmState> statePriorityQueue;
     statePriorityQueue.emplace(nodeIndex, instant,0, nodeIndex);
 
-    TransitAlgorithmState currentState;
     while(!statePriorityQueue.empty())
     {
         //Extract head from our state priority queue
-        currentState = statePriorityQueue.top();
+        TransitAlgorithmState currentState = statePriorityQueue.top();
         statePriorityQueue.pop();
         if(!solutionsContainer.strictlyDominates(currentState)) {
             DEBUG_MSG("\n\nComparing state " + currentState.toString() + " and " + solutionsContainer.getBestSolution(currentState.getNodeIndex(), currentState.getNbConnections()).toString());
-            for (auto const& lineStop : graph.getPTLinesSet(currentState.getNodeIndex()))
+            for (const auto& lineStop : graph.getPTLinesSet(currentState.getNodeIndex()))
             {
                 int nextNode = lineStop.getNextNodeIndex();
                 //If there is a proper next node and if it's not the same as our last used line stop predecessor

@@ -37,8 +37,6 @@ public:
         }
     }
 
-    TransitAlgorithmState(TransitAlgorithmState&& baseStatePointer) = default;
-
     TransitAlgorithmState(TransitAlgorithmState const& baseState, const LineStop& newConnection) :
     _nodeIndex(baseState.getNodeIndex()), _instant(baseState.getInstant()),
     _passageIndex(baseState.getPassageIndex()), _precedingNodeIndex(baseState.getPrecedingNodeIndex()) {
@@ -135,8 +133,6 @@ public:
         }
     }
 
-    bool canAddNewConnection() const {return _connections.size() < _connections.max_size(); }
-
     /**
      * Strict dominance between two transit shortest path states happens if state *this* has :
      * 1) lower amount of connections and same arrival time OR 2) lower arrival time than the state rhs
@@ -181,8 +177,6 @@ public:
                 || this->getInstant() != rhs.getInstant()
                 || this->getConnections().size() != rhs.getConnections().size();
     }
-
-    TransitAlgorithmState& operator=(const TransitAlgorithmState& baseState) = default;
 
     [[nodiscard]] std::string toString() const {
         std::string res = "Node: " + std::to_string(_nodeIndex) + ", Instant: " + std::to_string(_instant);
