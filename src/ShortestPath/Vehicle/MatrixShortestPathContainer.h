@@ -21,7 +21,7 @@ public:
      * Moves the given shortestPathsMatrix to initialize the container with the given distances.
      * @param shortestPathsMatrix
      */
-    explicit MatrixShortestPathContainer(std::vector<std::vector<uint>> shortestPathsMatrix) : _distanceMatrix(std::move(shortestPathsMatrix)) {}
+    explicit MatrixShortestPathContainer(std::vector<std::vector<uint>>& shortestPathsMatrix) : _distanceMatrix(std::move(shortestPathsMatrix)) {}
 
     explicit MatrixShortestPathContainer(size_t matrixSize) {
         _distanceMatrix.resize(matrixSize);

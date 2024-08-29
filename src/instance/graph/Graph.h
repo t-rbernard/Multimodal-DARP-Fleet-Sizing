@@ -169,7 +169,11 @@ public:
     const size_t getNbClosestStations(size_t nodeIdx);
 
     void computeAndUpdateShortestPathsMatrix() {
-        VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(*this);
+        VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(*this, false);
+    }
+
+    void computeAndUpdateShortestPathsMatrix(bool useEdges) {
+        VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(*this, useEdges);
     }
 
     void computeAndUpdateClosestStationsForNode(size_t nodeIdx);

@@ -17,13 +17,13 @@ public:
      * Computes shortest paths from the given graph's distance matrix
      * @param graph
      */
-    static void computeAndUpdateShortestPathsForGraph(Graph& graph);
+    static void computeAndUpdateShortestPathsForGraph(Graph &graph, bool useEdges);
     /**
      * Computes and returns an updated distance matrix from the given graph's distance matrix computed via Dijsktra's algorithm
      * @param graph
      * @return A matrix distances container
      */
-    static MatrixShortestPathContainer computeShortestPathsForGraph(Graph& graph);
+    static MatrixShortestPathContainer computeShortestPathsForGraph(Graph &graph, bool useEdges);
     /**
      * Computes the shortest paths to all the nodes in the graph from the given starting node.
      * If a node is unreachable its default distance is INT32_MAX. Distance from the starting node to itself is 0
@@ -45,6 +45,10 @@ private:
                                      std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue, const Graph& graph);
     static void expandStatesViaMatrix(const VehiclePathState& currentState, std::vector<uint> &results,
                                       std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue, const Graph& graph);
+
+    void computeAndUpdateShortestPathsForGraph(Graph &graph);
+
+    MatrixShortestPathContainer computeShortestPathsForGraph(Graph &graph);
 };
 #include "../../instance/graph/Graph.h"
 

@@ -9,7 +9,12 @@
 
 std::vector<uint>
 VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_t startingNodeIdx, bool useEdges) {
-    std::vector<uint> results{graph.getShortestSaevPaths()[startingNodeIdx]};
+    std::vector<uint> results;
+    results.reserve(graph.getNbNodes());
+
+    if(!useEdges)
+        results = graph.getShortestSaevPaths()[startingNodeIdx];
+
     std::vector<bool> mark(graph.getNbNodes(),false);
     std::priority_queue<VehiclePathState,std::vector<VehiclePathState>, std::greater<>> stateQueue{};
 
@@ -44,18 +49,26 @@ VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_
 }
 
 MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPathsForGraph(Graph &graph) {
+    return computeShortestPathsForGraph(graph, false);
+}
+
+MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPathsForGraph(Graph &graph, bool useEdges) {
     std::vector<std::vector<uint>> results;
     results.resize(graph.getNbNodes());
     for(size_t i = 0; i < graph.getNbNodes(); ++i) {
         results[i].resize(graph.getNbNodes());
-        std::ranges::move(computeShortestPathsFromNode(graph, i, false), results[i].begin());
+        std::ranges::move(computeShortestPathsFromNode(graph, i, useEdges), results[i].begin());
     }
 
     return MatrixShortestPathContainer(results);
 }
 
 void VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(Graph &graph) {
-    MatrixShortestPathContainer results = computeShortestPathsForGraph(graph);
+    computeAndUpdateShortestPathsForGraph(graph, false);
+}
+
+void VehicleShortestPathCalculation::computeAndUpdateShortestPathsForGraph(Graph &graph, bool useEdges) {
+    MatrixShortestPathContainer results = computeShortestPathsForGraph(graph, useEdges);
     graph.setShortestSaevPaths(results.getDistanceMatrix());
 }
 
