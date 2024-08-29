@@ -18,7 +18,7 @@ public:
      * @param value the comparable value we are looking for in the vector
      * @return an iterator to the first item higher or equal than the comparable value given
      */
-    static std::vector<Comparable>::iterator findNextSortedValue(std::vector<Comparable> sortedVector, Comparable value) {
+    static std::vector<Comparable>::const_iterator findNextSortedValue(const std::vector<Comparable>& sortedVector, Comparable value) {
         return std::ranges::lower_bound(sortedVector, value);
     }
     /**
@@ -27,7 +27,7 @@ public:
      * @param value the comparable value we are looking for in the vector
      * @return the size of the vector if all vector values are lower than our search, the index of the first larger or equal value otherwise
      */
-    static size_t findNextSortedValueIdx(std::vector<Comparable> sortedVector, Comparable value) {
+    static size_t findNextSortedValueIdx(const std::vector<Comparable>& sortedVector, Comparable value) {
         auto iterator = std::ranges::lower_bound(sortedVector, value);
         return std::distance(sortedVector.begin(), iterator);
     }
@@ -38,7 +38,7 @@ public:
      * @param value the comparable value we are looking for in the vector
      * @return -1 if the exact value hasn't been found or the index of the value if it's been found
      */
-    static size_t vectorBinarySearch(std::vector<Comparable> sortedVector, Comparable value) {
+    static size_t vectorBinarySearch(const std::vector<Comparable>& sortedVector, Comparable value) {
         auto iterator = std::ranges::lower_bound(sortedVector, value);
         if (iterator == sortedVector.end() || *iterator != value) {
             return -1;

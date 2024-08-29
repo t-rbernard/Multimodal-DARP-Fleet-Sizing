@@ -38,7 +38,7 @@ public:
      * @param instant The instant of arrival at the station, hence we look for the value itself or the first greater instant
      * @return a vector index corresponding to the next valid passage at the given station and after or at the given instant
      */
-    [[nodiscard]] auto findNextScheduledPassage(size_t stationIdx, uint instant) const {
+    [[nodiscard]] std::vector<int>::const_iterator findNextScheduledPassage(size_t stationIdx, uint instant) const {
         return SearchAlgorithms<int>::findNextSortedValue(_timetables[stationIdx], instant);
     }
     /**

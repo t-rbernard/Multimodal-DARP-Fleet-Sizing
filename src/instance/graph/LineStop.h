@@ -30,10 +30,10 @@ public:
     [[nodiscard]] size_t findNextScheduledPassageIdx(size_t stationIdx, uint instant) const {
         return _lineRef.findNextScheduledPassageIdx(stationIdx, instant);
     }
-    [[nodiscard]] auto findNextScheduledPassage(uint instant) const {
+    [[nodiscard]] std::vector<int>::const_iterator findNextScheduledPassage(uint instant) const {
         return _lineRef.findNextScheduledPassage(_stopIndex, instant);
     }
-    [[nodiscard]] auto findNextScheduledPassage(size_t stationIdx, uint instant) const {
+    [[nodiscard]] std::vector<int>::const_iterator findNextScheduledPassage(size_t stationIdx, uint instant) const {
         return _lineRef.findNextScheduledPassage(stationIdx, instant);
     }
 
