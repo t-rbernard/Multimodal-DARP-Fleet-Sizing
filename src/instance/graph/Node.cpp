@@ -59,3 +59,15 @@ const std::vector<size_t> & Node::getBestStationsNodeIdxVector() const {
 void Node::setBestStationsNodeIdxVector(const std::vector<size_t> &bestStationsOrderedVector) {
     _bestStationsNodeIdxVector = bestStationsOrderedVector;
 }
+
+void Node::clearPTLineSet() {
+    _ptLines.clear();
+}
+
+void Node::emplaceBackOutgoingEdge(size_t outgoingEdgeIndex) {
+    _outgoingEdgesIndex.emplace_back(outgoingEdgeIndex);
+}
+
+void Node::emplaceBackIncomingEdge(size_t incomingEdgeIndex) {
+    _incomingEdgesIndex.emplace_back(incomingEdgeIndex);
+}

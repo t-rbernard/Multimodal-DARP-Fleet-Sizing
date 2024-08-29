@@ -130,7 +130,7 @@ void Graph::exportGraphToFile(const fs::path& exportFolderPath) {
     //Edges
     if(!edgesVector.empty()) {
         outfileGraph << "#Edges format : node_in,node_out,length" << std::endl;
-        for (auto &edge: this->edgesVector) {
+        for (auto const &edge: this->edgesVector) {
             outfileGraph << edge.getStartNodeIdx() << "," << edge.getEndNodeIdx() << "," << edge.getLength() << std::endl;
         }
     }
@@ -283,9 +283,9 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
         int travelTime = travelTimeDistribution(rng); //FIXME travel time is randomized for now, we should get edge length if it exists I guess
         std::vector<int> precedingTimeTable = newLine.getTimetable(i - 1);
         std::vector<int> newTimetable;
-        for(auto it = precedingTimeTable.begin(); it != precedingTimeTable.end(); ++it)
-        {
-            newTimetable.emplace_back(*it.base() + travelTime);
+        newTimetable.reserve(precedingTimeTable.size()); //Reserve to improve foreach efficiency
+        for(int const & it : precedingTimeTable) {
+            newTimetable.emplace_back(it + travelTime);
         }
         newLine.addTimetable(newTimetable);
         newTimetable.clear();
@@ -301,10 +301,10 @@ void Graph::createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex,
     edgesVector.emplace_back(edgeStartNodeIndex, edgeEndNodeIndex, length);
 
     Node entryNode = nodesVector[edgeStartNodeIndex];
-    entryNode.getOutgoingEdges().emplace_back(edgesVector.size() - 1);
+    entryNode.emplaceBackOutgoingEdge(edgesVector.size() - 1);
 
     Node exitNode = nodesVector[edgeEndNodeIndex];
-    exitNode.getIncomingEdges().emplace_back(edgesVector.size() - 1);
+    exitNode.emplaceBackIncomingEdge(edgesVector.size() - 1);
 }
 
 void Graph::parseDistanceMatrix(std::ifstream &infile, DATRow currentRow) {

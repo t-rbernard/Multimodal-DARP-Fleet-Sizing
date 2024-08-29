@@ -74,9 +74,9 @@ public:
     [[nodiscard]] double getX() const {return _x;}
     [[nodiscard]] double getY() const {return _y;}
     [[nodiscard]] Status getStatus() const {return _status;}
-    [[nodiscard]] std::vector<int> getIncomingEdges() const {return _incomingEdgesIndex;}
-    [[nodiscard]] std::vector<int> getOutgoingEdges() const {return _outgoingEdgesIndex;}
-    [[nodiscard]] std::vector<LineStop> getPTLinesSet() const {return _ptLines;}
+    [[nodiscard]] const std::vector<int> & getIncomingEdges() const {return _incomingEdgesIndex;}
+    [[nodiscard]] const std::vector<int> & getOutgoingEdges() const {return _outgoingEdgesIndex;}
+    [[nodiscard]] const std::vector<LineStop> & getPTLinesSet() const {return _ptLines;}
 
     /**
      * Verify if _x, _y and _status are equal to check for node equality
@@ -92,9 +92,13 @@ public:
     bool operator!=(const Node& rhs) const;
 
     void emplaceBackClosestStation(size_t closestStationIdx);
+    void emplaceBackOutgoingEdge(size_t outgoingEdgeIndex);
+    void emplaceBackIncomingEdge(size_t incomingEdgeIndex);
 
     [[nodiscard]] const std::vector<size_t>& getBestStationsNodeIdxVector() const;
     void setBestStationsNodeIdxVector(const std::vector<size_t> &bestStationsOrderedVector);
+
+    void clearPTLineSet();
 };
 #include "Line.h"
 #include "LineStop.h"

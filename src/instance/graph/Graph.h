@@ -53,7 +53,7 @@ public:
         return nodesVector.size();
     }
 
-    [[nodiscard]] std::vector<LineStop> getPTLinesSet(size_t nodeIndex) const {
+    [[nodiscard]] const std::vector<LineStop> & getPTLinesSet(size_t nodeIndex) const {
         return nodesVector[nodeIndex].getPTLinesSet();
     }
 
@@ -97,7 +97,7 @@ public:
      * @param edge The edge to push in the graph's edge vector
      * @return The edge vector after having added the edge
      */
-    std::vector<Edge> addEdge(Edge const& edge) {
+    const std::vector<Edge>& addEdge(Edge const& edge) {
         edgesVector.push_back(edge);
         return edgesVector;
     }
@@ -107,7 +107,7 @@ public:
      * @param node The node to push in the graph's node vector
      * @return The node vector after having added the node
      */
-    std::vector<Node> addNode(Node const& node) {
+    const std::vector<Node>& addNode(Node const& node) {
         nodesVector.push_back(node);
         return nodesVector;
     }

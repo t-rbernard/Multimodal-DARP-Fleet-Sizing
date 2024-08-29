@@ -22,13 +22,13 @@ public:
 
     [[nodiscard]] const std::string &getLineId() const;
     void setLineId(const std::string &lineId);
-    [[nodiscard]] std::vector<int> getNodes() const { return _nodes;};
+    [[nodiscard]] const std::vector<int>& getNodes() const { return _nodes;};
     [[nodiscard]] int getNode(size_t index) const { return _nodes[index];};
     void addNode(const int node){this->_nodes.emplace_back(node);};
     [[nodiscard]] bool isEmpty() const{return this->_nodes.empty() || _timetables.empty();}
 
     [[nodiscard]] const std::vector<int>& getTimetable(size_t pos) const{ return _timetables[pos];};
-    [[nodiscard]] std::vector<std::vector<int>> getTimetables() const{ return _timetables;};
+    [[nodiscard]] const std::vector<std::vector<int>>& getTimetables() const{ return _timetables;};
     void addTimetable(const std::vector<int>& timetable) { _timetables.push_back(timetable);};
     void setTimetable(size_t pos, const std::vector<int>& timetable) { _timetables.insert(_timetables.begin() + pos, timetable);};
 
