@@ -7,7 +7,8 @@
 std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(const Request &baseRequest) const {
     const auto& bestStationsIndexVector = _graph->getNode(
             baseRequest.getOriginNodeIndex()).getBestStationsNodeIdxVector();
-    std::vector<TransitAccess> results{bestStationsIndexVector.size()}; //init results vector to the appropriate size
+    std::vector<TransitAccess> results; //init results vector to the appropriate size
+    results.reserve(std::min(Constants::MAX_TRANSIT_ENTRY_CANDIDATES, bestStationsIndexVector.size()));
     //Iterate over the best stations saved prior
     for(const auto& bestStationNodeIdx : bestStationsIndexVector) {
         int maxDepartureTime = -1;
@@ -79,7 +80,8 @@ Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &bas
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
 Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t requestId) {
-    std::vector<Request> entrySubRequestsList{Constants::MAX_TRANSIT_ENTRY_CANDIDATES}; //Init entry subrequests list to the appropriate size
+    std::vector<Request> entrySubRequestsList;
+    entrySubRequestsList.reserve(Constants::MAX_TRANSIT_ENTRY_CANDIDATES); //Init entry subrequests list to the appropriate size
     //Generate subrequests from best transit entries
     for(auto const& access : entriesAccessList) {
         entrySubRequestsList.emplace_back(*_graph, baseRequest, access, true);
