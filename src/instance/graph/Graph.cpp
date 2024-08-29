@@ -16,12 +16,7 @@
 #include "../../services/CSV/CSVRange.h"
 #include "Graph.h"
 
-std::vector<Line> Graph::addLine(Line& line) {
-    //Add line stops to nodes
-    for(int i = 0; i < line.size(); ++i)
-    {
-        nodesVector[line.getNode(i)].addBusLine(line, i);
-    }
+const std::vector<Line>& Graph::addLine(const Line &line) {
     //Add transit line to transit lines vector
     transitLines.push_back(line);
     return transitLines;
@@ -62,6 +57,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
         {
             parseLineRandomizedSchedule(row, rng, uint_dist10, uint_dist60);
         }
+        linkAllPTNodes();
     }
     std::cout << "test is done" << std::endl;
 }
@@ -115,6 +111,8 @@ Graph::Graph(const std::string& datFilePath) {
     while(infile >> currentRow && !currentRow[0].starts_with('#')) {
         this->parseLineRandomizedSchedule(currentRow, rng, uint_dist10, uint_dist60);
     }
+    //Make links once all lines are created to prevent stale refs
+    this->linkAllPTNodes();
 }
 
 namespace fs = std::filesystem;
@@ -370,4 +368,19 @@ void Graph::computeAndUpdateShortestTransitPaths() {
         }
     }
     transitShortestPaths = shortestPathsContainer;
+}
+
+/**
+ * Clears every node's set of lines (to remove any eventual stale reference)
+ * then links every line's station to its referred node
+ */
+void Graph::linkAllPTNodes() {
+    for(auto& node : nodesVector) {
+        node.clearPTLineSet();
+    }
+    for(auto& line : getPTLines()) {
+        for(size_t i = 0; i < line.size(); ++i) {
+            nodesVector[line.getNode(i)].addBusLine(line, i);
+        }
+    }
 }

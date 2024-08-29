@@ -134,7 +134,7 @@ public:
      * @param line The Line to add. It's expected to be fully filled with its nodes schedules before adding to the graph
      * @return The updated vector containing all lines of the graph
      */
-    std::vector<Line> addLine(Line& line);
+    const std::vector<Line>& addLine(const Line &line);
     /**
      * Export graph data (nodes, edges, transit lines) to files to plot graph data with Python
      * The function creates the folders if need be, and will overwrite existing files if data has been outputted to this folder before
@@ -176,6 +176,7 @@ public:
     void computeAndUpdateClosestStations();
     void computeAndUpdateShortestTransitPaths();
 
+    void linkAllPTNodes();
 };
 
 
