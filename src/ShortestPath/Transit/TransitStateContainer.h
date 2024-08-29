@@ -36,7 +36,7 @@ public:
      * @return The first solution of potentially two saved in this array
      */
     [[nodiscard]] const TransitAlgorithmState& getBestSolution(int nodeIndex) const{
-        if(solutionVector[1] < solutionVector[0])
+        if(solutionVector[nodeIndex][1] < solutionVector[nodeIndex][0])
             return solutionVector[nodeIndex][1];
         else
             return solutionVector[nodeIndex][0];

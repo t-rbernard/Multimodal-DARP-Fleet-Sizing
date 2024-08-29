@@ -153,6 +153,8 @@ public:
      * @return
      */
     bool operator<(const TransitAlgorithmState& rhs) const {
+        if(this->_nodeIndex != -1 && rhs._nodeIndex == -1)
+            return true;
         return this->_nodeIndex == rhs.getNodeIndex() //same current node
                 && (this->getInstant() < rhs.getInstant() //strictly better time
                 || (this->getInstant() == rhs.getInstant()
@@ -160,6 +162,8 @@ public:
     }
 
     bool operator>(const TransitAlgorithmState& rhs) const {
+        if(this->_nodeIndex != -1 && rhs._nodeIndex == -1)
+            return false;
         return this->_nodeIndex == rhs.getNodeIndex() //same current node
                 && (this->getInstant() > rhs.getInstant()
                 || (this->getInstant() == rhs.getInstant()
