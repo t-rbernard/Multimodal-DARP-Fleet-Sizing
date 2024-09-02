@@ -300,10 +300,10 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
 void Graph::createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length) {
     edgesVector.emplace_back(edgeStartNodeIndex, edgeEndNodeIndex, length);
 
-    Node entryNode = nodesVector[edgeStartNodeIndex];
+    Node& entryNode = nodesVector[edgeStartNodeIndex];
     entryNode.emplaceBackOutgoingEdge(edgesVector.size() - 1);
 
-    Node exitNode = nodesVector[edgeEndNodeIndex];
+    Node& exitNode = nodesVector[edgeEndNodeIndex];
     exitNode.emplaceBackIncomingEdge(edgesVector.size() - 1);
 }
 
