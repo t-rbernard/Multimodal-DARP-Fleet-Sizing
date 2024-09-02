@@ -42,6 +42,10 @@ void SAEVRoute::initMultimodalKeyPoints() {
                                             // 2*NbRequests O/D Bus entry Keypoints, 2*NbRequests O/D Bus exit Keypoints
 
     for (size_t i = 0; i < _nbRequest; ++i) {
+        //Set isOrigin accordingly
+        getEntrySubRequestOrigin(i).setIsOrigin(true);
+        getExitSubRequestOrigin(i).setIsOrigin(true);
+
         //Link Origins and Destinations for entry/exit subrequests
         getEntrySubRequestOrigin(i).setCounterpart(&getEntrySubRequestDestination(i));
         getEntrySubRequestDestination(i).setCounterpart(&getEntrySubRequestOrigin(i));
