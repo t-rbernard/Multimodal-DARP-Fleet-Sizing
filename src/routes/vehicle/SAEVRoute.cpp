@@ -7,6 +7,11 @@
 #include "SAEVRoute.h"
 #include "BestInsertionQueue.h"
 
+// uncomment to disable assert()
+// #define NDEBUG
+#include <cassert>
+#define assertm(exp, msg) assert(((void)msg, exp))
+
 #ifdef DEBUG_CONSTRAINT_PROPAGATION
 #include <iostream>
 #define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
@@ -88,6 +93,7 @@ void SAEVRoute::insertRequest(SAEVKeyPoint &originKp, SAEVKeyPoint * originReque
 }
 
 void SAEVRoute::removeRequest(SAEVKeyPoint &originKp) {
+    assertm(originKp.getSuccessor() != nullptr, "Trying to remove a request that was already removed");
     //Before undoing the insertion, update weights on the route
     removeRequestWeightFromRoute(originKp);
 
