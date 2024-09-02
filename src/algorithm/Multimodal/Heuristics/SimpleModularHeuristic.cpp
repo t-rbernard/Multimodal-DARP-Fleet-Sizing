@@ -133,9 +133,9 @@ void SimpleModularHeuristic::setRoute(SAEVRoute *route) {
 
 void SimpleModularHeuristic::updateSubRequest(size_t requestId, const Request &request, bool isEntry) {
     size_t subRequestIndex = getSubrequestIndex(requestId, isEntry);
-    if(_requestsVect->size() < subRequestIndex) {
+    if((_requestsVect->size() - 1) < subRequestIndex) {
         _requestsVect->emplace_back(request);
-        assertm(_requestsVect->size() == subRequestIndex,"A request seems to have been missed or doesn't have any subrequest defined");
+        assertm((_requestsVect->size() - 1) == subRequestIndex,"A request seems to have been missed or doesn't have any subrequest defined");
     } else {
         _requestsVect->assign(subRequestIndex, request);
     }
