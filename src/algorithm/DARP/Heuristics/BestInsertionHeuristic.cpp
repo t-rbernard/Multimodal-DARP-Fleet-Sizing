@@ -64,5 +64,5 @@ SAEVRouteChangelist BestInsertionHeuristic::tryBestRequestInsertionInActiveVehic
         route.getBestFeasibleInsertionsQueue(bestInsertions, requestKp, vehicleId);
     }
 
-    return tryVehicleBestInsertion(requestKp, vehicleId, route);
+    return tryVehicleBestInsertion(bestInsertions, route);
 }
