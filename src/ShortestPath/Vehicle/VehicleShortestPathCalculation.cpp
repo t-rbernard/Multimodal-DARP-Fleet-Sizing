@@ -12,8 +12,15 @@ VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_
     std::vector<uint> results;
     results.resize(graph.getNbNodes(), UINT32_MAX);
 
-    if(!useEdges)
+    if(!useEdges) {
         results = graph.getShortestSaevPaths()[startingNodeIdx];
+    } else {
+        results[startingNodeIdx] = 0; //Init value to 0 for path from X to X
+        for(const auto& edgeIndex : graph.getNode(startingNodeIdx).getOutgoingEdges()) { //Init  values according to immediate outgoing edges
+            const Edge & edge = graph.getEdge(edgeIndex);
+            results[edge.getEndNodeIdx()] = edge.getLength();
+        }
+    }
 
     std::vector<bool> mark(graph.getNbNodes(),false);
     std::priority_queue<VehiclePathState,std::vector<VehiclePathState>, std::greater<>> stateQueue{};
@@ -23,9 +30,8 @@ VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_
         stateQueue.emplace(i, results[i]);
     }
 
-    VehiclePathState currentState;
     while(!stateQueue.empty()) {
-        currentState = stateQueue.top();
+        VehiclePathState currentState = stateQueue.top();
         stateQueue.pop();
         //Only expand and add
         if(!mark[currentState.getNodeIndex()]) {
@@ -99,10 +105,9 @@ void VehicleShortestPathCalculation::expandStatesViaMatrix(const VehiclePathStat
 void VehicleShortestPathCalculation::expandStatesViaEdges(const VehiclePathState &currentState, std::vector<uint> &results,
                                                           std::priority_queue<VehiclePathState, std::vector<VehiclePathState>, std::greater<>> &stateQueue,
                                                           const Graph& graph) {
-    Edge edge;
     uint newDistance = INT32_MAX;
     for(const auto& edgeIndex : graph.getNode(currentState.getNodeIndex()).getOutgoingEdges()) {
-        edge = graph.getEdgesVector()[edgeIndex];
+        const Edge& edge = graph.getEdge(edgeIndex);
         newDistance = currentState.getInstant() + edge.getLength();
         if(newDistance < results[edge.getEndNodeIdx()]) {
             stateQueue.emplace(edge.getEndNodeIdx(), newDistance);
