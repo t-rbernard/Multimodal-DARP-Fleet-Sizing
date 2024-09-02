@@ -60,9 +60,9 @@ SAEVRouteChangelist BestInsertionHeuristic::tryBestRequestInsertionInActiveVehic
     size_t vehicleId = 0;
     BestInsertionQueue bestInsertions{requestKp};
     //Iteratively try inserting in every active vehicle and the first inactive vehicle
-    while(++vehicleId <= route.getLastActiveVehicleId() + 1) {
+    do {
         route.getBestFeasibleInsertionsQueue(bestInsertions, requestKp, vehicleId);
-    }
+    } while(++vehicleId <= route.getLastActiveVehicleId());
 
     return tryVehicleBestInsertion(bestInsertions, route);
 }
