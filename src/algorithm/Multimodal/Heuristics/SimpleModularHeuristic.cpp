@@ -104,8 +104,6 @@ SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>
         //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
             return getSubrequest(requestId, true);
-        } else {
-            changeList.revertChanges();
         }
     }
 
