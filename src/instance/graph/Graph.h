@@ -70,6 +70,12 @@ public:
     [[nodiscard]] const std::vector<Edge> &getEdgesVector() const {
         return edgesVector;
     }
+    /**
+     * @return Const ref to the edge at the given index
+     */
+    [[nodiscard]] const Edge &getEdge(size_t edgeIndex) const {
+        return edgesVector[edgeIndex];
+    }
 
     [[nodiscard]] size_t getNbIncomingEdges(size_t nodeIndex) const {
         return nodesVector[nodeIndex].getIncomingEdges().size();
