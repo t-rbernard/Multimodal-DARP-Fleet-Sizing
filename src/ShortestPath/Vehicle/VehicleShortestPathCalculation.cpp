@@ -10,7 +10,7 @@
 std::vector<uint>
 VehicleShortestPathCalculation::computeShortestPathsFromNode(Graph &graph, size_t startingNodeIdx, bool useEdges) {
     std::vector<uint> results;
-    results.reserve(graph.getNbNodes());
+    results.resize(graph.getNbNodes(), UINT32_MAX);
 
     if(!useEdges)
         results = graph.getShortestSaevPaths()[startingNodeIdx];
@@ -53,8 +53,7 @@ MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPaths
 }
 
 MatrixShortestPathContainer VehicleShortestPathCalculation::computeShortestPathsForGraph(Graph &graph, bool useEdges) {
-    std::vector<std::vector<uint>> results;
-    results.resize(graph.getNbNodes());
+    std::vector<std::vector<uint>> results{graph.getNbNodes()};
     for(size_t i = 0; i < graph.getNbNodes(); ++i) {
         results[i].resize(graph.getNbNodes());
         std::ranges::move(computeShortestPathsFromNode(graph, i, useEdges), results[i].begin());
