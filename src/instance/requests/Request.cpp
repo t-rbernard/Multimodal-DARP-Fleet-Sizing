@@ -235,7 +235,7 @@ Request::Request(const Graph& graph, const Request &baseRequest, const TransitAc
         _arrivalTW.max = _departureTW.min + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
     }
     _transitTravelTimeRatio = baseRequest.getTransitTravelTimeRatio();
-    _deltaTime = std::numeric_limits<uint>::max();
+    _deltaTime = UINT16_MAX;
     _weight = baseRequest.getWeight();
 }
 
