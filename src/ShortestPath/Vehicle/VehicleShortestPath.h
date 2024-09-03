@@ -8,6 +8,7 @@
 #include <compare>
 #include "../ShortestPath.h"
 #include "../../instance/graph/Node.h"
+#include "../../utils/Globals.h"
 
 class VehicleShortestPath : public ShortestPath<size_t> {
 private:

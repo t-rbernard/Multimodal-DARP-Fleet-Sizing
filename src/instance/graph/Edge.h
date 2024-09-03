@@ -7,6 +7,7 @@
 
 
 #include "Node.h"
+#include "../../utils/Globals.h"
 
 class Edge {
 private:
