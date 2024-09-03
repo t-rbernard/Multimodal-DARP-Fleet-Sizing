@@ -43,19 +43,6 @@ uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_
     return (uint) std::floor(request.getMaxArrivalTw() - _graph->getShortestSAEVPath(ptEntryNodeIdx, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio());
 }
 
-std::vector<Request>
-SimpleModularHeuristic::generateAndInsertBestEntries(const std::vector<Request> &baseRequestsList) {
-    std::vector<Request> entrySubRequestsList{baseRequestsList.size()}; //Init entry subrequests list
-    for(size_t i = 0; i < baseRequestsList.size(); ++i) {
-        const Request& baseRequest = baseRequestsList[i];
-        const Request subreq = insertBestTransitEntryInRoute(baseRequest, i);
-        _requestsVect->push_back(subreq);
-        entrySubRequestsList.push_back(subreq);
-    }
-
-    return entrySubRequestsList;
-}
-
 /**
  * Generates the best entries list (ordered by an implementation-dependant ,
  * then generates a vector of requests from these entries before starting the entry subrequest insertion process <br>

@@ -42,7 +42,6 @@ private:
     Request insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t requestId);
     const Request & insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId);
 
-    std::vector<Request> generateAndInsertBestEntries(const std::vector<Request> &baseRequestsList);
     void insertBestTransitExitsInRoute(const std::vector<Request>& baseRequestsList, const std::vector<TransitAccess>& transitEntriesList);
 
     //Best candidates function
