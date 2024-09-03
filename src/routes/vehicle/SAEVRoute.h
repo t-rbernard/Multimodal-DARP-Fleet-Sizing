@@ -5,6 +5,10 @@
 #ifndef GREEDYALGORITHM_SAEVROUTE_H
 #define GREEDYALGORITHM_SAEVROUTE_H
 
+// uncomment to disable assert()
+// #define NDEBUG
+#include <cassert>
+#define assertm(exp, msg) assert(((void)msg, exp))
 
 #include <vector>
 #include "SAEVKeyPoint.h"
@@ -172,6 +176,10 @@ public:
     [[nodiscard]] size_t getExitSubRequestDestinationNodeIdx(const size_t requestId) const { return _route[getExitSubRequestDestinationRouteIdx(requestId)].getNodeIndex();}
 
     [[nodiscard]] size_t getLastActiveVehicleId() const { return _lastActiveVehicleId; }
+    size_t addNewActiveVehicle() {
+        assertm(_lastActiveVehicleId < _nbRequest - 1, "No more vehicle available");
+        return ++_lastActiveVehicleId;
+    }
     void setLastActiveVehicleId(size_t lastActiveVehicleId) { _lastActiveVehicleId = lastActiveVehicleId; }
 
     /**

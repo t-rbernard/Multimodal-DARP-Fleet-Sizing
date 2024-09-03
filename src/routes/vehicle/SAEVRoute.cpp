@@ -501,8 +501,7 @@ void SAEVRoute::removeRequestWeightFromRoute(SAEVKeyPoint& requestOriginKeyPoint
 }
 
 void SAEVRoute::insertRequestInNewVehicle(SAEVKeyPoint &originKp) {
-    size_t vehicleId = getLastActiveVehicleId() + 1;
-    setLastActiveVehicleId(vehicleId);
+    size_t vehicleId = addNewActiveVehicle();
     DEBUG_MSG("NEW VEHICLE CREATED, ID :" + std::to_string(vehicleId));
 
     tryAddRequest(originKp, &getOriginDepot(vehicleId), &getOriginDepot(vehicleId));
