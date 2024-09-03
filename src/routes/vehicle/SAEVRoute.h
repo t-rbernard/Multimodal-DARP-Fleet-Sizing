@@ -27,7 +27,15 @@ public:
      * @param graph the instance's graph, used to get shortest paths values during key point initialization and later in constraint propagation
      * @param requestList the instance's request list, used to associate KeyPoints that represent requests with the appropriate informations
      */
-    explicit SAEVRoute(const Graph& graph, const std::vector<Request>& requestList);
+    explicit SAEVRoute(const Graph &graph, const std::vector<Request> &requestList);
+    /**
+     * Initializes a route following a tabular doubly chained approach where 0->nbRequest*2-1 are Request Origin (even)/Destination (odd)
+     * and nbRequest*2 -> nbRequest*4-1 are vehicle start (even)/end (odd) depot. Each KeyPoint has
+     * @param graph the instance's graph, used to get shortest paths values during key point initialization and later in constraint propagation
+     * @param requestList the instance's request list, used to associate KeyPoints that represent requests with the appropriate informations
+     * @param initMultimodal true to init the container to a multimodal approach compatible size in advance, false (default) otherwise to just have requests/depots sections
+     */
+    explicit SAEVRoute(const Graph &graph, const std::vector<Request> &requestList, bool initMultimodal);
 
     [[nodiscard]] const std::vector<SAEVKeyPoint> &getRoute() const {
         return _route;
@@ -175,11 +183,6 @@ public:
 
     std::string to_string(size_t vehicleId);
     void exportToFile();
-
-    /**
-     * Extends the existing route to add 4*NbRequests keypoints to represent entry/exit sub-requests Origin/Destination
-     */
-    void initMultimodalKeyPoints();
 };
 
 #include "propagation/SAEVRouteChangelist.h"

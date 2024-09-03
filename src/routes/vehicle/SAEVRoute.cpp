@@ -19,8 +19,18 @@
 #define DEBUG_MSG(str) do { } while ( false )
 #endif
 
-SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList) : _nbRequest(requestList.size()), _graph(&graph), _requestList(&requestList) {
-    _route.resize(_nbRequest*4); //nbRequest*2 O/D KeyPoints + nbRequest*2 Start/End depots (upper bound #vehicle = #requests
+SAEVRoute::SAEVRoute(const Graph &graph, const std::vector<Request> &requestList)
+        : SAEVRoute(graph, requestList, false) {}
+
+SAEVRoute::SAEVRoute(const Graph &graph, const std::vector<Request> &requestList, bool initMultimodal)
+        : _nbRequest(requestList.size()), _graph(&graph), _requestList(&requestList) {
+
+    if(!initMultimodal) {
+        _route.resize(_nbRequest*4); //nbRequest*2 O/D KeyPoints + nbRequest*2 Start/End depots (upper bound #vehicle = #requests
+    } else {
+        _route.resize(_nbRequest * 8); // 2*NbRequests O/D Keypoints, 2*NbRequests O/D vehicle depot Keypoints
+                                                // 2*NbRequests O/D Bus entry Keypoints, 2*NbRequests O/D Bus exit Keypoints
+    }
 
     //Init Request O/D and Depot start/end key points
     for(size_t i = 0; i < _nbRequest; ++i) {
@@ -40,22 +50,20 @@ SAEVRoute::SAEVRoute(const Graph& graph, const std::vector<Request>& requestList
         getOriginDepot(i).setSuccessor(&getDestinationDepot(i));
         getDestinationDepot(i).setPredecessor(&getOriginDepot(i));
     }
-}
 
-void SAEVRoute::initMultimodalKeyPoints() {
-    _route.resize(_nbRequest * 8); // 2*NbRequests O/D Keypoints, 2*NbRequests O/D vehicle depot Keypoints
-                                            // 2*NbRequests O/D Bus entry Keypoints, 2*NbRequests O/D Bus exit Keypoints
+    //Set values and init all links for multimodal keypoints
+    if(initMultimodal) {
+        for (size_t i = 0; i < _nbRequest; ++i) {
+            //Set isOrigin accordingly
+            getEntrySubRequestOrigin(i).setIsOrigin(true);
+            getExitSubRequestOrigin(i).setIsOrigin(true);
 
-    for (size_t i = 0; i < _nbRequest; ++i) {
-        //Set isOrigin accordingly
-        getEntrySubRequestOrigin(i).setIsOrigin(true);
-        getExitSubRequestOrigin(i).setIsOrigin(true);
-
-        //Link Origins and Destinations for entry/exit subrequests
-        getEntrySubRequestOrigin(i).setCounterpart(&getEntrySubRequestDestination(i));
-        getEntrySubRequestDestination(i).setCounterpart(&getEntrySubRequestOrigin(i));
-        getExitSubRequestOrigin(i).setCounterpart(&getExitSubRequestDestination(i));
-        getExitSubRequestDestination(i).setCounterpart(&getExitSubRequestOrigin(i));
+            //Link Origins and Destinations for entry/exit subrequests
+            getEntrySubRequestOrigin(i).setCounterpart(&getEntrySubRequestDestination(i));
+            getEntrySubRequestDestination(i).setCounterpart(&getEntrySubRequestOrigin(i));
+            getExitSubRequestOrigin(i).setCounterpart(&getExitSubRequestDestination(i));
+            getExitSubRequestDestination(i).setCounterpart(&getExitSubRequestOrigin(i));
+        }
     }
 }
 

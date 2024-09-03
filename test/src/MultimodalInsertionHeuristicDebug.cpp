@@ -25,14 +25,13 @@ TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance) {
 
     //Init instance
     Instance instance(requests,graphFromSingleFile,4);
-    SAEVRoute routesContainer(graphFromSingleFile, requests);
+    SAEVRoute routesContainer(graphFromSingleFile, requests, true);
     SimpleModularHeuristic multimodalHeuristic(&graphFromSingleFile, &routesContainer, &requests);
     STOP_TIMER("Instance parsing and init")
     std::cout << "------------------Fin parsing instance et route-------------------" << std::endl << std::endl;
 
     std::cout << "------------------Start preprocessings-------------------" << std::endl << std::endl;
     START_TIMER
-    routesContainer.initMultimodalKeyPoints();
     graphFromSingleFile.computeAndUpdateShortestTransitPaths();
     STOP_TIMER("Preprocess")
     std::cout << "------------------End preprocessings-------------------" << std::endl << std::endl;
