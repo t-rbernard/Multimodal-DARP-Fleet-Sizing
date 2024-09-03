@@ -32,7 +32,7 @@ void SAEVKeyPoint::setCurrentOccupation(uint currentCapacity) {
     _currentOccupation = currentCapacity;
 }
 
-uint SAEVKeyPoint::getMinTw() const {
+int SAEVKeyPoint::getMinTw() const {
     return _minTW;
 }
 
@@ -40,7 +40,7 @@ void SAEVKeyPoint::setMinTw(uint minTw) {
     _minTW = minTw;
 }
 
-uint SAEVKeyPoint::getMaxTw() const {
+int SAEVKeyPoint::getMaxTw() const {
     return _maxTW;
 }
 

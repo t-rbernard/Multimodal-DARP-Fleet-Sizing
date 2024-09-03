@@ -48,10 +48,10 @@ public:
     [[nodiscard]] uint getCurrentOccupation() const;
     void setCurrentOccupation(uint currentCapacity);
 
-    [[nodiscard]] uint getMinTw() const;
+    [[nodiscard]] int getMinTw() const;
     void setMinTw(uint minTw);
 
-    [[nodiscard]] uint getMaxTw() const;
+    [[nodiscard]] int getMaxTw() const;
     void setMaxTw(uint maxTw);
 
     [[nodiscard]] bool isOrigin() const;

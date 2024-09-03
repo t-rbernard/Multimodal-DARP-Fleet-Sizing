@@ -234,8 +234,8 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(SAEVKeyPoint &origin
     boundPropagationQueue.emplace(Max, destinationKP);
 
     //Pre-init variables used in the loop
-    uint oldValue;
-    uint newValue;
+    int oldValue;
+    int newValue;
     SAEVKeyPoint * predecessorKP;
     SAEVKeyPoint * successorKP;
     SAEVKeyPoint * counterpartKP; //An Origin's Destination, or a Destination's Origin
