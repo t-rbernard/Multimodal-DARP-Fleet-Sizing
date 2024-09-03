@@ -35,6 +35,10 @@ public:
 
     void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
 
+    [[nodiscard]] size_t getNbBaseRquests() const {
+        return _nbBaseRquests;
+    }
+
 //Private members for heuristic internal functions we don't wish to see overriden
 private:
 

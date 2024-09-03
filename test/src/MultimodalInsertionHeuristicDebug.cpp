@@ -37,7 +37,7 @@ TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance) {
     std::cout << "------------------End preprocessings-------------------" << std::endl << std::endl;
     std::cout << "------------------Start multimodal insertion (entry)-------------------" << std::endl << std::endl;
     START_TIMER
-    for(size_t i = 0; i < requests.size(); ++i) {
+    for(size_t i = 0; i < multimodalHeuristic.getNbBaseRquests(); ++i) {
         multimodalHeuristic.insertBestTransitEntryInRoute(requests[i], i);
     }
     STOP_TIMER("Multimodal insertion (entry)")
