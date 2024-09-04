@@ -502,3 +502,11 @@ void SAEVRoute::insertRequestInNewVehicle(SAEVKeyPoint &originKp) {
     tryAddRequest(originKp, &getOriginDepot(vehicleId), &getOriginDepot(vehicleId));
 }
 
+std::string SAEVRoute::to_string() {
+    std::string res;
+    for(size_t i = 0; i < _lastActiveVehicleId; ++i){
+        res += "Vehicle #" + std::to_string(i) + ": " + to_string(i) + "\n";
+    }
+    return res;
+}
+

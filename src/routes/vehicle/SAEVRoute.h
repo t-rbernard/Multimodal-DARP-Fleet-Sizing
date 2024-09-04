@@ -185,6 +185,14 @@ public:
      */
     bool checkRouteTimeWindows(size_t vehicleId);
 
+    /**
+     * @return A string comprised of every vehicle appended to their own line each
+     */
+    std::string to_string();
+    /**
+     * @param vehicleId ID of the vehicle for which we want to print the current route
+     * @return A string comprised of every keypoint traversed by the vehicle corresponding to the given vehicleId
+     */
     std::string to_string(size_t vehicleId);
     void exportToFile();
 };
