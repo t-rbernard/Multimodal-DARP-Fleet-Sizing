@@ -22,7 +22,6 @@ SAEVRouteChangelist BestInsertionHeuristic::tryVehicleBestInsertion(BestInsertio
     SAEVKeyPoint & requestKp = bestInsertionsQueue.getOriginKp();
     SAEVRouteChangelist lastInsertionChangelist(&route, &requestKp);
 
-    DEBUG_MSG("Trying to insert request " + std::to_string(requestId) + " in vehicle " + std::to_string(vehicleId) + " queue size : " + std::to_string(bestInsertionsQueue.size()));
     while(!bestInsertionsQueue.empty() && !bestInsertionFound) {
         currentBestInsertion = bestInsertionsQueue.topAndPop();
         DEBUG_MSG("Trying insertion " + currentBestInsertion.to_string() + ", remaining : " + std::to_string(bestInsertionsQueue.size()));
