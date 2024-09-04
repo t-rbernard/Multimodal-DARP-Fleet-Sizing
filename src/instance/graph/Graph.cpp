@@ -26,6 +26,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
 
     //Nodes instantiation
     std::ifstream nodesFile(nodesFilePath);
+    assertm(!nodesFile.fail(), "Failed to open the given file");
     std::cout << "Nodes instantiation" << std::endl;
     for(auto& row: CSVRange(nodesFile))
     {
@@ -37,6 +38,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
 
     //Edges instantiation
     std::ifstream edgesFile(edgesFilePath);
+    assertm(!edgesFile.fail(), "Failed to open the given file");
     std::cout << "Edges instantiation" << std::endl;
     for(auto& row: CSVRange(edgesFile))
     {
@@ -49,6 +51,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
     std::uniform_int_distribution<uint32_t> uint_dist10(1,10);
     std::uniform_int_distribution<uint32_t> uint_dist60(1,60);
     std::ifstream ptLinesFile(ptLinesFilePath);
+    assertm(!ptLinesFile.fail(), "Failed to open the given file");
     std::cout << "Lines instantiation" << std::endl;
     for(auto& row: CSVRange(ptLinesFile))
     {
@@ -64,6 +67,7 @@ Graph::Graph(const std::string& nodesFilePath, const std::string& edgesFilePath,
 
 Graph::Graph(const std::string& datFilePath) {
     std::ifstream infile(datFilePath);
+    assertm(!infile.fail(), "Failed to open the given file");
     DATRow currentRow = DATRow(',');
 
     //-- Read params

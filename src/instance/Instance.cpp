@@ -17,6 +17,7 @@ Instance::Instance(const std::string& graphFilePath,
 
 void Instance::parseRequestsFromFile(const std::string &requestsFilePath) {
     std::ifstream infile(requestsFilePath);
+    assertm(!infile.fail(), "Failed to open the given file");
     DATRow currentRow = DATRow(',');
     std::string currentLine;
     while(infile >> currentRow && !currentRow[0].starts_with('#')) {

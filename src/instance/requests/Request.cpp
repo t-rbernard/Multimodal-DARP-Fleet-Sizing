@@ -73,6 +73,7 @@ std::vector<Request> Request::getRequestsFromFile(const std::string& datFilePath
     std::vector<Request> requests;
 
     std::ifstream infile(datFilePath);
+    assertm(!infile.fail(), "Failed to open the given file");
     DATRow currentRow = DATRow(',');
 
     //-- Read params
