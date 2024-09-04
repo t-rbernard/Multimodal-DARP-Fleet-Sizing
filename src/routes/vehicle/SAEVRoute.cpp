@@ -7,11 +7,6 @@
 #include "SAEVRoute.h"
 #include "BestInsertionQueue.h"
 
-// uncomment to disable assert()
-// #define NDEBUG
-#include <cassert>
-#define assertm(exp, msg) assert(((void)msg, exp))
-
 #ifdef DEBUG_CONSTRAINT_PROPAGATION
 #include <iostream>
 #define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )

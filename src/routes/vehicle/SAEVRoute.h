@@ -5,10 +5,6 @@
 #ifndef GREEDYALGORITHM_SAEVROUTE_H
 #define GREEDYALGORITHM_SAEVROUTE_H
 
-// uncomment to disable assert()
-// #define NDEBUG
-#include <cassert>
-#define assertm(exp, msg) assert(((void)msg, exp))
 
 #include <vector>
 #include "SAEVKeyPoint.h"

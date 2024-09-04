@@ -5,10 +5,6 @@
 #ifndef GREEDYALGORITHM_SIMPLEMODULARHEURISTIC_H
 #define GREEDYALGORITHM_SIMPLEMODULARHEURISTIC_H
 
-// uncomment to disable assert()
-// #define NDEBUG
-#include <cassert>
-#define assertm(exp, msg) assert(((void)msg, exp))
 
 #include <cstddef>
 #include <vector>
@@ -27,6 +23,7 @@ private:
 
     //Add friend test classes to test inner workings without making the whole API public
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance);
+    FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugInstanceAlain);
 
 //Public interface to interact with the modular heuristic
 public:
