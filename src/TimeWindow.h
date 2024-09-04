@@ -6,6 +6,7 @@
 #define GREEDYALGORITHM_TIMEWINDOW_H
 
 #include <cstdlib>
+#include <string>
 #include "utils/Globals.h"
 
 /**
@@ -26,6 +27,8 @@ struct TimeWindow {
     * @return True iff instant is in the time window, false otherwise
     */
     [[nodiscard]] bool isInTimeWindow(const TimeWindow& instant) const;
+
+    [[nodiscard]] std::string to_string() const;
 
     TimeWindow operator+(uint rhs) const;
     TimeWindow& operator+=(uint rhs);

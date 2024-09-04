@@ -90,11 +90,13 @@ SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>
         SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(requestId), *_route);
         //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
+            DEBUG_MSG("ENTRY CANDIDATE SUCCESS : " + subreq.to_string());
             return getSubrequest(requestId, true);
         }
     }
 
     //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
+    DEBUG_MSG("CREATE VEHICLE");
     updateSubRequest(requestId, entrySubRequestsList[0], true);
     _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(requestId));
     return getSubrequest(requestId, true);

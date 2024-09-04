@@ -109,6 +109,7 @@ public:
      * @return A properly formatted string to import back again
      */
     [[nodiscard]] std::string to_string_export() const;
+    [[nodiscard]] std::string to_string() const;
 };
 
 

@@ -209,6 +209,13 @@ void Request::resetKeyPoint(int routeIndex) {
     _currentRoute.resetKeyPoint(routeIndex);
 }
 
+std::string Request::to_string() const {
+    std::string res = "O=" + std::to_string(_originNodeIndex) + "," + "D=" + std::to_string(_destinationNodeIndex) //FIXME:replace with std::format whenever possible
+                      + ", " + _departureTW.to_string() + ", " + _arrivalTW.to_string()
+                      + ", w=" + std::to_string(_weight);
+    return res;
+}
+
 std::string Request::to_string_export() const {
     std::string res = std::to_string(_originNodeIndex) + "," + std::to_string(_destinationNodeIndex) //FIXME:replace with std::format whenever possible
             + "," + std::to_string(_arrivalTW.min) + "," + std::to_string(_arrivalTW.max)

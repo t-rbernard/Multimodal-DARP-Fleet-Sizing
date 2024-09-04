@@ -52,3 +52,7 @@ bool TimeWindow::isInTimeWindow(uint instant) const {
 bool TimeWindow::isInTimeWindow(const TimeWindow &instant) const {
     return this->isInTimeWindow(instant.min) && this->isInTimeWindow(instant.max);
 }
+
+std::string TimeWindow::to_string() const {
+    return "[" + std::to_string(min) + "," + std::to_string(max) + "]";
+}
