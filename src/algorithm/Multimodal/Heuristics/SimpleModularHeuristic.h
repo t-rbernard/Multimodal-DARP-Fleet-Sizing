@@ -94,9 +94,9 @@ protected:
     /**
      * Base implementation of min exit constraint.
      * This implementation is equivalent to no min constraint, as our subset of possible moves already filters our options a bit
-     * @param baseRequest
-     * @param exitNodeIndex
-     * @return
+     * @param baseRequestId Id of the base request for which we generate exit subrequests. Necessary to get data on base request and entry subrequest if necessary
+     * @param exitData Data containing the exit node and timestamp
+     * @return 0
      */
     [[nodiscard]] uint getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData);
     /**
