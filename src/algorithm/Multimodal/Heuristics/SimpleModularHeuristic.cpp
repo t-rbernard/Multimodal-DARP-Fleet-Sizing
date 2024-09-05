@@ -126,7 +126,7 @@ void SimpleModularHeuristic::updateSubRequest(size_t requestId, const Request &r
         _requestsVect->emplace_back(request);
         assertm((_requestsVect->size() - 1) == subRequestIndex,"A request seems to have been missed or doesn't have any subrequest defined");
     } else {
-        _requestsVect->assign(subRequestIndex, request);
+        (*_requestsVect)[subRequestIndex] = request;
     }
 
     std::vector<Request>& requestVectRef = *_requestsVect;
