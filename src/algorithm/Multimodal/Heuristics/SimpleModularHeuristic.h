@@ -46,10 +46,10 @@ public:
 //Private members for heuristic internal functions we don't wish to see overriden
 private:
 
-    Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t requestId);
-    Request insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t requestId);
+    Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId);
+    Request insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t baseRequestId);
     const Request &insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
-                                                  size_t requestId, bool isEntry);
+                                                  size_t baseRequestId, bool isEntry);
 
     void insertBestTransitExitsInRoute(const std::vector<Request>& baseRequestsList, const std::vector<TransitAccess>& transitEntriesList);
 
