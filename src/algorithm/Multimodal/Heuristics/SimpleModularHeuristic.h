@@ -91,8 +91,31 @@ protected:
     [[nodiscard]] uint getMinEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const;
     [[nodiscard]] uint getMaxEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const;
     //Exit filter
-    uint getMinExitConstraint(const Request &request, size_t exitNodeIndex);
-    uint getMaxExitConstraint(const Request &request, size_t exitNodeIndex);
+    /**
+     * Base implementation of min exit constraint.
+     * This implementation is equivalent to no min constraint, as our subset of possible moves already filters our options a bit
+     * @param baseRequest
+     * @param exitNodeIndex
+     * @return
+     */
+    [[nodiscard]] uint getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData);
+    /**
+     * Base implementation of max exit constraint.
+     * This base implementation just checks for arrival validity wrt the base request's max time window
+     * @param baseRequestId Id of the base request for which we generate exit subrequests. Necessary to get data on base request and entry subrequest if necessary
+     * @param exitData Data containing the exit node and timestamp
+     * @return baseRequest.DestinationTW.max - T(exitData.Node, baseRequest.Destination)
+     */
+    [[nodiscard]] uint getMaxExitConstraint(size_t baseRequestId, const TransitAccess &exitData);
+    /**
+     * Base implementation of a sorting score (lower is better) for exit candidates.
+     * This implementation scores via T(exitNode, destinationNode) + exitTime to try and
+     * incentivize early and/or close access points
+     * @param baseRequest the base request, required to get the destination
+     * @param exitData exit data containing the exit point and timestamp
+     * @return A score allowing to sort transit exits in ascending score order
+     */ //TODO: try other scoring functions (current other idea : T(exitNode, destinationNode) * exitTime; alpha*T(exitNode, destinationNode) + exitTime)
+    [[nodiscard]] double getTransitExitScore(const Request& baseRequest, const TransitAccess& exitData);
 
     [[nodiscard]] const Graph *getGraph() const;
     void setGraph(const Graph *graph);
@@ -102,7 +125,7 @@ protected:
 
     void updateSubRequest(size_t requestId, const Request &request, bool isEntry);
 
-    size_t getSubrequestIndex(size_t requestId, bool isEntry) const;
+    [[nodiscard]] size_t getSubrequestIndex(size_t requestId, bool isEntry) const;
 
     const Request &getSubrequest(size_t requestId, bool isEntry);
 };
