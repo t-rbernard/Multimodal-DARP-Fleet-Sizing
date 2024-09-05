@@ -14,6 +14,13 @@
 #include "../../DARP/Heuristics/BestInsertionHeuristic.h"
 #include "../../../../test/lib/googletest/googletest/include/gtest/gtest_prod.h"
 
+#ifdef DEBUG_MULTIMODAL_HEURISTIC
+#include <iostream>
+#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#else
+#define DEBUG_MSG(str) do { } while ( false )
+#endif
+
 class SimpleModularHeuristic {
 private:
     const Graph* _graph{nullptr};

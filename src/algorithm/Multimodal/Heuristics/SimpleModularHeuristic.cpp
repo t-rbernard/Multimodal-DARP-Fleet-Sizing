@@ -92,6 +92,8 @@ SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>
         if(changeList.success()) {
             DEBUG_MSG("ENTRY CANDIDATE SUCCESS : " + subreq.to_string());
             return getSubrequest(requestId, true);
+        } else {
+            DEBUG_MSG("ENTRY CANDIDATE FAILURE : " + subreq.to_string());
         }
     }
 
