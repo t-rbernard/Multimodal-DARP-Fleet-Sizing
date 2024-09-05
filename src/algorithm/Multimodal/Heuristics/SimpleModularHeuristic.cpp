@@ -73,25 +73,27 @@ Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &bas
     for(auto const& access : entriesAccessList) {
         entrySubRequestsList.emplace_back(*_graph, baseRequest, access, true);
     }
-    return insertBestTransitEntryInRoute(entrySubRequestsList, requestId);
+    return insertBestTransitAccessInRoute(entrySubRequestsList, requestId, true);
 }
 
 /**
  * The insertion process first tries best insertions without creating a new vehicles in order of the best entries list.
  * If none result in a valid insertion, we insert the first subrequest (supposedly the better one) in a new vehicle
- * @param entrySubRequestsList A list of entry subrequest candidates, preferably ordered from best to worst candidate, but the list order is implementation dependant
+ * @param accessSubRequestsList A list of entry subrequest candidates, preferably ordered from best to worst candidate, but the list order is implementation dependant
  * @param requestId ID/index in the request vector for our base request
+ * @param isEntry true iff the given access requests are transit entry requests
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
 const Request &
-SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>& entrySubRequestsList, size_t requestId) {
-    for(const auto& subreq : entrySubRequestsList) {
-        updateSubRequest(requestId, subreq, true);
+SimpleModularHeuristic::insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
+                                                       size_t requestId, bool isEntry) {
+    for(const auto& subreq : accessSubRequestsList) {
+        updateSubRequest(requestId, subreq, isEntry);
         SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(requestId), *_route);
         //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
             DEBUG_MSG("ENTRY CANDIDATE SUCCESS : " + subreq.to_string());
-            return getSubrequest(requestId, true);
+            return getSubrequest(requestId, isEntry);
         } else {
             DEBUG_MSG("ENTRY CANDIDATE FAILURE : " + subreq.to_string());
         }
@@ -99,9 +101,9 @@ SimpleModularHeuristic::insertBestTransitEntryInRoute(const std::vector<Request>
 
     //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
     DEBUG_MSG("CREATE VEHICLE");
-    updateSubRequest(requestId, entrySubRequestsList[0], true);
+    updateSubRequest(requestId, accessSubRequestsList[0], isEntry);
     _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(requestId));
-    return getSubrequest(requestId, true);
+    return getSubrequest(requestId, isEntry);
 }
 
 const Graph *SimpleModularHeuristic::getGraph() const {
@@ -143,4 +145,18 @@ size_t SimpleModularHeuristic::getSubrequestIndex(size_t requestId, bool isEntry
 
 const Request& SimpleModularHeuristic::getSubrequest(size_t requestId, bool isEntry) {
     return (*_requestsVect)[getSubrequestIndex(requestId, isEntry)];
+}
+
+double SimpleModularHeuristic::getTransitExitScore(const Request &baseRequest, const TransitAccess &exitData) {
+    return _graph->getShortestSAEVPath(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex())
+           + exitData.getAccessTimestamp();
+}
+
+uint SimpleModularHeuristic::getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
+    return 0;
+}
+
+uint SimpleModularHeuristic::getMaxExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
+    const Request& baseRequest = (*_requestsVect)[baseRequestId];
+    return baseRequest.getMaxArrivalTw() - _graph->getShortestSAEVPath(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex());
 }
