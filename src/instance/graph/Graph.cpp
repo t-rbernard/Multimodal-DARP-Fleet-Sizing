@@ -394,11 +394,11 @@ const TransitShortestPathContainer &Graph::getTransitShortestPaths() const {
 }
 
 const std::pair<size_t, std::vector<TransitShortestPath>> &
-Graph::getShortestTransitPathsFrom(size_t startNodeIndex, uint earliestStartInstant) {
+Graph::getShortestTransitPathsFrom(size_t startNodeIndex, uint earliestStartInstant) const {
     return transitShortestPaths.getShortestPathsFrom(startNodeIndex, earliestStartInstant);
 }
 
 TransitShortestPath
-Graph::getShortestTransitPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) {
+Graph::getShortestTransitPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) const {
     return transitShortestPaths.getShortestPathToYFromTime(startNodeIndex, earliestStartInstant, goalNode);
 }

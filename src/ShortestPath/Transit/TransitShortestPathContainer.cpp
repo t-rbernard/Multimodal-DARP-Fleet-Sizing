@@ -25,8 +25,8 @@ void TransitShortestPathContainer::addShortestPathCollection(size_t startNodeInd
     container[startNodeIndex].emplace_back(startingInstant, shortestPathList);
 }
 
-std::pair<size_t, std::vector<TransitShortestPath>>&
-TransitShortestPathContainer::getShortestPathsFrom(size_t startNodeIndex, uint earliestStartInstant) {
+const std::pair<size_t, std::vector<TransitShortestPath>> &
+TransitShortestPathContainer::getShortestPathsFrom(size_t startNodeIndex, uint earliestStartInstant) const {
     const auto& iterator = std::ranges::lower_bound(container[startNodeIndex],
                                             std::pair<size_t , std::vector<TransitShortestPath>>(earliestStartInstant, {}));
 
@@ -34,7 +34,7 @@ TransitShortestPathContainer::getShortestPathsFrom(size_t startNodeIndex, uint e
 }
 
 TransitShortestPath
-TransitShortestPathContainer::getShortestPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) {
+TransitShortestPathContainer::getShortestPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) const {
     auto [startNode, shortestPathsVector] = getShortestPathsFrom(startNodeIndex, earliestStartInstant);
     //Check if destination vector size is the same as the container's which means we have a cell for every graph node => O(1) access
     if(shortestPathsVector.size() == container.size())  {
