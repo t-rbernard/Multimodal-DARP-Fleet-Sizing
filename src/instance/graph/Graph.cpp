@@ -388,3 +388,17 @@ void Graph::linkAllPTNodes() {
         }
     }
 }
+
+const TransitShortestPathContainer &Graph::getTransitShortestPaths() const {
+    return transitShortestPaths;
+}
+
+const std::pair<size_t, std::vector<TransitShortestPath>> &
+Graph::getShortestTransitPathsFrom(size_t startNodeIndex, uint earliestStartInstant) {
+    return transitShortestPaths.getShortestPathsFrom(startNodeIndex, earliestStartInstant);
+}
+
+TransitShortestPath
+Graph::getShortestTransitPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) {
+    return transitShortestPaths.getShortestPathToYFromTime(startNodeIndex, earliestStartInstant, goalNode);
+}

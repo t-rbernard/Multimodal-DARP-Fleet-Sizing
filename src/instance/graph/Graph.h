@@ -186,6 +186,10 @@ public:
     void computeAndUpdateClosestStations();
     void computeAndUpdateShortestTransitPaths();
 
+    [[nodiscard]] const TransitShortestPathContainer &getTransitShortestPaths() const;
+    const std::pair<size_t, std::vector<TransitShortestPath>>& getShortestTransitPathsFrom(size_t startNodeIndex, uint earliestStartInstant);
+    TransitShortestPath getShortestTransitPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode);
+
     void linkAllPTNodes();
 };
 
