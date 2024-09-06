@@ -36,9 +36,14 @@ TransitShortestPathContainer::getShortestPathsFrom(size_t startNodeIndex, uint e
 TransitShortestPath
 TransitShortestPathContainer::getShortestPathToYFromTime(size_t startNodeIndex, uint earliestStartInstant, size_t goalNode) {
     auto [startNode, shortestPathsVector] = getShortestPathsFrom(startNodeIndex, earliestStartInstant);
-    for(const auto& shortestPath : shortestPathsVector) {
-        if(shortestPath.getArrivalNode() == goalNode) {
-            return shortestPath;
+    //Check if destination vector size is the same as the container's which means we have a cell for every graph node => O(1) access
+    if(shortestPathsVector.size() == container.size())  {
+        return shortestPathsVector[goalNode];
+    } else {
+        for (const auto &shortestPath: shortestPathsVector) {
+            if (shortestPath.getArrivalNode() == goalNode) {
+                return shortestPath;
+            }
         }
     }
     return  TransitShortestPath{};
