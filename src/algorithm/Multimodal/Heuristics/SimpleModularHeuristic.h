@@ -47,7 +47,9 @@ public:
 private:
 
     Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId);
-    Request insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t baseRequestId);
+
+    const Request &insertBestTransitAccessInRoute(const Request &baseRequest, const std::vector<TransitAccess> &entriesAccessList,
+                                   size_t baseRequestId, bool isEntry);
     const Request &insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
                                                   size_t baseRequestId, bool isEntry);
 
@@ -117,6 +119,7 @@ protected:
      */ //TODO: try other scoring functions (current other idea : T(exitNode, destinationNode) * exitTime; alpha*T(exitNode, destinationNode) + exitTime)
     [[nodiscard]] double getTransitExitScore(const Request& baseRequest, const TransitAccess& exitData);
 
+    //Keep those getters/setters protected as no other member should access or modify these objects
     [[nodiscard]] const Graph *getGraph() const;
     void setGraph(const Graph *graph);
 

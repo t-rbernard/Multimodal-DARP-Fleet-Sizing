@@ -54,26 +54,30 @@ uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_
  */
 Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId) {
     std::vector<TransitAccess> entriesAccessList = getBestTransitEntriesList(baseRequest);
-    return insertBestTransitEntryInRoute(baseRequest, entriesAccessList, baseRequestId);
+    return insertBestTransitAccessInRoute(baseRequest, entriesAccessList, baseRequestId, true);
 }
 
 /**
- * Generates a vector of requests from the given entries list before starting the entry subrequest insertion process <br>
+ * Generates a vector of requests from the given access list before starting the entry subrequest insertion process <br>
  * The insertion process first tries best insertions without creating a new vehicles in order of the best entries list.
  * If none result in a valid insertion, we insert the first subrequest (supposedly the better one) in a new vehicle
- * @param baseRequest const ref to the request we use as our base to generate subrequest frm the best entries list
+ * @param baseRequest const ref to the request we use as our base to generate subrequests from the sorted best access list
  * @param entriesAccessList A list of best entries, preferably ordered from best to worst and sized according to the max number of candidates we want to try inserting
  * @param baseRequestId ID/index in the request vector for our base request
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
-Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, const std::vector<TransitAccess>& entriesAccessList, size_t baseRequestId) {
+const Request &
+SimpleModularHeuristic::insertBestTransitAccessInRoute(const Request &baseRequest,
+                                                       const std::vector<TransitAccess> &entriesAccessList,
+                                                       size_t baseRequestId, bool isEntry) {
     std::vector<Request> entrySubRequestsList;
-    entrySubRequestsList.reserve(Constants::MAX_TRANSIT_ENTRY_CANDIDATES); //Init entry subrequests list to the appropriate size
+    size_t maxSize = isEntry ? Constants::MAX_TRANSIT_ENTRY_CANDIDATES : Constants::MAX_TRANSIT_EXIT_CANDIDATES;
+    entrySubRequestsList.reserve(maxSize); //Init entry subrequests list to the appropriate size
     //Generate subrequests from best transit entries
     for(auto const& access : entriesAccessList) {
-        entrySubRequestsList.emplace_back(*_graph, baseRequest, access, true);
+        entrySubRequestsList.emplace_back(*_graph, baseRequest, access, isEntry);
     }
-    return insertBestTransitAccessInRoute(entrySubRequestsList, baseRequestId, true);
+    return insertBestTransitAccessInRoute(entrySubRequestsList, baseRequestId, isEntry);
 }
 
 /**
