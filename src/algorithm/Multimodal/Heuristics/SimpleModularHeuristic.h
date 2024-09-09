@@ -8,6 +8,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <float.h>
 #include "../../../instance/requests/Request.h"
 #include "../../../routes/vehicle/SAEVRoute.h"
 #include "TransitAccess.h"
@@ -22,6 +23,11 @@
 #endif
 
 class SimpleModularHeuristic {
+public:
+    struct ScoredTransitAccess : public TransitAccess {
+        double score{DBL_MAX};
+        explicit ScoredTransitAccess(const TransitAccess& access, double scr) : TransitAccess(access), score(scr) {}
+    };
 private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
@@ -31,6 +37,9 @@ private:
     //Add friend test classes to test inner workings without making the whole API public
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance);
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugInstanceAlain);
+
+
+    using transit_order_function = std::function<bool(ScoredTransitAccess, ScoredTransitAccess)>;
 
 //Public interface to interact with the modular heuristic
 public:
@@ -47,13 +56,13 @@ public:
 private:
 
     Request insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId);
+    Request insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId);
+
 
     const Request &insertBestTransitAccessInRoute(const Request &baseRequest, const std::vector<TransitAccess> &entriesAccessList,
                                    size_t baseRequestId, bool isEntry);
     const Request &insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
                                                   size_t baseRequestId, bool isEntry);
-
-    void insertBestTransitExitsInRoute(const std::vector<Request>& baseRequestsList, const std::vector<TransitAccess>& transitEntriesList);
 
     //Best candidates function
     /**
@@ -77,15 +86,31 @@ private:
      * in a vehicle. <br>
      * <br>
      * This vector is sorted according to the sort function the class was initialized with
-     * (default = t' + T(y,Dr)) and has max size Constants::MAX_TRANSIT_EXIT_CANDIDATES.
+     * (default = t' + T(y,Dr)). It does not guarantee a max size of Constants::MAX_TRANSIT_EXIT_CANDIDATES.
      * There can be less, or even 0 elements if no candidate has a transit departure tmax in
      * getMinEntryConstraint <= tmax <= getMaxEntryConstraint
      *
-     * @param transitEntryRequest the transit entry sub-request we wish to find potential exits from
+     * @param baseRequestId id of the base request for which we look for best exits
      * @return A vector consisting of all valid TransitAccess objects wrt the entry request's state
      * and the min/max entry constraints. If no valid access is found, we return an empty vector.
      */
-     std::vector<TransitAccess> getBestTransitExitsList(Request transitEntryRequest);
+    std::vector<TransitAccess> getBestTransitExitsList(size_t baseRequestId);
+    /**
+    * Creates and returns a vector of TransitAccess objects representing possible
+    * transit entries that can be converted to Request objects to try and insert them
+    * in a vehicle. <br>
+    * <br>
+    * This vector is sorted according to the sort function the class was initialized with
+    * (default = t' + T(y,Dr)). It does not guarantee a max size of Constants::MAX_TRANSIT_EXIT_CANDIDATES.
+    * There can be less, or even 0 elements if no candidate has a transit departure tmax in
+    * getMinEntryConstraint <= tmax <= getMaxEntryConstraint
+    *
+    * @param baseRequestId id of the base request for which we look for best exits
+    * @return A vector consisting of all valid TransitAccess objects wrt the entry request's state
+    * and the min/max entry constraints. If no valid access is found, we return an empty vector.
+    */
+    [[nodiscard]] std::vector<TransitAccess>
+    getBestTransitExitsList(const Request &baseRequest, const SAEVKeyPoint &entrySubRequestOriginKP) const;
 
 //Protected member function for overriding as we make this more modular
 protected:
@@ -112,12 +137,21 @@ protected:
     /**
      * Base implementation of a sorting score (lower is better) for exit candidates.
      * This implementation scores via T(exitNode, destinationNode) + exitTime to try and
-     * incentivize early and/or close access points
+     * incentivize early and/or close access points. <br> <br>
+     * Override this function to alter exit candidates ordering via the score function <br>
+     * /!\ Be mindful that vectors are sorted in ascending order, so invert the score or override getScoredTransitExitOrderer if you want greater values first /!\
      * @param baseRequest the base request, required to get the destination
      * @param exitData exit data containing the exit point and timestamp
      * @return A score allowing to sort transit exits in ascending score order
      */ //TODO: try other scoring functions (current other idea : T(exitNode, destinationNode) * exitTime; alpha*T(exitNode, destinationNode) + exitTime)
-    [[nodiscard]] double getTransitExitScore(const Request& baseRequest, const TransitAccess& exitData);
+    [[nodiscard]] double getTransitExitScore(const Request& baseRequest, const TransitAccess& exitData) const;
+    /**
+     * This function returns an orderer function used to sort the transit exit priority queue. <br> <br>
+     * Only override this function if you need a more involved kind of sort function that can't be made by simply overriding getTransitExitScore. <br>
+     * /!\ Be mindful that vectors are sorted in ascending order, so invert the order if you want greater values first /!\
+     * @return Returns a function taking in argument two ScoredTransitAccess objects and returning a true if lhs is to be ordered before rhs, false otherwise
+     */
+    [[nodiscard]] static transit_order_function getScoredTransitExitOrderer() ;
 
     //Keep those getters/setters protected as no other member should access or modify these objects
     [[nodiscard]] const Graph *getGraph() const;
@@ -131,6 +165,9 @@ protected:
     [[nodiscard]] size_t getSubrequestIndex(size_t requestId, bool isEntry) const;
 
     const Request &getSubrequest(size_t requestId, bool isEntry);
+
+    [[nodiscard]] double getTransitExitScore(size_t transitExitNodeIndex, size_t requestDestinationNodeIndex,
+                               uint transitExitTimestamp) const;
 };
 
 

@@ -4,6 +4,8 @@
 
 #include "SimpleModularHeuristic.h"
 
+using transit_order_function = std::function<bool(SimpleModularHeuristic::ScoredTransitAccess, SimpleModularHeuristic::ScoredTransitAccess)>;
+
 std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(const Request &baseRequest) const {
     const auto& bestStationsIndexVector = _graph->getNode(
             baseRequest.getOriginNodeIndex()).getBestStationsNodeIdxVector();
@@ -81,12 +83,13 @@ SimpleModularHeuristic::insertBestTransitAccessInRoute(const Request &baseReques
 }
 
 /**
- * The insertion process first tries best insertions without creating a new vehicles in order of the best entries list.
- * If none result in a valid insertion, we insert the first subrequest (supposedly the better one) in a new vehicle
+ * The insertion process first tries best insertions without creating a new vehicles in order of the best entries list. <br>
+ * If none result in a valid insertion, we insert the first subrequest (supposedly the better one) in a new vehicle. <br>
+ * While doing these insertions, the route and global request vector is updated with the appropriate request so that no inconsistencies in data structures happen
  * @param accessSubRequestsList A list of entry subrequest candidates, preferably ordered from best to worst candidate, but the list order is implementation dependant
  * @param baseRequestId ID/index in the request vector for our base request
  * @param isEntry true iff the given access requests are transit entry requests
- * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
+ * @return The subrequest successfully inserted in our route
  */
 const Request &
 SimpleModularHeuristic::insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
@@ -151,9 +154,17 @@ const Request& SimpleModularHeuristic::getSubrequest(size_t requestId, bool isEn
     return (*_requestsVect)[getSubrequestIndex(requestId, isEntry)];
 }
 
-double SimpleModularHeuristic::getTransitExitScore(const Request &baseRequest, const TransitAccess &exitData) {
-    return _graph->getShortestSAEVPath(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex())
-           + exitData.getAccessTimestamp();
+double SimpleModularHeuristic::getTransitExitScore(const Request &baseRequest, const TransitAccess &exitData) const {
+    return getTransitExitScore(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex(), exitData.getAccessTimestamp());
+}
+
+double SimpleModularHeuristic::getTransitExitScore(size_t transitExitNodeIndex, size_t requestDestinationNodeIndex, uint transitExitTimestamp) const {
+    return _graph->getShortestSAEVPath(transitExitNodeIndex, requestDestinationNodeIndex) + transitExitTimestamp;
+}
+
+transit_order_function
+SimpleModularHeuristic::getScoredTransitExitOrderer() {
+    return [](SimpleModularHeuristic::ScoredTransitAccess lhs, SimpleModularHeuristic::ScoredTransitAccess rhs) { return lhs.score < rhs.score; };
 }
 
 uint SimpleModularHeuristic::getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
@@ -163,4 +174,38 @@ uint SimpleModularHeuristic::getMinExitConstraint(size_t baseRequestId, const Tr
 uint SimpleModularHeuristic::getMaxExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
     const Request& baseRequest = (*_requestsVect)[baseRequestId];
     return baseRequest.getMaxArrivalTw() - _graph->getShortestSAEVPath(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex());
+}
+
+std::vector<TransitAccess>
+SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId) {
+    const Request& baseRequest = (*_requestsVect)[baseRequestId];
+    const SAEVKeyPoint& entrySubRequestOriginKP = _route->getEntrySubRequestOrigin(baseRequestId);
+    return getBestTransitExitsList(baseRequest, entrySubRequestOriginKP);
+}
+
+std::vector<TransitAccess>
+SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, const SAEVKeyPoint &entrySubRequestOriginKP) const {
+    std::vector<SimpleModularHeuristic::ScoredTransitAccess> scoreTransitExits;
+    //Get departure time/shortest transit paths list from the entry sub request's max time (this means we take the first transit available after max arrival)
+    //TODO : study other approaches (e.g check for a faster max arrival if it's valid and allows better paths. This would require propagation => costly)
+    const auto& [departureTime, shortestTransitPaths] = _graph->getShortestTransitPathsFrom(entrySubRequestOriginKP.getCounterpart()->getNodeIndex(),
+                                                                   entrySubRequestOriginKP.getCounterpart()->getMaxTw());
+
+    //Iterate over the best stations saved prior
+    for(const auto& shortestTransitPath : shortestTransitPaths) {
+        if(shortestTransitPath.getArrivalTime() >= 0) {
+            TransitAccess exit{shortestTransitPath.getArrivalNode(),  (uint) shortestTransitPath.getArrivalTime()};
+            scoreTransitExits.emplace_back(exit, getTransitExitScore(baseRequest, exit));
+        }
+    }
+
+    //Sort and truncate transit exits list while removing score data that's unnecessary in later steps
+    std::ranges::sort(scoreTransitExits, getScoredTransitExitOrderer());
+    std::vector<TransitAccess> truncatedTransitExitsList{scoreTransitExits.begin(), scoreTransitExits.begin() + Constants::MAX_TRANSIT_EXIT_CANDIDATES};
+    return truncatedTransitExitsList;
+}
+
+Request SimpleModularHeuristic::insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId) {
+    std::vector<TransitAccess> exitAccessList = getBestTransitExitsList(baseRequestId);
+    return insertBestTransitAccessInRoute(baseRequest, exitAccessList, baseRequestId, false);
 }
