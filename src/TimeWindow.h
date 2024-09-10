@@ -39,6 +39,8 @@ struct TimeWindow {
     TimeWindow operator-(const TimeWindow& rhs) const;
     TimeWindow& operator-=(const TimeWindow& rhs);
     TimeWindow& operator=(const TimeWindow& rhs) = default;
+
+    struct invalid_time_window_exception : std::exception {};
 };
 
 

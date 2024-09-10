@@ -11,6 +11,9 @@ Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex,
                                                             _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
                                                             _deltaTime(deltaTime), _weight(weight) {
     _departureTW = _arrivalTW - deltaTime;
+
+    if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
+        throw TimeWindow::invalid_time_window_exception();
 }
 
 Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
@@ -19,6 +22,9 @@ Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex,
         _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight) {
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
+
+    if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
+        throw TimeWindow::invalid_time_window_exception();
 }
 
 Request::Request(const DATRow& currentRow, const Graph& graph) {
@@ -63,6 +69,8 @@ Request::Request(const DATRow& currentRow, const Graph& graph) {
         _arrivalTW.min = _departureTW.min + graph.getShortestSAEVPath(_originNodeIndex, _destinationNodeIndex);
         _arrivalTW.max = _departureTW.max + _deltaTime;
     }
+    if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
+        throw TimeWindow::invalid_time_window_exception();
 }
 
 Request::Request(const DATRow& currentRow, double deltaRatio, const Graph& graph) : Request(currentRow, graph){
