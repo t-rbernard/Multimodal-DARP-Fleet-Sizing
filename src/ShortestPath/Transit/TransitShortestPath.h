@@ -15,9 +15,11 @@ private:
 public:
     TransitShortestPath() = default;
 
-    explicit TransitShortestPath(const TransitAlgorithmState& state) : _arrivalTime(state.getInstant()) {
-        if(state.getNbConnections() > 0)
+    explicit TransitShortestPath(const TransitAlgorithmState& state) {
+        if(state.getNbConnections() > 0) {
             _keyPoints = state.getConnections();
+            _arrivalTime = state.getInstant();
+        }
     }
 
     /**
