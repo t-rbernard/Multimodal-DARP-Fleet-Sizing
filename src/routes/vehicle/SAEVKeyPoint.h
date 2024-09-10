@@ -8,7 +8,10 @@
 
 #include "../KeyPoint.h"
 #include "../../instance/graph/Graph.h"
-#include "../../instance/requests/Request.h"
+
+class Request;
+
+class SAEVehicle;
 
 class SAEVKeyPoint : public KeyPoint {
 private:
@@ -83,6 +86,7 @@ public:
 
     [[nodiscard]] std::string to_string() const override;
 };
+#include "../../instance/requests/Request.h"
 
 
 #endif //GREEDYALGORITHM_SAEVKEYPOINT_H
