@@ -64,22 +64,31 @@ Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &bas
  * The insertion process first tries best insertions without creating a new vehicles in order of the best entries list.
  * If none result in a valid insertion, we insert the first subrequest (supposedly the better one) in a new vehicle
  * @param baseRequest const ref to the request we use as our base to generate subrequests from the sorted best access list
- * @param entriesAccessList A list of best entries, preferably ordered from best to worst and sized according to the max number of candidates we want to try inserting
+ * @param transitAccessList A list of best entries, preferably ordered from best to worst and sized according to the max number of candidates we want to try inserting
  * @param baseRequestId ID/index in the request vector for our base request
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
 const Request &
 SimpleModularHeuristic::insertBestTransitAccessInRoute(const Request &baseRequest,
-                                                       const std::vector<TransitAccess> &entriesAccessList,
+                                                       const std::vector<TransitAccess> &transitAccessList,
                                                        size_t baseRequestId, bool isEntry) {
-    std::vector<Request> entrySubRequestsList;
+    std::vector<Request> accessSubRequestsList;
     size_t maxSize = isEntry ? Constants::MAX_TRANSIT_ENTRY_CANDIDATES : Constants::MAX_TRANSIT_EXIT_CANDIDATES;
-    entrySubRequestsList.reserve(maxSize); //Init entry subrequests list to the appropriate size
+    accessSubRequestsList.reserve(maxSize); //Init entry subrequests list to the appropriate size
     //Generate subrequests from best transit entries
-    for(auto const& access : entriesAccessList) {
-        entrySubRequestsList.emplace_back(*_graph, baseRequest, access, isEntry);
+    for(auto const& access : transitAccessList) {
+        try {
+            if(isEntry)
+                accessSubRequestsList.emplace_back(*_graph, baseRequest, access);
+            else
+                accessSubRequestsList.emplace_back(*_graph, baseRequest, access,
+                                                   _route->getEntrySubRequestOrigin(baseRequestId));
+        }
+        catch(const TimeWindow::invalid_time_window_exception& e) {
+            DEBUG_MSG("Invalid Time Window during candidate sub request creation, it won't be added to the list");
+        }
     }
-    return insertBestTransitAccessInRoute(entrySubRequestsList, baseRequestId, isEntry);
+    return insertBestTransitAccessInRoute(accessSubRequestsList, baseRequestId, isEntry);
 }
 
 /**

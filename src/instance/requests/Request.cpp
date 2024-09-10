@@ -206,25 +206,37 @@ std::string Request::to_string_export() const {
     return res;
 }
 
-Request::Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry) {
-    if(isEntry) {
-        _originNodeIndex = baseRequest.getOriginNodeIndex();
-        _destinationNodeIndex = access.getAccessNodeIdx();
+Request::Request(const Graph &graph, const Request &baseRequest, const TransitAccess &transitEntry) {
+    _originNodeIndex = baseRequest.getOriginNodeIndex();
+    _destinationNodeIndex = transitEntry.getAccessNodeIdx();
 
-        _departureTW = baseRequest.getDepartureTw();
+    _departureTW = baseRequest.getDepartureTw();
 
-        _arrivalTW.min = baseRequest.getDepartureTw().min + graph.getShortestSAEVPath(_originNodeIndex, access.getAccessNodeIdx());
-        _arrivalTW.max = access.getAccessTimestamp();
-    } else {
-        _originNodeIndex = access.getAccessNodeIdx();
-        _destinationNodeIndex = baseRequest.getDestinationNodeIndex();
+    _arrivalTW.min = baseRequest.getDepartureTw().min + graph.getShortestSAEVPath(_originNodeIndex, transitEntry.getAccessNodeIdx());
+    _arrivalTW.max = transitEntry.getAccessTimestamp();
 
-        _departureTW.min = access.getAccessTimestamp();
-        _departureTW.max = baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(access.getAccessNodeIdx(), _destinationNodeIndex);
+    if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
+        throw TimeWindow::invalid_time_window_exception();
 
-        _arrivalTW.min = baseRequest.getArrivalTw().min;
-        _arrivalTW.max = _departureTW.min + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
-    }
+    _transitTravelTimeRatio = baseRequest.getTransitTravelTimeRatio();
+    _deltaTime = UINT16_MAX;
+    _weight = baseRequest.getWeight();
+}
+
+Request::Request(const Graph &graph, const Request &baseRequest, const TransitAccess &transitExit,
+                 const SAEVKeyPoint &originSubRequestKeyPoint) {
+    _originNodeIndex = transitExit.getAccessNodeIdx();
+    _destinationNodeIndex = baseRequest.getDestinationNodeIndex();
+
+    _departureTW.min = transitExit.getAccessTimestamp();
+    _departureTW.max = baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(transitExit.getAccessNodeIdx(), _destinationNodeIndex);
+
+    _arrivalTW.min = baseRequest.getArrivalTw().min;
+    _arrivalTW.max = originSubRequestKeyPoint.getMinTw() + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
+
+    if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
+        throw TimeWindow::invalid_time_window_exception();
+
     _transitTravelTimeRatio = baseRequest.getTransitTravelTimeRatio();
     _deltaTime = UINT16_MAX;
     _weight = baseRequest.getWeight();

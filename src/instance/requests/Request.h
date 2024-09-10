@@ -11,6 +11,7 @@
 #include "../graph/Graph.h"
 #include "../../algorithm/Multimodal/Heuristics/TransitAccess.h"
 #include "../../utils/Constants.h"
+#include "../../routes/vehicle/SAEVKeyPoint.h"
 
 class Request {
 private:
@@ -41,7 +42,25 @@ public:
             const uint deltaTime, const uint weight, const Graph& graph);
     Request(const DATRow& currentRow, const Graph& graph);
     Request(const DATRow& currentRow, double deltaRatio, const Graph& graph);
-    Request(const Graph& graph, const Request &baseRequest, const TransitAccess &access, bool isEntry);
+    /**
+     * Entry sub request constructor, creating a new request from info on
+     * the base request and a transit entry candidate (entry node + max departure time)
+     * @param graph
+     * @param baseRequest
+     * @param transitEntry
+     */
+    Request(const Graph &graph, const Request &baseRequest, const TransitAccess &transitEntry);
+    /**
+     * Exit sub request constructor, creating a new request from info on
+     * the base request, a transit exit candidate (exit node + arrival time)
+     * and the current state of the entry sub request
+     * @param graph
+     * @param baseRequest
+     * @param transitExit
+     * @param originSubRequestKeyPoint
+     */
+    Request(const Graph &graph, const Request &baseRequest, const TransitAccess &transitExit,
+            const SAEVKeyPoint &originSubRequestKeyPoint);
 
     static std::vector<Request> getRequestsFromFile(const std::string& datFilePath, const Graph& graph);
 

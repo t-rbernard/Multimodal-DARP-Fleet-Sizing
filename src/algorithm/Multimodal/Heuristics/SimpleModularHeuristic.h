@@ -59,7 +59,7 @@ private:
     Request insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId);
 
 
-    const Request &insertBestTransitAccessInRoute(const Request &baseRequest, const std::vector<TransitAccess> &entriesAccessList,
+    const Request &insertBestTransitAccessInRoute(const Request &baseRequest, const std::vector<TransitAccess> &transitAccessList,
                                    size_t baseRequestId, bool isEntry);
     const Request &insertBestTransitAccessInRoute(const std::vector<Request> &accessSubRequestsList,
                                                   size_t baseRequestId, bool isEntry);
