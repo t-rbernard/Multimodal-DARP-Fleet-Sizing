@@ -23,15 +23,6 @@ private:
     uint _weight; //How much space the requests takes in the vehicle (defaults to 1)
 
     //Request helpful members (used for constraint propagation and remember the current state of the _request)
-    uint _currentDeltaTime; //deltaTime - currentRouteDuration
-    /**
-     * Store the timestamp when this request effectively starts its route here once we planified its route in detail
-     */
-    uint _requestServiceStart;
-    /**
-     * Store the timestamp when this request effectively ends its route here once we planified its route in detail
-     */
-    uint _requestServiceEnd;
     /**
      * This object divides our request's route in four key points for each step in the user's path:<br>
      * SAEV departure -> Transit entrance -> Transit exit -> SAEV end <br>
@@ -60,9 +51,6 @@ public:
     [[nodiscard]] const TimeWindow &getArrivalTw() const;
     [[nodiscard]] uint getDeltaTime() const;
     [[nodiscard]] uint getWeight() const;
-    [[nodiscard]] uint getCurrentDeltaTime() const;
-    [[nodiscard]] uint getRequestServiceStart() const;
-    [[nodiscard]] uint getRequestServiceEnd() const;
     [[nodiscard]] const RequestRoute &getCurrentRoute() const;
     [[nodiscard]] const TimeWindow &getDepartureTw() const;
     [[nodiscard]] uint getMinDepartureTw() const;
@@ -71,21 +59,12 @@ public:
     [[nodiscard]] uint getMaxArrivalTw() const;
 
     //Setters
-    void setCurrentDeltaTime(int currentDeltaTime);
-    void setRequestServiceStart(int requestServiceStart);
-    void setRequestServiceEnd(int requestServiceEnd);
     void setCurrentRoute(const RequestRoute &currentRoute);
     void setDepartureTw(const TimeWindow &departureTw);
 
     //Route API delegation
     [[nodiscard]] int getNodeIndex(int routeIndex) const;
     void setNodeIndex(int routeIndex, int nodeIndex);
-
-    [[nodiscard]] int getArrivalInstant(int routeIndex) const;
-    void setArrivalInstant(int routeIndex, int arrivalInstant);
-
-    [[nodiscard]] int getDepartureInstant(int routeIndex) const;
-    void setDepartureInstant(int routeIndex, int departureInstant);
 
     [[nodiscard]] const SAEVehicle *getSAEV(int routeIndex) const;
     void setSAEV(int routeIndex, SAEVehicle *saev);

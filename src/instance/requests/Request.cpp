@@ -9,14 +9,14 @@
 Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const uint deltaTime, const uint weight) : _originNodeIndex(departureNodeIndex),
                                                             _destinationNodeIndex(arrivalNodeIndex), _arrivalTW(arrivalTw),
-                                                            _deltaTime(deltaTime), _weight(weight), _currentDeltaTime(deltaTime) {
+                                                            _deltaTime(deltaTime), _weight(weight) {
     _departureTW = _arrivalTW - deltaTime;
 }
 
 Request::Request(const size_t departureNodeIndex, const size_t arrivalNodeIndex, const TimeWindow &arrivalTw,
                  const uint deltaTime, const uint weight, const Graph& graph) :
         _originNodeIndex(departureNodeIndex), _destinationNodeIndex(arrivalNodeIndex),
-        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight), _currentDeltaTime(deltaTime) {
+        _arrivalTW(arrivalTw), _deltaTime(deltaTime), _weight(weight) {
     _departureTW.min = _arrivalTW.min - deltaTime;
     _departureTW.max = _arrivalTW.max - graph.getShortestSAEVPath(departureNodeIndex, arrivalNodeIndex);
 }
@@ -115,18 +115,6 @@ uint Request::getWeight() const {
     return _weight;
 }
 
-uint Request::getCurrentDeltaTime() const {
-    return _currentDeltaTime;
-}
-
-uint Request::getRequestServiceStart() const {
-    return _requestServiceStart;
-}
-
-uint Request::getRequestServiceEnd() const {
-    return _requestServiceEnd;
-}
-
 const RequestRoute &Request::getCurrentRoute() const {
     return _currentRoute;
 }
@@ -156,19 +144,6 @@ uint Request::getMaxArrivalTw() const {
 //-----------------------------
 //---------- Setters ----------
 //-----------------------------
-
-void Request::setCurrentDeltaTime(int currentDeltaTime) {
-    _currentDeltaTime = currentDeltaTime;
-}
-
-void Request::setRequestServiceStart(int requestServiceStart) {
-    _requestServiceStart = requestServiceStart;
-}
-
-void Request::setRequestServiceEnd(int requestServiceEnd) {
-    _requestServiceEnd = requestServiceEnd;
-}
-
 void Request::setCurrentRoute(const RequestRoute &currentRoute) {
     _currentRoute = currentRoute;
 }
