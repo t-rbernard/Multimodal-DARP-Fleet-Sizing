@@ -185,8 +185,8 @@ SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId) {
 
 std::vector<TransitAccess>
 SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, const SAEVKeyPoint &entrySubRequestOriginKP) const {
-    std::vector<SimpleModularHeuristic::ScoredTransitAccess> scoreTransitExits;
-    //Get departure time/shortest transit paths list from the entry sub request's max time (this means we take the first transit available after max arrival)
+    std::vector<SimpleModularHeuristic::ScoredTransitAccess> scoredTransitExits;
+    //Get departure time/shortest transit paths list from the entry sub request's max time (this means we take the first transit available after current max arrival)
     //TODO : study other approaches (e.g check for a faster max arrival if it's valid and allows better paths. This would require propagation => costly)
     const auto& [departureTime, shortestTransitPaths] = _graph->getShortestTransitPathsFrom(entrySubRequestOriginKP.getCounterpart()->getNodeIndex(),
                                                                    entrySubRequestOriginKP.getCounterpart()->getMaxTw());
@@ -195,13 +195,14 @@ SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, cons
     for(const auto& shortestTransitPath : shortestTransitPaths) {
         if(shortestTransitPath.getArrivalTime() >= 0) {
             TransitAccess exit{shortestTransitPath.getArrivalNode(),  (uint) shortestTransitPath.getArrivalTime()};
-            scoreTransitExits.emplace_back(exit, getTransitExitScore(baseRequest, exit));
+            scoredTransitExits.emplace_back(exit, getTransitExitScore(baseRequest, exit));
         }
     }
 
     //Sort and truncate transit exits list while removing score data that's unnecessary in later steps
-    std::ranges::sort(scoreTransitExits, getScoredTransitExitOrderer());
-    std::vector<TransitAccess> truncatedTransitExitsList{scoreTransitExits.begin(), scoreTransitExits.begin() + Constants::MAX_TRANSIT_EXIT_CANDIDATES};
+    std::ranges::sort(scoredTransitExits, getScoredTransitExitOrderer());
+    uint finalVectorSize = std::min(scoredTransitExits.size(), Constants::MAX_TRANSIT_EXIT_CANDIDATES);
+    std::vector<TransitAccess> truncatedTransitExitsList{scoredTransitExits.begin(), scoredTransitExits.begin() + finalVectorSize};
     return truncatedTransitExitsList;
 }
 
