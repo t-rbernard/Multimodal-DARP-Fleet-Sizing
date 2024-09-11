@@ -20,7 +20,7 @@ TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance) {
     INIT_TIMER
     Graph graphFromSingleFile(instancesPath + instanceFolder + datFile);
     graphFromSingleFile.computeAndUpdateShortestPathsMatrix(true);
-    RequestGenerationParameters genParams(1, 1.5, 15,30,240,600,290820241032L);
+    RequestGenerationParameters genParams(1, 1.5, 15,30,300,600,290820241032L);
     std::vector<Request> requests = RequestsGenerator::generateRequests(graphFromSingleFile, genParams);
 
     //Init instance
@@ -42,6 +42,13 @@ TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance) {
     }
     STOP_TIMER("Multimodal insertion (entry)")
     std::cout << "------------------End multimodal insertion (entry)-------------------" << std::endl << std::endl;
+    std::cout << "------------------Start multimodal insertion (exit)-------------------" << std::endl << std::endl;
+    START_TIMER
+    for(size_t i = 0; i < multimodalHeuristic.getNbBaseRquests(); ++i) {
+        multimodalHeuristic.insertBestTransitExitsInRoute(requests[i], i);
+    }
+    STOP_TIMER("Multimodal insertion (exit)")
+    std::cout << "------------------End multimodal insertion (exit)-------------------" << std::endl << std::endl;
 }
 
 TEST(MultimodalInsertionHeuristicDebug, DebugInstanceAlain) {
@@ -76,6 +83,13 @@ TEST(MultimodalInsertionHeuristicDebug, DebugInstanceAlain) {
     }
     STOP_TIMER("Multimodal insertion (entry)")
     std::cout << "------------------End multimodal insertion (entry)-------------------" << std::endl << std::endl;
+    std::cout << "------------------Start multimodal insertion (exit)-------------------" << std::endl << std::endl;
+    START_TIMER
+    for(size_t i = 0; i < multimodalHeuristic.getNbBaseRquests(); ++i) {
+        multimodalHeuristic.insertBestTransitExitsInRoute(requests[i], i);
+    }
+    STOP_TIMER("Multimodal insertion (exit)")
+    std::cout << "------------------End multimodal insertion (exit)-------------------" << std::endl << std::endl;
 }
 
 int main(int argc, char* argv[]) {
