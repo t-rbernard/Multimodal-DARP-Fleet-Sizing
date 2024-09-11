@@ -110,8 +110,8 @@ Graph::Graph(const std::string& datFilePath) {
 
     //-- Read Public transit line
     std::cout << currentRow.toString() << std::endl;
-    std::uniform_int_distribution<uint32_t> uint_dist10(1,10);
-    std::uniform_int_distribution<uint32_t> uint_dist60(1,60);
+    std::uniform_int_distribution<uint32_t> uint_dist10(1,5);
+    std::uniform_int_distribution<uint32_t> uint_dist60(1,10);
     while(infile >> currentRow && !currentRow[0].starts_with('#')) {
         this->parseLineRandomizedSchedule(currentRow, rng, uint_dist10, uint_dist60);
     }
@@ -294,11 +294,10 @@ void Graph::parseLineRandomizedSchedule(const DATRow& row, std::mt19937 rng,
         newLine.addTimetable(newTimetable);
         newTimetable.clear();
     }
-
-    this->addLine(newLine);
-
-    DEBUG_MSG("Created new line with nodes");
-
+    if(newLine.check()) {
+        this->addLine(newLine);
+        DEBUG_MSG("Created new line with nodes");
+    }
 }
 
 void Graph::createAndAddEdge(size_t edgeStartNodeIndex, size_t edgeEndNodeIndex, double length) {

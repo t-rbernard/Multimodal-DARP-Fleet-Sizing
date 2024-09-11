@@ -14,6 +14,7 @@ bool Line::checkSchedules() const{
 
     int precedingTimeStep = 0;
     int expectedScheduleSize = !_timetables.empty() ? _timetables[0].size() : 0;
+    checkResult &= expectedScheduleSize > 0;
     for(auto& schedule : _timetables)
     {
         precedingTimeStep = 0; //reinit first timestep to 0
