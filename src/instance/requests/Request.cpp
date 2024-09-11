@@ -232,7 +232,10 @@ Request::Request(const Graph &graph, const Request &baseRequest, const TransitAc
     _departureTW.max = baseRequest.getArrivalTw().max - graph.getShortestSAEVPath(transitExit.getAccessNodeIdx(), _destinationNodeIndex);
 
     _arrivalTW.min = baseRequest.getArrivalTw().min;
-    _arrivalTW.max = originSubRequestKeyPoint.getMinTw() + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
+    if(originSubRequestKeyPoint.getNodeIndex() != originSubRequestKeyPoint.getCounterpart()->getNodeIndex())
+        _arrivalTW.max = originSubRequestKeyPoint.getMinTw() + baseRequest.getDeltaTime(); //Reduce max arrival TW to a value we are 100% sure is compatible with our current min departure time
+    else
+        _arrivalTW.max = std::min(baseRequest.getMinDepartureTw() + baseRequest.getDeltaTime(), baseRequest.getMaxArrivalTw()); //force earliest departure
 
     if(_departureTW.min > _departureTW.max || _arrivalTW.min > _arrivalTW.max)
         throw TimeWindow::invalid_time_window_exception();
