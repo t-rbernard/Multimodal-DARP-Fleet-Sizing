@@ -220,6 +220,7 @@ SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId, const Requ
             scoredTransitExits.emplace_back(exit, getTransitExitScore(baseRequest, exit));
         }
     }
+    assertm(!scoredTransitExits.empty(), ("No valid exit from the given entrance has been found for base request #" + std::to_string(baseRequestId)));
 
     //Sort and truncate transit exits list while removing score data that's unnecessary in later steps
     std::ranges::sort(scoredTransitExits, getScoredTransitExitOrderer());
