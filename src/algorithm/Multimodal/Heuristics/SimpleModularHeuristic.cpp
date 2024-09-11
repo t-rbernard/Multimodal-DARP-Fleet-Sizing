@@ -19,7 +19,7 @@ std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(con
         for(const Node& bestStationNode = _graph->getNode(bestStationNodeIdx);
             const auto& lineStop : bestStationNode.getPTLinesSet()) {
             //Find the next passage lower or equal to our max entry time constraint
-            auto iterator = --lineStop.findNextScheduledPassage(getMaxEntryConstraint(baseRequest, bestStationNodeIdx))--;
+            auto iterator = --lineStop.findNextScheduledPassage(getMaxEntryConstraint(baseRequest, bestStationNodeIdx));
             if(iterator != lineStop.getSchedule().end() && *iterator > maxDepartureTime //If we've found a valid time that's superior to our current max time
             && *iterator > getMinEntryConstraint(baseRequest, bestStationNodeIdx)) { //and respects min entry time, replace old value
                 maxDepartureTime = *iterator;
