@@ -12,12 +12,14 @@
 class TransitShortestPath : public ShortestPath<std::reference_wrapper<const LineStop>> {
 private:
     int _arrivalTime{-1};
+    int _arrivalNode{-1};
 public:
     TransitShortestPath() = default;
 
     explicit TransitShortestPath(const TransitAlgorithmState& state) {
         if(state.getNbConnections() > 0) {
             _keyPoints = state.getConnections();
+            _arrivalNode = state.getNodeIndex();
             _arrivalTime = state.getInstant();
         }
     }
@@ -55,7 +57,7 @@ public:
     }
 
     [[nodiscard]] size_t getArrivalNode() const {
-        return getArrival().get().getNodeIndex();
+        return _arrivalNode;
     }
 
     [[nodiscard]] int getArrivalTime() const { return _arrivalTime; }
