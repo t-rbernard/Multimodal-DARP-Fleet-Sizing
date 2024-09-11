@@ -110,7 +110,8 @@ private:
     * and the min/max entry constraints. If no valid access is found, we return an empty vector.
     */
     [[nodiscard]] std::vector<TransitAccess>
-    getBestTransitExitsList(const Request &baseRequest, const SAEVKeyPoint &entrySubRequestOriginKP) const;
+    getBestTransitExitsList(size_t baseRequestId, const Request &baseRequest,
+                            const SAEVKeyPoint &entrySubRequestOriginKP) const;
 
 //Protected member function for overriding as we make this more modular
 protected:
@@ -122,18 +123,20 @@ protected:
      * Base implementation of min exit constraint.
      * This implementation is equivalent to no min constraint, as our subset of possible moves already filters our options a bit
      * @param baseRequestId Id of the base request for which we generate exit subrequests. Necessary to get data on base request and entry subrequest if necessary
-     * @param exitData Data containing the exit node and timestamp
+     * @param transitExitNodeIdx exit node index
      * @return 0
      */
-    [[nodiscard]] uint getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData);
+    [[nodiscard]] uint getMinExitConstraint(size_t baseRequestId, const SAEVKeyPoint &entrySubRequestOriginKP,
+                                            size_t transitExitNodeIdx) const;
     /**
      * Base implementation of max exit constraint.
      * This base implementation just checks for arrival validity wrt the base request's max time window
      * @param baseRequestId Id of the base request for which we generate exit subrequests. Necessary to get data on base request and entry subrequest if necessary
-     * @param exitData Data containing the exit node and timestamp
+     * @param transitExitNodeIdx exit node index
      * @return baseRequest.DestinationTW.max - T(exitData.Node, baseRequest.Destination)
      */
-    [[nodiscard]] uint getMaxExitConstraint(size_t baseRequestId, const TransitAccess &exitData);
+    [[nodiscard]] uint getMaxExitConstraint(size_t baseRequestId, const SAEVKeyPoint &entrySubRequestOriginKP,
+                                            size_t transitExitNodeIdx) const;
     /**
      * Base implementation of a sorting score (lower is better) for exit candidates.
      * This implementation scores via T(exitNode, destinationNode) + exitTime to try and

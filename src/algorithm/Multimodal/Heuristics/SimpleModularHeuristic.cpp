@@ -105,7 +105,8 @@ SimpleModularHeuristic::insertBestTransitAccessInRoute(const std::vector<Request
                                                        size_t baseRequestId, bool isEntry) {
     for(const auto& subreq : accessSubRequestsList) {
         updateSubRequest(baseRequestId, subreq, isEntry);
-        SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(_route->getEntrySubRequestOrigin(baseRequestId), *_route);
+        SAEVRouteChangelist changeList = BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(
+                _route->getEntrySubRequestOrigin(baseRequestId), *_route);
         //If we've found an insertion that doesn't create a vehicle, stop there
         if(changeList.success()) {
             DEBUG_MSG("ENTRY CANDIDATE SUCCESS : " + subreq.to_string());
@@ -176,24 +177,28 @@ SimpleModularHeuristic::getScoredTransitExitOrderer() {
     return [](SimpleModularHeuristic::ScoredTransitAccess lhs, SimpleModularHeuristic::ScoredTransitAccess rhs) { return lhs.score < rhs.score; };
 }
 
-uint SimpleModularHeuristic::getMinExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
+uint SimpleModularHeuristic::getMinExitConstraint(size_t baseRequestId, const SAEVKeyPoint &entrySubRequestOriginKP,
+                                                  size_t transitExitNodeIdx) const {
     return 0;
 }
 
-uint SimpleModularHeuristic::getMaxExitConstraint(size_t baseRequestId, const TransitAccess &exitData) {
+uint SimpleModularHeuristic::getMaxExitConstraint(size_t baseRequestId, const SAEVKeyPoint &entrySubRequestOriginKP,
+                                                  size_t transitExitNodeIdx) const {
     const Request& baseRequest = (*_requestsVect)[baseRequestId];
-    return baseRequest.getMaxArrivalTw() - _graph->getShortestSAEVPath(exitData.getAccessNodeIdx(), baseRequest.getDestinationNodeIndex());
+    return (entrySubRequestOriginKP.getMinTw() + baseRequest.getDeltaTime()) -
+           _graph->getShortestSAEVPath(transitExitNodeIdx, baseRequest.getDestinationNodeIndex());
 }
 
 std::vector<TransitAccess>
 SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId) {
     const Request& baseRequest = (*_requestsVect)[baseRequestId];
     const SAEVKeyPoint& entrySubRequestOriginKP = _route->getEntrySubRequestOrigin(baseRequestId);
-    return getBestTransitExitsList(baseRequest, entrySubRequestOriginKP);
+    return getBestTransitExitsList(baseRequestId, baseRequest, entrySubRequestOriginKP);
 }
 
 std::vector<TransitAccess>
-SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, const SAEVKeyPoint &entrySubRequestOriginKP) const {
+SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId, const Request &baseRequest,
+                                                const SAEVKeyPoint &entrySubRequestOriginKP) const {
     std::vector<SimpleModularHeuristic::ScoredTransitAccess> scoredTransitExits;
     //Get departure time/shortest transit paths list from the entry sub request's max time (this means we take the first transit available after current max arrival)
     //TODO : study other approaches (e.g check for a faster max arrival if it's valid and allows better paths. This would require propagation => costly)
@@ -202,7 +207,9 @@ SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, cons
 
     //Iterate over the best stations saved prior
     for(const auto& shortestTransitPath : shortestTransitPaths) {
-        if(shortestTransitPath.getArrivalTime() >= 0) {
+        //Check valid transit path + arrival node != starting point
+        if(shortestTransitPath.getArrivalTime() >= 0 && shortestTransitPath.getArrivalNode() != entryNodeIdx
+        && shortestTransitPath.getArrivalTime() < getMaxExitConstraint(baseRequestId, entrySubRequestOriginKP, shortestTransitPath.getArrivalNode())) {
             TransitAccess exit{shortestTransitPath.getArrivalNode(),  (uint) shortestTransitPath.getArrivalTime()};
             scoredTransitExits.emplace_back(exit, getTransitExitScore(baseRequest, exit));
         }
