@@ -140,6 +140,13 @@ SAEVRoute::tryAddRequest(SAEVKeyPoint &requestOriginKeyPoint, SAEVKeyPoint * ori
     const Request* request = requestOriginKeyPoint.getRequest();
     SAEVKeyPoint const* destinationSuccessor = destinationRequestPredecessorKP->getSuccessor();
 
+    //Check if this request actually needs a vehicle
+    if(requestOriginKeyPoint.getNodeIndex() == requestOriginKeyPoint.getCounterpart()->getNodeIndex()) {
+        SAEVRouteChangelist res(this, &requestOriginKeyPoint);
+        res.setStatus(SAEVRouteChangelist::InsertionStatus::SUCCESS);
+        return res;
+    }
+
     //Check vehicle capacity
     SAEVKeyPoint const* currentKP = originRequestPredecessorKP;
     do {

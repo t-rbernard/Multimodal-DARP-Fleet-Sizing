@@ -56,12 +56,18 @@ size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(SAEVKeyPoint &requ
 }
 
 SAEVRouteChangelist BestInsertionHeuristic::tryBestRequestInsertionInActiveVehicle(SAEVKeyPoint &requestKp, SAEVRoute &route) {
-    size_t vehicleId = 0;
-    BestInsertionQueue bestInsertions{requestKp};
-    //Iteratively try inserting in every active vehicle and the first inactive vehicle
-    do {
-        route.getBestFeasibleInsertionsQueue(bestInsertions, requestKp, vehicleId);
-    } while(++vehicleId <= route.getLastActiveVehicleId());
+    if(requestKp.getNodeIndex() == requestKp.getCounterpart()->getNodeIndex()) {
+        SAEVRouteChangelist res(&route, &requestKp);
+        res.setStatus(SAEVRouteChangelist::InsertionStatus::SUCCESS);
+        return res;
+    } else {
+        size_t vehicleId = 0;
+        BestInsertionQueue bestInsertions{requestKp};
+        //Iteratively try inserting in every active vehicle and the first inactive vehicle
+        do {
+            route.getBestFeasibleInsertionsQueue(bestInsertions, requestKp, vehicleId);
+        } while(++vehicleId <= route.getLastActiveVehicleId());
 
-    return tryVehicleBestInsertion(bestInsertions, route);
+        return tryVehicleBestInsertion(bestInsertions, route);
+    }
 }
