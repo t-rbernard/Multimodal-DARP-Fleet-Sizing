@@ -19,10 +19,13 @@ std::vector<TransitAccess> SimpleModularHeuristic::getBestTransitEntriesList(con
         for(const Node& bestStationNode = _graph->getNode(bestStationNodeIdx);
             const auto& lineStop : bestStationNode.getPTLinesSet()) {
             //Find the next passage lower or equal to our max entry time constraint
-            auto iterator = --lineStop.findNextScheduledPassage(getMaxEntryConstraint(baseRequest, bestStationNodeIdx));
-            if(iterator != lineStop.getSchedule().end() && *iterator > maxDepartureTime //If we've found a valid time that's superior to our current max time
-            && *iterator > getMinEntryConstraint(baseRequest, bestStationNodeIdx)) { //and respects min entry time, replace old value
-                maxDepartureTime = *iterator;
+            auto iterator = lineStop.findNextScheduledPassage(getMaxEntryConstraint(baseRequest, bestStationNodeIdx));
+            if(iterator != lineStop.getSchedule().cbegin() && iterator != lineStop.getSchedule().cend()) { //Iterator is invalid if it points to schedule end (no result) or begin (no result lower than our constraint)
+                --iterator; //Move iterator to the value that's under our max entry constraint
+                if(*iterator > maxDepartureTime //If we've found a valid time that's superior to our current max time
+                && *iterator > getMinEntryConstraint(baseRequest, bestStationNodeIdx)) { //and respects min entry time, replace old value
+                    maxDepartureTime = *iterator;
+                }
             }
         }
 
@@ -42,7 +45,7 @@ uint SimpleModularHeuristic::getMinEntryConstraint(const Request &request, size_
 }
 
 uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_t ptEntryNodeIdx) const {
-    return (uint) std::floor(request.getMaxArrivalTw() - _graph->getShortestSAEVPath(ptEntryNodeIdx, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio());
+    return request.getMaxArrivalTw() - ((uint) std::floor(_graph->getShortestSAEVPath(ptEntryNodeIdx, request.getDestinationNodeIndex()) * request.getTransitTravelTimeRatio()));
 }
 
 /**
