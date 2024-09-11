@@ -54,7 +54,7 @@ uint SimpleModularHeuristic::getMaxEntryConstraint(const Request &request, size_
  * @param baseRequestId ID/index in the request vector for our base request
  * @return The subrequest successfully inserted in our route. This method's caller needs to add this request to its main request vector
  */
-Request SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId) {
+const Request & SimpleModularHeuristic::insertBestTransitEntryInRoute(const Request &baseRequest, size_t baseRequestId) {
     std::vector<TransitAccess> entriesAccessList = getBestTransitEntriesList(baseRequest);
     return insertBestTransitAccessInRoute(baseRequest, entriesAccessList, baseRequestId, true);
 }
@@ -215,7 +215,7 @@ SimpleModularHeuristic::getBestTransitExitsList(const Request &baseRequest, cons
     return truncatedTransitExitsList;
 }
 
-Request SimpleModularHeuristic::insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId) {
+const Request & SimpleModularHeuristic::insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId) {
     std::vector<TransitAccess> exitAccessList = getBestTransitExitsList(baseRequestId);
     return insertBestTransitAccessInRoute(baseRequest, exitAccessList, baseRequestId, false);
 }
