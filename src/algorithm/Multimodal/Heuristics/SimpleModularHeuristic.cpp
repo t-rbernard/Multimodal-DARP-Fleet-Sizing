@@ -202,8 +202,14 @@ SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId, const Requ
     std::vector<SimpleModularHeuristic::ScoredTransitAccess> scoredTransitExits;
     //Get departure time/shortest transit paths list from the entry sub request's max time (this means we take the first transit available after current max arrival)
     //TODO : study other approaches (e.g check for a faster max arrival if it's valid and allows better paths. This would require propagation => costly)
-    const auto& [departureTime, shortestTransitPaths] = _graph->getShortestTransitPathsFrom(entrySubRequestOriginKP.getCounterpart()->getNodeIndex(),
-                                                                   entrySubRequestOriginKP.getCounterpart()->getMaxTw());
+
+    size_t entryNodeIdx = entrySubRequestOriginKP.getCounterpart()->getNodeIndex();
+    uint transitMinDepartureTime = entrySubRequestOriginKP.getCounterpart()->getMaxTw();
+    if(entrySubRequestOriginKP.getNodeIndex() == entrySubRequestOriginKP.getCounterpart()->getNodeIndex()) {
+        transitMinDepartureTime = baseRequest.getMinDepartureTw(); //TODO: check with the team if this choice is fine
+    }
+    const auto& [departureTime, shortestTransitPaths] = _graph->getShortestTransitPathsFrom(entryNodeIdx,
+                                                                                            transitMinDepartureTime);
 
     //Iterate over the best stations saved prior
     for(const auto& shortestTransitPath : shortestTransitPaths) {
