@@ -23,34 +23,39 @@
 #endif
 
 class SimpleModularHeuristic {
-public:
-    struct ScoredTransitAccess : public TransitAccess {
-        double score{DBL_MAX};
-        explicit ScoredTransitAccess(const TransitAccess& access, double scr) : TransitAccess(access), score(scr) {}
-    };
 private:
     const Graph* _graph{nullptr};
     SAEVRoute* _route{nullptr};
     std::vector<Request>* _requestsVect{nullptr};
     size_t _nbBaseRquests;
+    std::vector<bool> _unfulfilledTransitEntry;
+    std::vector<bool> _unfulfilledTransitExit;
 
     //Add friend test classes to test inner workings without making the whole API public
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugBaseInstance);
     FRIEND_TEST(MultimodalInsertionHeuristicDebug, DebugInstanceAlain);
 
-
-    using transit_order_function = std::function<bool(ScoredTransitAccess, ScoredTransitAccess)>;
-
 //Public interface to interact with the modular heuristic
 public:
     SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request>* requestsVect) : _graph(graph), _route(route),
-    _requestsVect(requestsVect), _nbBaseRquests(requestsVect->size()) {}
+    _requestsVect(requestsVect), _nbBaseRquests(requestsVect->size()), _unfulfilledTransitEntry(_nbBaseRquests), _unfulfilledTransitExit(_nbBaseRquests) {}
 
     void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
 
     [[nodiscard]] size_t getNbBaseRquests() const {
         return _nbBaseRquests;
     }
+
+    const std::vector<bool> &getUnfulfilledTransitExit() const;
+
+    const std::vector<bool> &getUnfulfilledTransitEntry() const;
+
+    //Define useful struct to order transit access objects
+    struct ScoredTransitAccess : public TransitAccess {
+        double score{DBL_MAX};
+        explicit ScoredTransitAccess(const TransitAccess& access, double scr) : TransitAccess(access), score(scr) {}
+    };
+    using transit_order_function = std::function<bool(ScoredTransitAccess, ScoredTransitAccess)>;
 
 //Private members for heuristic internal functions we don't wish to see overriden
 private:
@@ -171,6 +176,8 @@ protected:
 
     [[nodiscard]] double getTransitExitScore(size_t transitExitNodeIndex, size_t requestDestinationNodeIndex,
                                uint transitExitTimestamp) const;
+
+    void updateUnfulfilledSubrequest(size_t baseRequestId, bool isEntry, bool value);
 };
 
 

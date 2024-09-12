@@ -119,10 +119,17 @@ SimpleModularHeuristic::insertBestTransitAccessInRoute(const std::vector<Request
         }
     }
 
-    //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
-    DEBUG_MSG("CREATE VEHICLE");
-    updateSubRequest(baseRequestId, accessSubRequestsList[0], isEntry);
-    _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(baseRequestId));
+    if(accessSubRequestsList.empty()) { //If no valid subrequest was given, still create a fake subrequest and mention failure in the appropriate vector
+        DEBUG_MSG("UNFULFILLED SUBREQUEST");
+        updateSubRequest(baseRequestId, (*_requestsVect)[baseRequestId], isEntry);
+        updateUnfulfilledSubrequest(baseRequestId, isEntry, true);
+    } else {
+        //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
+        DEBUG_MSG("CREATE VEHICLE");
+        updateSubRequest(baseRequestId, accessSubRequestsList[0], isEntry);
+        _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(baseRequestId));
+    }
+
     return getSubrequest(baseRequestId, isEntry);
 }
 
@@ -235,4 +242,20 @@ SimpleModularHeuristic::getBestTransitExitsList(size_t baseRequestId, const Requ
 const Request & SimpleModularHeuristic::insertBestTransitExitsInRoute(const Request &baseRequest, size_t baseRequestId) {
     std::vector<TransitAccess> exitAccessList = getBestTransitExitsList(baseRequestId);
     return insertBestTransitAccessInRoute(baseRequest, exitAccessList, baseRequestId, false);
+}
+
+void SimpleModularHeuristic::updateUnfulfilledSubrequest(size_t baseRequestId, bool isEntry, bool value) {
+    if(isEntry) {
+        _unfulfilledTransitEntry[baseRequestId] = value;
+    } else {
+        _unfulfilledTransitExit[baseRequestId] = value;
+    }
+}
+
+const std::vector<bool> &SimpleModularHeuristic::getUnfulfilledTransitExit() const {
+    return _unfulfilledTransitExit;
+}
+
+const std::vector<bool> &SimpleModularHeuristic::getUnfulfilledTransitEntry() const {
+    return _unfulfilledTransitEntry;
 }
