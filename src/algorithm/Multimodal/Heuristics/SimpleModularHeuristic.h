@@ -178,6 +178,8 @@ protected:
                                uint transitExitTimestamp) const;
 
     void updateUnfulfilledSubrequest(size_t baseRequestId, bool isEntry, bool value);
+
+    bool isEntryFulfilled(size_t baseRequestId);
 };
 
 

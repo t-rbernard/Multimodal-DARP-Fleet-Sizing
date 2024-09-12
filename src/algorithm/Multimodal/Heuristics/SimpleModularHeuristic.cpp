@@ -127,7 +127,7 @@ SimpleModularHeuristic::insertBestTransitAccessInRoute(const std::vector<Request
         //If no active vehicle insertion worked, do best insertion on a new vehicle with the first subrequest (supposedly it's the most advantageous)
         DEBUG_MSG("CREATE VEHICLE");
         updateSubRequest(baseRequestId, accessSubRequestsList[0], isEntry);
-        _route->insertRequestInNewVehicle(_route->getEntrySubRequestOrigin(baseRequestId));
+        _route->insertRequestInNewVehicle(_route->getExitSubRequestOrigin(baseRequestId));
     }
 
     return getSubrequest(baseRequestId, isEntry);
@@ -258,4 +258,8 @@ const std::vector<bool> &SimpleModularHeuristic::getUnfulfilledTransitExit() con
 
 const std::vector<bool> &SimpleModularHeuristic::getUnfulfilledTransitEntry() const {
     return _unfulfilledTransitEntry;
+}
+
+bool SimpleModularHeuristic::isEntryFulfilled(size_t baseRequestId) {
+    return !_unfulfilledTransitEntry[baseRequestId];
 }

@@ -43,7 +43,7 @@ size_t BestInsertionHeuristic::doBestRequestInsertionForRoute(SAEVKeyPoint &requ
     size_t vehicleId = 0;
     bool insertionSuccess{false};
     //Iteratively try inserting in every active vehicle and the first inactive vehicle
-    do {
+    do { //TODO: improve this to mutualize best insertions amongst best vehicles ?
         insertionSuccess = tryVehicleBestInsertion(requestKp, vehicleId, route).success();
     } while(!insertionSuccess && ++vehicleId <= route.getLastActiveVehicleId() + 1);
 
