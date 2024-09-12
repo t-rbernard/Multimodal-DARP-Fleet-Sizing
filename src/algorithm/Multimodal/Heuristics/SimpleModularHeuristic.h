@@ -17,7 +17,7 @@
 
 #ifdef DEBUG_MULTIMODAL_HEURISTIC
 #include <iostream>
-#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#define DEBUG_MSG(str) do { std::cout << "[SMH] " << str << std::endl; } while( false )
 #else
 #define DEBUG_MSG(str) do { } while ( false )
 #endif

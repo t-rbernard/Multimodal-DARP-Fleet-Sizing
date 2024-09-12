@@ -6,7 +6,7 @@
 
 #ifdef DEBUG_BEST_INSERTION_HEURISTIC
 #include <iostream>
-#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#define DEBUG_MSG(str) do { std::cout << "[BEST INSERTION] " << str << std::endl; } while( false )
 #else
 #define DEBUG_MSG(str) do { } while ( false )
 #endif

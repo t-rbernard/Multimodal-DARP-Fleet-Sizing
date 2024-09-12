@@ -8,7 +8,7 @@
 
 #ifdef DEBUG_TRANSIT_PRECOMPUTE
 #include <iostream>
-#define DEBUG_MSG(str) do { std::cout << str << std::endl; } while( false )
+#define DEBUG_MSG(str) do { std::cout << "[TRANSIT] " << str << std::endl; } while( false )
 #else
 #define DEBUG_MSG(str) do { } while ( false )
 #endif
