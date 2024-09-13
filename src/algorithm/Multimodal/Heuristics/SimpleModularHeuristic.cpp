@@ -150,28 +150,17 @@ void SimpleModularHeuristic::setRoute(SAEVRoute *route) {
 }
 
 void SimpleModularHeuristic::updateSubRequest(size_t requestId, const Request &request, bool isEntry) {
-    size_t subRequestIndex = getSubrequestIndex(requestId, isEntry);
-    if((_requestsVect->size() - 1) < subRequestIndex) {
-        _requestsVect->emplace_back(request);
-        assertm((_requestsVect->size() - 1) == subRequestIndex,"A request seems to have been missed or doesn't have any subrequest defined");
-    } else {
-        (*_requestsVect)[subRequestIndex] = request;
-    }
-
-    std::vector<Request>& requestVectRef = *_requestsVect;
-    _route->getEntrySubRequestOrigin(requestId).setRequest(&requestVectRef[subRequestIndex]);
-    _route->getEntrySubRequestDestination(requestId).setRequest(&requestVectRef[subRequestIndex]);
-}
-
-size_t SimpleModularHeuristic::getSubrequestIndex(size_t requestId, bool isEntry) const {
     if(isEntry)
-        return _nbBaseRquests + requestId;
+        _entrySubRequests[requestId] = request;
     else
-        return _nbBaseRquests*2 + requestId;
+        _exitSubRequests[requestId] = request;
+
+    _route->getEntrySubRequestOrigin(requestId).setRequest(&getSubrequest(requestId, isEntry));
+    _route->getEntrySubRequestDestination(requestId).setRequest(&getSubrequest(requestId, isEntry));
 }
 
 const Request& SimpleModularHeuristic::getSubrequest(size_t requestId, bool isEntry) {
-    return (*_requestsVect)[getSubrequestIndex(requestId, isEntry)];
+    return isEntry ? _entrySubRequests[requestId] : _exitSubRequests[requestId];
 }
 
 double SimpleModularHeuristic::getTransitExitScore(const Request &baseRequest, const TransitAccess &exitData) const {
@@ -262,4 +251,12 @@ const std::vector<bool> &SimpleModularHeuristic::getUnfulfilledTransitEntry() co
 
 bool SimpleModularHeuristic::isEntryFulfilled(size_t baseRequestId) {
     return !_unfulfilledTransitEntry[baseRequestId];
+}
+
+const std::vector<Request> &SimpleModularHeuristic::getEntrySubRequests() const {
+    return _entrySubRequests;
+}
+
+const std::vector<Request> &SimpleModularHeuristic::getExitSubRequests() const {
+    return _exitSubRequests;
 }

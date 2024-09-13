@@ -24,10 +24,14 @@
 
 class SimpleModularHeuristic {
 private:
+    //Exterior members
     const Graph* _graph{nullptr};
-    SAEVRoute* _route{nullptr};
-    std::vector<Request>* _requestsVect{nullptr};
-    size_t _nbBaseRquests;
+    const std::vector<Request>* _requestsVect{nullptr};
+    SAEVRoute* _route{nullptr}; //_route is a pointer here to decorrelate the route from the algorithm and facilitate using multiple modules on the same route
+
+    std::vector<Request> _entrySubRequests;
+    std::vector<Request> _exitSubRequests;
+
     std::vector<bool> _unfulfilledTransitEntry;
     std::vector<bool> _unfulfilledTransitExit;
 
@@ -37,18 +41,21 @@ private:
 
 //Public interface to interact with the modular heuristic
 public:
-    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request>* requestsVect) : _graph(graph), _route(route),
-    _requestsVect(requestsVect), _nbBaseRquests(requestsVect->size()), _unfulfilledTransitEntry(_nbBaseRquests), _unfulfilledTransitExit(_nbBaseRquests) {}
+    SimpleModularHeuristic(const Graph *graph, SAEVRoute *route, std::vector<Request> const* requestsVect) : _graph(graph), _requestsVect(requestsVect),
+    _route(route), _entrySubRequests(requestsVect->size()), _exitSubRequests(requestsVect->size()),
+    _unfulfilledTransitEntry(requestsVect->size()), _unfulfilledTransitExit(requestsVect->size()) {}
 
     void multimodalRequestsInsertion(const std::vector<Request>& requestsToInsert);
 
     [[nodiscard]] size_t getNbBaseRquests() const {
-        return _nbBaseRquests;
+        return _requestsVect->size();
     }
 
-    const std::vector<bool> &getUnfulfilledTransitExit() const;
+    [[nodiscard]] const std::vector<Request> &getEntrySubRequests() const;
+    [[nodiscard]] const std::vector<Request> &getExitSubRequests() const;
 
-    const std::vector<bool> &getUnfulfilledTransitEntry() const;
+    [[nodiscard]] const std::vector<bool> &getUnfulfilledTransitEntry() const;
+    [[nodiscard]] const std::vector<bool> &getUnfulfilledTransitExit() const;
 
     //Define useful struct to order transit access objects
     struct ScoredTransitAccess : public TransitAccess {
