@@ -324,7 +324,7 @@ SAEVRouteChangelist SAEVRoute::doBoundPropagation(std::queue<std::pair<int, SAEV
 }
 
 double SAEVRoute::getDetourScore(const SAEVKeyPoint &originKP, const SAEVKeyPoint * originRequestPredecessorKP,
-                                 const SAEVKeyPoint * destinationRequestPredecessorKP) {
+                                 const SAEVKeyPoint * destinationRequestPredecessorKP) const {
     double score;
     const SAEVKeyPoint* destinationKP = originKP.getCounterpart();
     const SAEVKeyPoint* originSuccKP = originRequestPredecessorKP->getSuccessor();
@@ -523,5 +523,45 @@ std::string SAEVRoute::to_string() {
         res += "Vehicle #" + std::to_string(i) + ": " + to_string(i) + "\n";
     }
     return res;
+}
+
+SAEVRouteChangelist SAEVRoute::removeRequestWithPropagation(SAEVKeyPoint &originKP) {
+    //save ref to part of the route we have to update before removing
+    //FIXME : best would be to link to depot/vehicle to directly start from the origin depot instead of having two whiles
+    SAEVKeyPoint const* originPredKp = originKP.getPredecessor();
+    assertm(originPredKp != nullptr, "Trying to remove a key point that's not in any route");
+    //Actually remove request
+    removeRequest(originKP);
+
+    std::queue<std::pair<int, SAEVKeyPoint*>> propagationQueue;
+    //Now iterate over predecessor KPs to reset their bounds and add to propagation queue
+    SAEVKeyPoint* currentKP = originPredKp->getPredecessor();
+    while (currentKP != nullptr) {
+        currentKP->resetBounds();
+        propagationQueue.emplace(Min, currentKP);
+        propagationQueue.emplace(Max, currentKP);
+        currentKP = currentKP->getPredecessor();
+    }
+    //Do the same over successor KPs to be fully done with the
+    currentKP = originPredKp->getSuccessor();
+    while (currentKP != nullptr) {
+        currentKP->resetBounds();
+        propagationQueue.emplace(Min, currentKP);
+        propagationQueue.emplace(Max, currentKP);
+        currentKP = currentKP->getSuccessor();
+    }
+
+    SAEVRouteChangelist changelist{this, nullptr};
+    doBoundPropagation(propagationQueue, changelist);
+    return changelist;
+}
+
+SAEVRouteChangelist SAEVRoute::removeRequestWithPropagation(size_t requestId, bool isEntry) {
+    SAEVKeyPoint& originKeyPoint = isEntry ? getEntrySubRequestOrigin(requestId) : getExitSubRequestOrigin(requestId);
+    return removeRequestWithPropagation(originKeyPoint);
+}
+
+SAEVRouteChangelist SAEVRoute::removeRequestWithPropagation(size_t requestId) {
+    return removeRequestWithPropagation(getRequestOrigin(requestId));
 }
 

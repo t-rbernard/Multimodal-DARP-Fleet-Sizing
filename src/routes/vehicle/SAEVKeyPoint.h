@@ -85,6 +85,11 @@ public:
     [[nodiscard]] int getDeltaTime() const;
 
     [[nodiscard]] std::string to_string() const override;
+
+    /**
+     * Resets the keypoint's min/max bounds to the linked request's original bounds
+     */
+    void resetBounds();
 };
 #include "../../instance/requests/Request.h"
 

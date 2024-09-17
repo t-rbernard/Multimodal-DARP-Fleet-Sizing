@@ -126,3 +126,13 @@ std::string SAEVKeyPoint::to_string() const {
     return "(nodeIdx=" + std::to_string(getNodeIndex()) + ", Type=" + nodeType +
     + "TW=[" + std::to_string(getMinTw()) + ";" + std::to_string(getMaxTw()) + "])";
 }
+
+void SAEVKeyPoint::resetBounds() {
+    if(isOrigin()) {
+        _minTW = _requestPointer->getMinDepartureTw();
+        _maxTW = _requestPointer->getMaxDepartureTw();
+    } else {
+        _minTW = _requestPointer->getMinArrivalTw();
+        _maxTW = _requestPointer->getMaxArrivalTw();
+    }
+}

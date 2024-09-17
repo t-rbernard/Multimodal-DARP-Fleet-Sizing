@@ -61,6 +61,29 @@ public:
     void removeRequest(SAEVKeyPoint &originKp);
 
     /**
+     * Removes a given base request from the route and does a complete reset and recomputing of bound propagations
+     * By nature of our propagation making bounds only smaller and no simple rule existing to make our bounds larger after removal,
+     * this method is highly inefficient computationally. A new propagation method or even modelling would be necessary to make it faster
+     * @param requestId a base request ID allowing us to find the origin keypoint to use as removal basis
+     */
+    SAEVRouteChangelist removeRequestWithPropagation(size_t requestId);
+    /**
+     * Removes a given entry/exit sub-request from the route and does a complete reset and recomputing of bound propagations
+     * By nature of our propagation making bounds only smaller and no simple rule existing to make our bounds larger after removal,
+     * this method is highly inefficient computationally. A new propagation method or even modelling would be necessary to make it faster
+     * @param requestId a base request ID allowing us to find the entry/exit subrequest to delete
+     * @param isEntry true iff the subrequest to delete
+     */
+    SAEVRouteChangelist removeRequestWithPropagation(size_t requestId, bool isEntry);
+    /**
+     * Removes a given request from the route and does a complete reset and recomputing of bound propagations
+     * By nature of our propagation making bounds only smaller and no simple rule existing to make our bounds larger after removal,
+     * this method is highly inefficient computationally. A new propagation method or even modelling would be necessary to make it faster
+     * @param originKP pointer to the origin key point of a given request to remove
+     */
+    SAEVRouteChangelist removeRequestWithPropagation(SAEVKeyPoint &originKP);
+
+    /**
      * Updates weight in-between request's Origin/Destination (both included) to account for the given request's weight
      * ⚠️ Execute this function *after* adding the request to the route, as it assumes the request is part of the route
      * @param requestOriginKeyPoint reference to the origin keypoint of the request for which we wish to remove the weight to the route
@@ -145,7 +168,7 @@ public:
      * @param destinationRequestPredecessorKP Identifier/index in the route key point vector for the request origin or destination that will precede our request's destination in the route
      * @return
      */
-    double getDetourScore(const SAEVKeyPoint &originKP, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP);
+    double getDetourScore(const SAEVKeyPoint &originKP, const SAEVKeyPoint * originRequestPredecessorKP, const SAEVKeyPoint * destinationRequestPredecessorKP) const;
 
     BestInsertionQueue getBestInsertionsQueue(size_t requestId, size_t vehicleId);
     BestInsertionQueue getBestInsertionsQueue(SAEVKeyPoint &originKP, size_t vehicleId);
