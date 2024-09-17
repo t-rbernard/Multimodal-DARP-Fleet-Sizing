@@ -218,14 +218,15 @@ SAEVRoute::doNeighbouringTWChecks(const SAEVKeyPoint &originKP, const SAEVKeyPoi
 SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(SAEVKeyPoint &originKP, SAEVKeyPoint * originRequestPredecessorKP,
                                                             SAEVKeyPoint * destinationRequestPredecessorKP) {
     //Init changelist and detour score
-    SAEVRouteChangelist changelist{this, &originKP, originRequestPredecessorKP, destinationRequestPredecessorKP, SAEVRouteChangelist::InsertionStatus::FAILURE_MIN};
+    SAEVRouteChangelist changelist{this, &originKP, originRequestPredecessorKP, destinationRequestPredecessorKP,
+                                   SAEVRouteChangelist::InsertionStatus::FAILURE_MIN};
     double detourScore = getDetourScore(originKP, originRequestPredecessorKP, destinationRequestPredecessorKP);
     //Properly insert the request to facilitate constraint propagation
     insertRequest(originKP, originRequestPredecessorKP, destinationRequestPredecessorKP);
 
     //Initialize bound propagation signal queue (each item signals a modification done on one of a KeyPoint
-    std::queue<std::pair<Bound, SAEVKeyPoint *>> boundPropagationQueue{};
-    SAEVKeyPoint * destinationKP = originKP.getCounterpart();
+    std::queue<std::pair<int, SAEVKeyPoint *>> boundPropagationQueue{};
+    SAEVKeyPoint *destinationKP = originKP.getCounterpart();
     boundPropagationQueue.emplace(Min, originKP.getPredecessor());
     boundPropagationQueue.emplace(Max, originKP.getSuccessor());
     boundPropagationQueue.emplace(Min, destinationKP->getPredecessor());
@@ -235,6 +236,14 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(SAEVKeyPoint &origin
     boundPropagationQueue.emplace(Min, destinationKP);
     boundPropagationQueue.emplace(Max, destinationKP);
 
+    doBoundPropagation(boundPropagationQueue, changelist);
+    changelist.setScore(detourScore);
+    return changelist;
+}
+
+
+SAEVRouteChangelist SAEVRoute::doBoundPropagation(std::queue<std::pair<int, SAEVKeyPoint *>> &boundPropagationQueue,
+                                                  SAEVRouteChangelist &changelist) {
     //Pre-init variables used in the loop
     int oldValue;
     int newValue;
@@ -311,7 +320,6 @@ SAEVRouteChangelist SAEVRoute::insertRequestWithPropagation(SAEVKeyPoint &origin
     }
 
     changelist.setStatus(SAEVRouteChangelist::InsertionStatus::SUCCESS);
-    changelist.setScore(detourScore);
     return changelist;
 }
 

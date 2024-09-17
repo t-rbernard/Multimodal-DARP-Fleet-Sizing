@@ -125,6 +125,18 @@ public:
     SAEVRouteChangelist insertRequestWithPropagation(SAEVKeyPoint &originKP, SAEVKeyPoint * originRequestPredecessorKP, SAEVKeyPoint * destinationRequestPredecessorKP);
 
     /**
+     * Executes the bound propagation algorithm, starting from the given bound propagation queue.
+     * Each item in the queue references which bound (Min/Max) and what key point was affected, and from there we verify bounds for each predecessor/successor
+     *
+     * If the bounds become infeasible (min > max), then the propagation stops with a changelist with score= +Infinity and changes will be immediately reverted.
+     * Otherwise, it's the responsibility of this method's callers to revert changes if wanted (or to defer this responsibility to its caller)
+     *
+     * @param boundPropagationQueue a (Bound/Keypoint) pair queue giving a list of starting points for propagation. Typically when inserting a key point, the queue contains two items (one for each bound)
+     * @return A change list with every min/max bound change made during the insert procedure and a score estimating insertion quality (lower is better)
+     */ // FIXME: not a fan of using int instead of the Bound enum here, but I can't forward-declare it since it's part of SAEVRouteChange
+    SAEVRouteChangelist doBoundPropagation(std::queue<std::pair<int, SAEVKeyPoint *>> &boundPropagationQueue,
+                                           SAEVRouteChangelist &changelist);
+    /**
      * Returns a score value equivalent to the detour implied by insertion of a request after the two given key point indexes.
      * The specific case of origin/destination being inserted one after another is taken into account
      * ⚠️ This method assumes the insertion hasn't been done yet, so compute detour scores before inserting your request ⚠️
